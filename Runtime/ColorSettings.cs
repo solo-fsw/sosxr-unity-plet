@@ -9,8 +9,8 @@ namespace SOSXR.Plet
     {
         public string Name;
         public ColorType ColorType;
-        public float Saturation = 1f;
-        public float Value = 1f;
+        public int Saturation = 1;
+        public int Value = 1;
         public float Alpha = 1f;
         public Color ValuedColor;
     }

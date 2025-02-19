@@ -17,49 +17,49 @@ namespace SOSXR.Plet
         [SerializeField] private Material m_skyboxMaterial;
 
         [SerializeField] private ColorType m_skyColorType;
-        [SerializeField] private float m_skyColorValue = 1f;
-        [SerializeField] private float m_skyColorSaturation = 1f;
+        [SerializeField] private int m_skyColorValue = 1;
+        [SerializeField] private int m_skyColorSaturation = 1;
         [SerializeField] private Color m_skyColor;
         [SerializeField] private ColorType m_horizonColorType;
-        [SerializeField] private float m_horizonColorValue = 1f;
-        [SerializeField] private float m_horizonColorSaturation = 1f;
+        [SerializeField] private int m_horizonColorValue = 1;
+        [SerializeField] private int m_horizonColorSaturation = 1;
         [SerializeField] private Color m_horizonColor;
         [SerializeField] private ColorType m_groundColorType;
-        [SerializeField] private float m_groundColorValue = 1f;
-        [SerializeField] private float m_groundColorSaturation = 1f;
+        [SerializeField] private int m_groundColorValue = 1;
+        [SerializeField] private int m_groundColorSaturation = 1;
         [SerializeField] private Color m_groundColor;
 
         [SerializeField] private bool m_applyAmbientLight = true;
 
         [SerializeField] private ColorType m_ambientLightType;
-        [SerializeField] private float m_ambientLightValue = 1f;
-        [SerializeField] private float m_ambientLightSaturation = 1f;
+        [SerializeField] private int m_ambientLightValue = 1;
+        [SerializeField] private int m_ambientLightSaturation = 1;
         [SerializeField] private Color m_ambientLightColor;
 
         [SerializeField] private ColorType m_ambientSkyLightType;
-        [SerializeField] private float m_ambientSkyLightValue = 1f;
-        [SerializeField] private float m_ambientSkyLightSaturation = 1f;
+        [SerializeField] private int m_ambientSkyLightValue = 1;
+        [SerializeField] private int m_ambientSkyLightSaturation = 1;
         [SerializeField] private Color m_ambientSkyLightColor;
         [SerializeField] private ColorType m_ambientEquatorLightType;
-        [SerializeField] private float m_ambientEquatorLightValue = 1f;
-        [SerializeField] private float m_ambientEquatorLightSaturation = 1f;
+        [SerializeField] private int m_ambientEquatorLightValue = 1;
+        [SerializeField] private int m_ambientEquatorLightSaturation = 1;
         [SerializeField] private Color m_ambientEquatorLightColor;
         [SerializeField] private ColorType m_ambientGroundLightType;
-        [SerializeField] private float m_ambientGroundLightValue = 1f;
-        [SerializeField] private float m_ambientGroundLightSaturation = 1f;
+        [SerializeField] private int m_ambientGroundLightValue = 1;
+        [SerializeField] private int m_ambientGroundLightSaturation = 1;
         [SerializeField] private Color m_ambientGroundLightColor;
 
         [SerializeField] private bool m_applyRealtimeShadows;
         [SerializeField] private Color m_shadowColor;
         [SerializeField] private ColorType m_shadowColorType;
-        [SerializeField] private float m_shadowColorValue = 1f;
-        [SerializeField] private float m_shadowColorSaturation = 1f;
+        [SerializeField] private int m_shadowColorValue = 1;
+        [SerializeField] private int m_shadowColorSaturation = 1;
 
         [SerializeField] private bool m_applyFog;
         [SerializeField] private Color m_fogColor;
         [SerializeField] private ColorType m_fogColorType;
-        [SerializeField] private float m_fogColorValue = 1f;
-        [SerializeField] private float m_fogColorSaturation = 1f;
+        [SerializeField] private int m_fogColorValue = 1;
+        [SerializeField] private int m_fogColorSaturation = 1;
 
         private readonly int _skyColorShaderId = Shader.PropertyToID("_SkyColor");
         private readonly int _horizonColorShaderId = Shader.PropertyToID("_HorizonColor");
@@ -160,20 +160,41 @@ namespace SOSXR.Plet
                 return;
             }
 
-            m_skyColorValue = 1f;
-            m_skyColorSaturation = 1f;
-            m_horizonColorValue = 1f;
-            m_horizonColorSaturation = 1f;
-            m_groundColorValue = 1f;
-            m_groundColorSaturation = 1f;
-            m_ambientLightValue = 1f;
-            m_ambientLightSaturation = 1f;
-            m_ambientSkyLightValue = 1f;
-            m_ambientSkyLightSaturation = 1f;
-            m_ambientEquatorLightValue = 1f;
-            m_ambientEquatorLightSaturation = 1f;
-            m_ambientGroundLightValue = 1f;
-            m_ambientGroundLightSaturation = 1f;
+            var skySV = GetColorSV(m_skyColorType);
+            m_skyColorSaturation = skySV.x;
+            m_skyColorValue = skySV.y;
+            
+            var horizonSV = GetColorSV(m_horizonColorType);
+            m_horizonColorSaturation = horizonSV.x;
+            m_horizonColorValue = horizonSV.y;
+            
+            var groundSV = GetColorSV(m_groundColorType);
+            m_groundColorSaturation = groundSV.x;
+            m_groundColorValue = groundSV.y;
+            
+            var ambientSV = GetColorSV(m_ambientLightType);
+            m_ambientLightSaturation = ambientSV.x;
+            m_ambientLightValue = ambientSV.y;
+            
+            var ambientSkySV = GetColorSV(m_ambientSkyLightType);
+            m_ambientSkyLightSaturation = ambientSkySV.x;
+            m_ambientSkyLightValue = ambientSkySV.y;
+            
+            var ambientEquatorSV = GetColorSV(m_ambientEquatorLightType);
+            m_ambientEquatorLightSaturation = ambientEquatorSV.x;
+            m_ambientEquatorLightValue = ambientEquatorSV.y;    
+            
+            var ambientGroundSV = GetColorSV(m_ambientGroundLightType);
+            m_ambientGroundLightSaturation = ambientGroundSV.x;
+            m_ambientGroundLightValue = ambientGroundSV.y;
+            
+            var shadowSV = GetColorSV(m_shadowColorType);
+            m_shadowColorSaturation = shadowSV.x;
+            m_shadowColorValue = shadowSV.y;
+            
+            var fogSV = GetColorSV(m_fogColorType);
+            m_fogColorSaturation = fogSV.x;
+            m_fogColorValue = fogSV.y;
 
             SetAllSkyboxAndLights();
         }
@@ -191,7 +212,7 @@ namespace SOSXR.Plet
                 return;
             }
 
-            m_ambientLightColor = ApplyColor(m_ambientLightType, m_ambientLightValue, m_ambientLightSaturation);
+            m_ambientLightColor = ApplyColor(m_ambientLightType, m_ambientLightSaturation, m_ambientLightValue);
             RenderSettings.ambientLight = m_ambientLightColor;
         }
 
@@ -208,7 +229,7 @@ namespace SOSXR.Plet
                 return;
             }
 
-            m_ambientSkyLightColor = ApplyColor(m_ambientSkyLightType, m_ambientSkyLightValue, m_ambientSkyLightSaturation);
+            m_ambientSkyLightColor = ApplyColor(m_ambientSkyLightType, m_ambientSkyLightSaturation, m_ambientSkyLightValue);
             RenderSettings.ambientSkyColor = m_ambientSkyLightColor;
         }
 
@@ -225,7 +246,7 @@ namespace SOSXR.Plet
                 return;
             }
 
-            m_ambientEquatorLightColor = ApplyColor(m_ambientEquatorLightType, m_ambientEquatorLightValue, m_ambientEquatorLightSaturation);
+            m_ambientEquatorLightColor = ApplyColor(m_ambientEquatorLightType, m_ambientEquatorLightSaturation, m_ambientEquatorLightValue);
             RenderSettings.ambientEquatorColor = m_ambientEquatorLightColor;
         }
 
@@ -242,7 +263,7 @@ namespace SOSXR.Plet
                 return;
             }
 
-            m_ambientGroundLightColor = ApplyColor(m_ambientGroundLightType, m_ambientGroundLightValue, m_ambientGroundLightSaturation);
+            m_ambientGroundLightColor = ApplyColor(m_ambientGroundLightType, m_ambientGroundLightSaturation, m_ambientGroundLightValue);
             RenderSettings.ambientGroundColor = m_ambientGroundLightColor;
         }
 
@@ -259,7 +280,7 @@ namespace SOSXR.Plet
                 return;
             }
 
-            m_shadowColor = ApplyColor(m_shadowColorType, m_shadowColorValue, m_shadowColorSaturation);
+            m_shadowColor = ApplyColor(m_shadowColorType, m_shadowColorSaturation, m_shadowColorValue);
             RenderSettings.subtractiveShadowColor = m_shadowColor;
         }
 
@@ -276,7 +297,7 @@ namespace SOSXR.Plet
                 return;
             }
 
-            m_fogColor = ApplyColor(m_fogColorType, m_fogColorValue, m_fogColorSaturation);
+            m_fogColor = ApplyColor(m_fogColorType, m_fogColorSaturation, m_fogColorValue);
             RenderSettings.fogColor = m_fogColor;
         }
 
@@ -300,7 +321,7 @@ namespace SOSXR.Plet
                 return;
             }
 
-            m_skyColor = ApplyColor(m_skyColorType, m_skyColorValue, m_skyColorSaturation);
+            m_skyColor = ApplyColor(m_skyColorType, m_skyColorSaturation, m_skyColorValue);
             m_skyboxMaterial.SetColor(_skyColorShaderId, m_skyColor);
         }
 
@@ -324,7 +345,7 @@ namespace SOSXR.Plet
                 return;
             }
 
-            m_horizonColor = ApplyColor(m_horizonColorType, m_horizonColorValue, m_horizonColorSaturation);
+            m_horizonColor = ApplyColor(m_horizonColorType, m_horizonColorSaturation, m_horizonColorValue);
             m_skyboxMaterial.SetColor(_horizonColorShaderId, m_horizonColor);
         }
 
@@ -348,7 +369,7 @@ namespace SOSXR.Plet
                 return;
             }
 
-            m_groundColor = ApplyColor(m_groundColorType, m_groundColorValue, m_groundColorSaturation);
+            m_groundColor = ApplyColor(m_groundColorType, m_groundColorSaturation, m_groundColorValue);
             m_skyboxMaterial.SetColor(_groundColorShaderId, m_groundColor);
         }
 
@@ -377,17 +398,34 @@ namespace SOSXR.Plet
         }
 
 
-        public Color ApplyColor(ColorType type, float valueAdjust, float saturation, float alpha = 1f)
+        public Color ApplyColor(ColorType type, int saturation, int value, float alpha = 1f)
         {
             var baseColor = GetColor(type);
 
             Color.RGBToHSV(baseColor, out var h, out var s, out var v);
-            var newColor = Color.HSVToRGB(h, Mathf.Clamp(s * saturation, SatClamp.x, SatClamp.y), Mathf.Clamp(v * valueAdjust, ValueClamp.x, ValueClamp.y));
+
+            // Map the 1-19 scale to a reasonable HSV range
+            s = Mathf.Lerp(SatClamp.x, SatClamp.y, (saturation - 1) / 18f);
+            v = Mathf.Lerp(ValueClamp.x, ValueClamp.y, (value - 1) / 18f);
+
+            var newColor = Color.HSVToRGB(h, s, v);
             newColor.a = alpha;
 
             return newColor;
         }
 
+
+        public Vector2Int GetColorSV(ColorType type)
+        {
+            var baseColor = GetColor(type);
+            Color.RGBToHSV(baseColor, out var h, out var s, out var v);
+
+            var saturation = Mathf.RoundToInt((s - SatClamp.x) / (SatClamp.y - SatClamp.x) * 18f) + 1;
+            var value = Mathf.RoundToInt((v - ValueClamp.x) / (ValueClamp.y - ValueClamp.x) * 18f) + 1;
+
+            return new Vector2Int( saturation, value);
+        }
+        
 
         public Color GetColor(ColorType type)
         {

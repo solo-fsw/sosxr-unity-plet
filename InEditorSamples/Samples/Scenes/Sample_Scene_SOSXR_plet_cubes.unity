@@ -15,17 +15,17 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
   m_Fog: 1
-  m_FogColor: {r: 0.3403294, g: 0.3336433, b: 0.23112282, a: 1}
+  m_FogColor: {r: 0.5588889, g: 0.5179127, b: 0.3458125, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.027
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.5051765, g: 0.49176472, b: 0.28611767, a: 1}
-  m_AmbientEquatorColor: {r: 0.13725491, g: 0.09019608, b: 0.078431375, a: 1}
-  m_AmbientGroundColor: {r: 0.109666675, g: 0.04273867, b: 0.026006669, a: 1}
+  m_AmbientSkyColor: {r: 0.3796875, g: 0.20991042, b: 0.05754639, a: 1}
+  m_AmbientEquatorColor: {r: 0.8759375, g: 0.87265277, b: 0.869368, a: 1}
+  m_AmbientGroundColor: {r: 0.8759375, g: 0.87265277, b: 0.869368, a: 1}
   m_AmbientIntensity: 1.23
-  m_AmbientMode: 1
-  m_SubtractiveShadowColor: {r: 0.44313726, g: 0.4161961, b: 0.0030980646, a: 1}
+  m_AmbientMode: 0
+  m_SubtractiveShadowColor: {r: 0.5588889, g: 0.5179127, b: 0.3458125, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: 6789d134a6fe34f689a5724fb2d4f22d, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
@@ -128,10 +128,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 91543529}
+  - component: {fileID: 91543530}
   - component: {fileID: 91543528}
   - component: {fileID: 91543527}
   - component: {fileID: 91543526}
-  - component: {fileID: 91543525}
   m_Layer: 0
   m_Name: Cube (14)
   m_TagString: Untagged
@@ -139,25 +139,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &91543525
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 91543524}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 2
-  m_saturation: 1
-  m_value: 1
-  m_alpha: 1
-  m_valuedColor: {r: 0.2, g: 0.27450982, b: 0.35686275, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &91543526
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -247,6 +228,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &91543530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91543524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 1
+    Saturation: 8
+    Value: 15
+    Alpha: 1
+    ValuedColor: {r: 0.77944446, g: 0.6672576, b: 0.093858086, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &99393014
 GameObject:
   m_ObjectHideFlags: 0
@@ -256,10 +258,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 99393019}
+  - component: {fileID: 99393020}
   - component: {fileID: 99393018}
   - component: {fileID: 99393017}
   - component: {fileID: 99393016}
-  - component: {fileID: 99393015}
   m_Layer: 0
   m_Name: Cube (10)
   m_TagString: Untagged
@@ -267,25 +269,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &99393015
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 99393014}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 0
-  m_saturation: 2.03
-  m_value: 1
-  m_alpha: 1
-  m_valuedColor: {r: 0.44313726, g: 0.41925493, b: 0.053058855, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &99393016
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -375,6 +358,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &99393020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 99393014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 0
+    Saturation: 4
+    Value: 11
+    Alpha: 1
+    ValuedColor: {r: 0.5588889, g: 0.5179127, b: 0.3458125, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &130836295
 GameObject:
   m_ObjectHideFlags: 0
@@ -509,13 +513,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_colorType: 0
-  m_saturation: 5.63
-  m_value: 1.722
-  m_alpha: 0.961
-  m_valuedColor: {r: 1, g: 0.464939, b: -1.25, a: 0.961}
+  m_colorSettings: []
   init: 1
-  _paletteHolder: {fileID: 11400000, guid: 30f49701448b4418694bcde88f285cfd, type: 2}
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &291197672
 GameObject:
   m_ObjectHideFlags: 0
@@ -662,10 +662,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 545832058}
+  - component: {fileID: 545832059}
   - component: {fileID: 545832057}
   - component: {fileID: 545832056}
   - component: {fileID: 545832055}
-  - component: {fileID: 545832054}
   m_Layer: 0
   m_Name: Cube (18)
   m_TagString: Untagged
@@ -673,25 +673,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &545832054
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 545832053}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 0
-  m_saturation: 1
-  m_value: 1
-  m_alpha: 1
-  m_valuedColor: {r: 0.44313726, g: 0.43137255, b: 0.2509804, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &545832055
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -781,6 +762,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &545832059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 545832053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 1
+    Saturation: 8
+    Value: 15
+    Alpha: 1
+    ValuedColor: {r: 0.77944446, g: 0.6672576, b: 0.093858086, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &551249328
 GameObject:
   m_ObjectHideFlags: 0
@@ -790,10 +792,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 551249333}
+  - component: {fileID: 551249334}
   - component: {fileID: 551249332}
   - component: {fileID: 551249331}
   - component: {fileID: 551249330}
-  - component: {fileID: 551249329}
   m_Layer: 0
   m_Name: Cube (3)
   m_TagString: Untagged
@@ -801,25 +803,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &551249329
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 551249328}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 1
-  m_saturation: 1.63
-  m_value: 1
-  m_alpha: 1
-  m_valuedColor: {r: 0.13725491, g: 0.060549017, b: 0.04137255, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &551249330
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -909,6 +892,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &551249334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 551249328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 2
+    Saturation: 10
+    Value: 7
+    Alpha: 1
+    ValuedColor: {r: -0.043560404, g: 0.33833334, b: 0.015192429, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &642715402
 GameObject:
   m_ObjectHideFlags: 0
@@ -918,10 +922,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 642715407}
+  - component: {fileID: 642715408}
   - component: {fileID: 642715406}
   - component: {fileID: 642715405}
   - component: {fileID: 642715404}
-  - component: {fileID: 642715403}
   m_Layer: 0
   m_Name: Cube (2)
   m_TagString: Untagged
@@ -929,25 +933,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &642715403
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 642715402}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 0
-  m_saturation: 1
-  m_value: 1
-  m_alpha: 1
-  m_valuedColor: {r: 0.44313726, g: 0.43137255, b: 0.2509804, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &642715404
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1037,6 +1022,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &642715408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642715402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 0
+    Saturation: 4
+    Value: 11
+    Alpha: 1
+    ValuedColor: {r: 0.5588889, g: 0.5179127, b: 0.3458125, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &650012323
 GameObject:
   m_ObjectHideFlags: 0
@@ -1046,10 +1052,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 650012328}
+  - component: {fileID: 650012329}
   - component: {fileID: 650012327}
   - component: {fileID: 650012326}
   - component: {fileID: 650012325}
-  - component: {fileID: 650012324}
   m_Layer: 0
   m_Name: Cube (15)
   m_TagString: Untagged
@@ -1057,25 +1063,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &650012324
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 650012323}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 0
-  m_saturation: 1
-  m_value: 1
-  m_alpha: 1
-  m_valuedColor: {r: 0.44313726, g: 0.43137255, b: 0.2509804, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &650012325
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1165,6 +1152,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &650012329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650012323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 1
+    Saturation: 8
+    Value: 15
+    Alpha: 1
+    ValuedColor: {r: 0.77944446, g: 0.6672576, b: 0.093858086, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &663867317
 GameObject:
   m_ObjectHideFlags: 0
@@ -1174,10 +1182,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 663867322}
+  - component: {fileID: 663867323}
   - component: {fileID: 663867321}
   - component: {fileID: 663867320}
   - component: {fileID: 663867319}
-  - component: {fileID: 663867318}
   m_Layer: 0
   m_Name: Cube (11)
   m_TagString: Untagged
@@ -1185,25 +1193,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &663867318
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 663867317}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 1
-  m_saturation: 1
-  m_value: 1
-  m_alpha: 1
-  m_valuedColor: {r: 0.13725491, g: 0.09019608, b: 0.078431375, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &663867319
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1293,6 +1282,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &663867323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 663867317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 0
+    Saturation: 10
+    Value: 10
+    Alpha: 1
+    ValuedColor: {r: 0.50375, g: 0.39440238, b: -0.064857796, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &982140902
 GameObject:
   m_ObjectHideFlags: 0
@@ -1302,10 +1312,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 982140907}
+  - component: {fileID: 982140908}
   - component: {fileID: 982140906}
   - component: {fileID: 982140905}
   - component: {fileID: 982140904}
-  - component: {fileID: 982140903}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -1313,25 +1323,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &982140903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 982140902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 0
-  m_saturation: 1
-  m_value: 1
-  m_alpha: 1
-  m_valuedColor: {r: 0.44313726, g: 0.43137255, b: 0.2509804, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &982140904
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1421,6 +1412,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &982140908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982140902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 0
+    Saturation: 4
+    Value: 11
+    Alpha: 1
+    ValuedColor: {r: 0.5588889, g: 0.5179127, b: 0.3458125, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &1006497767
 GameObject:
   m_ObjectHideFlags: 0
@@ -1430,10 +1442,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1006497772}
+  - component: {fileID: 1006497773}
   - component: {fileID: 1006497771}
   - component: {fileID: 1006497770}
   - component: {fileID: 1006497769}
-  - component: {fileID: 1006497768}
   m_Layer: 0
   m_Name: Cube (7)
   m_TagString: Untagged
@@ -1441,25 +1453,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1006497768
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1006497767}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 1
-  m_saturation: 1
-  m_value: 1
-  m_alpha: 1
-  m_valuedColor: {r: 0.13725491, g: 0.09019608, b: 0.078431375, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &1006497769
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1549,6 +1542,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1006497773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006497767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 1
+    Saturation: 10
+    Value: 8
+    Alpha: 1
+    ValuedColor: {r: 0.39347222, g: 0.32079613, b: -0.050659537, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &1043537252
 GameObject:
   m_ObjectHideFlags: 0
@@ -1558,10 +1572,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1043537257}
+  - component: {fileID: 1043537258}
   - component: {fileID: 1043537256}
   - component: {fileID: 1043537255}
   - component: {fileID: 1043537254}
-  - component: {fileID: 1043537253}
   m_Layer: 0
   m_Name: Cube (5)
   m_TagString: Untagged
@@ -1569,25 +1583,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1043537253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1043537252}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 2
-  m_saturation: 2.71
-  m_value: 0.851
-  m_alpha: 0.949
-  m_valuedColor: {r: -0.05806825, g: 0.113767065, b: 0.3036902, a: 0.949}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &1043537254
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1677,6 +1672,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1043537258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043537252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 0
+    Saturation: 5
+    Value: 9
+    Alpha: 1
+    ValuedColor: {r: 0.4486111, g: 0.4049722, b: 0.22168866, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &1345480854
 GameObject:
   m_ObjectHideFlags: 0
@@ -1686,10 +1702,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1345480859}
+  - component: {fileID: 1345480860}
   - component: {fileID: 1345480858}
   - component: {fileID: 1345480857}
   - component: {fileID: 1345480856}
-  - component: {fileID: 1345480855}
   m_Layer: 0
   m_Name: Cube (13)
   m_TagString: Untagged
@@ -1697,25 +1713,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1345480855
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1345480854}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 2
-  m_saturation: 5.36
-  m_value: 1.513
-  m_alpha: 1
-  m_valuedColor: {r: -0.6749166, g: -0.09786274, b: 0.5399333, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &1345480856
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1805,6 +1802,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1345480860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1345480854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 0
+    Saturation: 5
+    Value: 6
+    Alpha: 1
+    ValuedColor: {r: 0.28319445, g: 0.25564653, b: 0.13994525, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &1520425583
 GameObject:
   m_ObjectHideFlags: 0
@@ -1814,10 +1832,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1520425588}
+  - component: {fileID: 1520425589}
   - component: {fileID: 1520425587}
   - component: {fileID: 1520425586}
   - component: {fileID: 1520425585}
-  - component: {fileID: 1520425584}
   m_Layer: 0
   m_Name: Cube (8)
   m_TagString: Untagged
@@ -1825,25 +1843,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1520425584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1520425583}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 0
-  m_saturation: 1
-  m_value: 1
-  m_alpha: 1
-  m_valuedColor: {r: 0.44313726, g: 0.43137255, b: 0.2509804, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &1520425585
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1933,6 +1932,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1520425589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1520425583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 0
+    Saturation: 4
+    Value: 11
+    Alpha: 1
+    ValuedColor: {r: 0.5588889, g: 0.5179127, b: 0.3458125, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &1560163359
 GameObject:
   m_ObjectHideFlags: 0
@@ -1942,10 +1962,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1560163364}
+  - component: {fileID: 1560163365}
   - component: {fileID: 1560163363}
   - component: {fileID: 1560163362}
   - component: {fileID: 1560163361}
-  - component: {fileID: 1560163360}
   m_Layer: 0
   m_Name: Cube (17)
   m_TagString: Untagged
@@ -1953,25 +1973,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1560163360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1560163359}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 0
-  m_saturation: 1
-  m_value: 1
-  m_alpha: 1
-  m_valuedColor: {r: 0.44313726, g: 0.43137255, b: 0.2509804, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &1560163361
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2061,6 +2062,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1560163365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560163359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 1
+    Saturation: 8
+    Value: 15
+    Alpha: 1
+    ValuedColor: {r: 0.77944446, g: 0.6672576, b: 0.093858086, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &1569432174
 GameObject:
   m_ObjectHideFlags: 0
@@ -2070,10 +2092,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1569432179}
+  - component: {fileID: 1569432180}
   - component: {fileID: 1569432178}
   - component: {fileID: 1569432177}
   - component: {fileID: 1569432176}
-  - component: {fileID: 1569432175}
   m_Layer: 0
   m_Name: Cube (12)
   m_TagString: Untagged
@@ -2081,25 +2103,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1569432175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1569432174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 0
-  m_saturation: 2.96
-  m_value: 1.086
-  m_alpha: 1
-  m_valuedColor: {r: 0.48124704, g: 0.4434287, b: -0.13645267, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &1569432176
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2189,6 +2192,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1569432180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1569432174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 1
+    Saturation: 8
+    Value: 15
+    Alpha: 1
+    ValuedColor: {r: 0.77944446, g: 0.6672576, b: 0.093858086, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &1645743080
 GameObject:
   m_ObjectHideFlags: 0
@@ -2198,10 +2222,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1645743085}
+  - component: {fileID: 1645743086}
   - component: {fileID: 1645743084}
   - component: {fileID: 1645743083}
   - component: {fileID: 1645743082}
-  - component: {fileID: 1645743081}
   m_Layer: 0
   m_Name: Cube (16)
   m_TagString: Untagged
@@ -2209,25 +2233,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1645743081
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1645743080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 1
-  m_saturation: 1.63
-  m_value: 0.639
-  m_alpha: 1
-  m_valuedColor: {r: 0.08770589, g: 0.038690824, b: 0.026437059, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &1645743082
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2317,6 +2322,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1645743086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1645743080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 0
+    Saturation: 4
+    Value: 11
+    Alpha: 1
+    ValuedColor: {r: 0.5588889, g: 0.5179127, b: 0.3458125, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &1800179155
 GameObject:
   m_ObjectHideFlags: 0
@@ -2326,10 +2352,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1800179160}
+  - component: {fileID: 1800179161}
   - component: {fileID: 1800179159}
   - component: {fileID: 1800179158}
   - component: {fileID: 1800179157}
-  - component: {fileID: 1800179156}
   m_Layer: 0
   m_Name: Cube (19)
   m_TagString: Untagged
@@ -2337,25 +2363,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1800179156
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1800179155}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 1
-  m_saturation: 1
-  m_value: 0.639
-  m_alpha: 1
-  m_valuedColor: {r: 0.08770589, g: 0.057635296, b: 0.05011765, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &1800179157
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2445,6 +2452,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1800179161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1800179155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 0
+    Saturation: 4
+    Value: 11
+    Alpha: 1
+    ValuedColor: {r: 0.5588889, g: 0.5179127, b: 0.3458125, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &1951542207
 GameObject:
   m_ObjectHideFlags: 0
@@ -2454,10 +2482,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1951542212}
+  - component: {fileID: 1951542213}
   - component: {fileID: 1951542211}
   - component: {fileID: 1951542210}
   - component: {fileID: 1951542209}
-  - component: {fileID: 1951542208}
   m_Layer: 0
   m_Name: Cube (20)
   m_TagString: Untagged
@@ -2465,25 +2493,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1951542208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1951542207}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 0
-  m_saturation: 1
-  m_value: 1
-  m_alpha: 1
-  m_valuedColor: {r: 0.44313726, g: 0.43137255, b: 0.2509804, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &1951542209
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2573,6 +2582,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1951542213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1951542207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 0
+    Saturation: 4
+    Value: 11
+    Alpha: 1
+    ValuedColor: {r: 0.5588889, g: 0.5179127, b: 0.3458125, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &1957805818
 GameObject:
   m_ObjectHideFlags: 11
@@ -2627,10 +2657,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1986549953}
+  - component: {fileID: 1986549954}
   - component: {fileID: 1986549952}
   - component: {fileID: 1986549951}
   - component: {fileID: 1986549950}
-  - component: {fileID: 1986549949}
   m_Layer: 0
   m_Name: Cube (4)
   m_TagString: Untagged
@@ -2638,25 +2668,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1986549949
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1986549948}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 0
-  m_saturation: 1
-  m_value: 0.639
-  m_alpha: 1
-  m_valuedColor: {r: 0.2831647, g: 0.27564707, b: 0.16037647, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &1986549950
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2746,6 +2757,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1986549954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1986549948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 2
+    Saturation: 11
+    Value: 5
+    Alpha: 1
+    ValuedColor: {r: -0.0577741, g: 0.22805555, b: -0.0138003435, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &2018006742
 GameObject:
   m_ObjectHideFlags: 0
@@ -2755,10 +2787,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2018006747}
+  - component: {fileID: 2018006748}
   - component: {fileID: 2018006746}
   - component: {fileID: 2018006745}
   - component: {fileID: 2018006744}
-  - component: {fileID: 2018006743}
   m_Layer: 0
   m_Name: Cube (6)
   m_TagString: Untagged
@@ -2766,25 +2798,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2018006743
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2018006742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 0
-  m_saturation: 7.28
-  m_value: 0.639
-  m_alpha: 1
-  m_valuedColor: {r: 0.2831647, g: 0.24415734, b: -0.3539559, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &2018006744
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2874,6 +2887,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2018006748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2018006742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 0
+    Saturation: 4
+    Value: 11
+    Alpha: 1
+    ValuedColor: {r: 0.5588889, g: 0.5179127, b: 0.3458125, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1 &2046290242
 GameObject:
   m_ObjectHideFlags: 0
@@ -2883,10 +2917,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2046290247}
+  - component: {fileID: 2046290248}
   - component: {fileID: 2046290246}
   - component: {fileID: 2046290245}
   - component: {fileID: 2046290244}
-  - component: {fileID: 2046290243}
   m_Layer: 0
   m_Name: Cube (9)
   m_TagString: Untagged
@@ -2894,25 +2928,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2046290243
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2046290242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_colorType: 0
-  m_saturation: 2.48
-  m_value: 0.612
-  m_alpha: 1
-  m_valuedColor: {r: 0.2712, g: 0.253344, b: -0.020447994, a: 1}
-  init: 1
-  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!65 &2046290244
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3002,6 +3017,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2046290248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046290242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a000636eeeb4b269390364d630bcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_colorSettings:
+  - Name: Cubes
+    ColorType: 0
+    Saturation: 4
+    Value: 11
+    Alpha: 1
+    ValuedColor: {r: 0.5588889, g: 0.5179127, b: 0.3458125, a: 1}
+  init: 1
+  _paletteHolder: {fileID: 11400000, guid: fc4b7aedad3804b599f159d07a80f948, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

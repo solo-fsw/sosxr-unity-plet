@@ -64,11 +64,11 @@ Once on the GameObject, it will grab any of these components that it can work wi
 
 Next, use the dropdown to select the 'color type': Base, Tone, or Accent color. This will determine which color (or more precisely: which hue) from the palette will be used.
 
-On each instance of the ColorProvider component, you can set a 'value' (brightness) _multiplier_ in relation to the chosen color in the palette. This will be used to calculate the actual brightness of the color that will be used on the object. 
+On each instance of the ColorProvider component, you can set a 'value' (brightness) of the color in the palette.
 
-A similar thing can be done with the 'saturation' _multiplier_, which makes the color more grey, or more vibrant. 
+A similar thing can be done with the saturation 1-19 scale (10 being middle), which makes the color more grey, or more vibrant. 
 
-Note that you're not influencing the value and saturation directly, but you're using this as a multiplier to the value and saturation of the color. This will become important later.
+
 
 ### Changing Palettes (a.k.a. the fun part)
 You have two options to change the palette that is being used in the scene:
@@ -79,7 +79,7 @@ You have two options to change the palette that is being used in the scene:
 The second option is preferable. This way, you can always go back to the original palette, and you can easily switch between palettes.
 This is honestly one of the best features of this package. You can easily switch between palettes, and see how the scene changes. It works because each instance of the ColorProvider component is not directly linked to the palette, but to the PaletteHolder. 
 This way, when you change the palette in the PaletteHolder, all ColorProviders will update to use the new palette, while remembering its own value and saturation multipliers, so you can easily switch between palettes, and still keep the look and feel of the scene.
-Now this is the part where the fact that you're not influencing the value and saturation directly, but you're using this as a multiplier to the value and saturation of the color becomes important. Since the colors you set in each Palette's Base / Tone / Accent will probably start off with various values and saturation, it may require you to adjust the multipliers for each ColorProvider to get the desired look. This is a bit of a downside, but it's a small price to pay for the flexibility of being able to switch between palettes.
+
 
 ### The checkboxes (PaletteHolder)
 - 'Apply Skybox': This will set the skybox in the Lighting tab to the skybox. If you set a skybox in the Lighting tab, it will be overwritten by the skybox in the PaletteHolder. If you uncheck this, the skybox in the Lighting tab will be used. It will look for a material called 'plet_skybox' in the Resources folder. If you don't want to use that one, you can supply your own (drag it forcefully into the 'Skybox' field in the PaletteHolder, you cannot unset the plet skybox without setting a new one). The Shader of the skybox material should be 'Shadergraph/TriColorSkybox' (from the excellent tutorial by [Digvijaysinh Gohil](https://www.youtube.com/watch?v=ZENOA_YFve0)), or at the very least have three public color values called "_SkyColor", "_HorizonColor", and "_GroundColor". You can set which of the three colors (Base, Tone, Accent) should be used for each of these three colors. Multipliers are supplied. Check out the material / shader as well, since it has some more options there.

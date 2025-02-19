@@ -10,7 +10,7 @@ namespace SOSXR.Plet
     {
         [SerializeField] private List<ColorSettings> m_colorSettings = new(1);
 
-        [HideInInspector] [SerializeField] private bool init;
+        [SerializeField] private bool init;
         [HideInInspector] [SerializeField] private PaletteHolder _paletteHolder;
 
 
@@ -125,8 +125,9 @@ namespace SOSXR.Plet
         {
             foreach (var setting in m_colorSettings)
             {
-                setting.Value = 1f;
-                setting.Saturation = 1f;
+                var satVal = _paletteHolder.GetColorSV(setting.ColorType);
+                setting.Saturation = satVal.x;
+                setting.Value = satVal.y;
                 setting.Alpha = 1f;
             }
 
@@ -136,6 +137,18 @@ namespace SOSXR.Plet
 
 
         private void GetPaletteHolder()
+        {
+            if (_paletteHolder != null)
+            {
+                return;
+            }
+
+            ForceGetNewPaletteHolder();
+        }
+
+
+        [ContextMenu(nameof(ForceGetNewPaletteHolder))]
+        private void ForceGetNewPaletteHolder()
         {
             var paletteHolders = Resources.LoadAll<PaletteHolder>("");
 
@@ -153,22 +166,19 @@ namespace SOSXR.Plet
                 return;
             }
 
-            if (paletteHolders.Length > 1)
+            foreach (var paletteHolder in paletteHolders)
             {
-                foreach (var paletteHolder in paletteHolders)
+                if (paletteHolder.name == gameObject.scene.name)
                 {
-                    if (paletteHolder.name == gameObject.scene.name)
-                    {
-                        _paletteHolder = paletteHolder;
+                    _paletteHolder = paletteHolder;
 
-                        break;
-                    }
+                    break;
                 }
+            }
 
-                if (_paletteHolder == null)
-                {
-                    Debug.LogWarningFormat("Multiple PaletteHolders found in Resources folders, but none with the same name as the scene: {0}", gameObject.scene.name);
-                }
+            if (_paletteHolder == null)
+            {
+                Debug.LogWarningFormat("Multiple PaletteHolders found in Resources folders, but none with the same name as the scene: {0}", gameObject.scene.name);
             }
         }
 
@@ -231,6 +241,7 @@ namespace SOSXR.Plet
 
             if (_paletteHolder == null)
             {
+                GetPaletteHolder();
                 Debug.LogWarningFormat(this, "Cannot function without a PaletteHolder.");
 
                 return;
@@ -242,7 +253,7 @@ namespace SOSXR.Plet
 
                 foreach (var setting in colorSettingsCopy)
                 {
-                    setting.ValuedColor = _paletteHolder.ApplyColor(setting.ColorType, setting.Value, setting.Saturation, setting.Alpha);
+                    setting.ValuedColor = _paletteHolder.ApplyColor(setting.ColorType, setting.Saturation, setting.Value, setting.Alpha);
                     _applyColorAction.Invoke(setting.ValuedColor);
                 }
             }
@@ -257,6 +268,7 @@ namespace SOSXR.Plet
         {
             if (_paletteHolder != null)
             {
+          
                 _paletteHolder.OnPaletteChanged -= ApplyColorAction;
             }
         }

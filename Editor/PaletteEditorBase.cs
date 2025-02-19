@@ -7,8 +7,8 @@ namespace SOSXR.Plet
 {
     public class PaletteEditorBase : Editor
     {
-        protected static readonly Vector2 ValueRange = new(0.001f, 2f);
-        protected static readonly Vector2 SaturationRange = new(0.001f, 10f);
+        protected static readonly Vector2Int ValueRange = new(1, 19);
+        protected static readonly Vector2Int SaturationRange = new(1, 19);
 
 
         /// <summary>

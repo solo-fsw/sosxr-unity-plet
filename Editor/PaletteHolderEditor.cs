@@ -355,12 +355,12 @@ namespace SOSXR.Plet
                 (prop, newValue) => prop.enumValueIndex = (int) newValue);
 
             DrawProperty(valueProp, $"{label} Value",
-                () => EditorGUILayout.Slider("Value", valueProp.floatValue, ValueRange.x, ValueRange.y),
-                (prop, newValue) => prop.floatValue = newValue);
+                () => EditorGUILayout.IntSlider("Value", valueProp.intValue, ValueRange.x, ValueRange.y),
+                (prop, newValue) => prop.intValue = newValue);
 
             DrawProperty(saturationProp, $"{label} Saturation",
-                () => EditorGUILayout.Slider("Saturation", saturationProp.floatValue, SaturationRange.x, SaturationRange.y),
-                (prop, newValue) => prop.floatValue = newValue);
+                () => EditorGUILayout.IntSlider("Saturation", saturationProp.intValue, SaturationRange.x, SaturationRange.y),
+                (prop, newValue) => prop.intValue = newValue);
 
             DrawColorBox(colorProp.colorValue, false, true, "HDR Preview");
             GUILayout.EndVertical();
@@ -415,12 +415,12 @@ namespace SOSXR.Plet
                 (prop, newValue) => prop.enumValueIndex = (int) newValue);
 
             DrawProperty(valueProp, $"{label} Value",
-                () => EditorGUILayout.Slider("Value", valueProp.floatValue, ValueRange.x, ValueRange.y),
-                (prop, newValue) => prop.floatValue = newValue);
+                () => EditorGUILayout.IntSlider("Value", valueProp.intValue, ValueRange.x, ValueRange.y),
+                (prop, newValue) => prop.intValue = newValue);
 
             DrawProperty(saturationProp, $"{label} Saturation",
-                () => EditorGUILayout.Slider("Saturation", saturationProp.floatValue, SaturationRange.x, SaturationRange.y),
-                (prop, newValue) => prop.floatValue = newValue);
+                () => EditorGUILayout.IntSlider("Saturation", saturationProp.intValue, SaturationRange.x, SaturationRange.y),
+                (prop, newValue) => prop.intValue = newValue);
 
             DrawColorBox(colorProp.colorValue);
 
@@ -438,12 +438,12 @@ namespace SOSXR.Plet
                 (prop, newValue) => prop.enumValueIndex = (int) newValue);
 
             DrawProperty(_shadowColorValueProp, "Shadow Value",
-                () => EditorGUILayout.Slider("Value", _shadowColorValueProp.floatValue, ValueRange.x, ValueRange.y),
-                (prop, newValue) => prop.floatValue = newValue);
+                () => EditorGUILayout.IntSlider("Value", _shadowColorValueProp.intValue, ValueRange.x, ValueRange.y),
+                (prop, newValue) => prop.intValue = newValue);
 
             DrawProperty(_shadowColorSaturationProp, "Shadow Saturation",
-                () => EditorGUILayout.Slider("Saturation", _shadowColorSaturationProp.floatValue, SaturationRange.x, SaturationRange.y),
-                (prop, newValue) => prop.floatValue = newValue);
+                () => EditorGUILayout.IntSlider("Saturation", _shadowColorSaturationProp.intValue, SaturationRange.x, SaturationRange.y),
+                (prop, newValue) => prop.intValue = newValue);
 
             DrawColorBox(_shadowColorProp.colorValue);
 
@@ -467,12 +467,12 @@ namespace SOSXR.Plet
                 (prop, newValue) => prop.enumValueIndex = (int) newValue);
 
             DrawProperty(_fogColorValueProp, "Fog Value",
-                () => EditorGUILayout.Slider("Value", _fogColorValueProp.floatValue, ValueRange.x, ValueRange.y),
-                (prop, newValue) => prop.floatValue = newValue);
+                () => EditorGUILayout.IntSlider("Value", _fogColorValueProp.intValue, ValueRange.x, ValueRange.y),
+                (prop, newValue) => prop.intValue = newValue);
 
             DrawProperty(_fogColorSaturationProp, "Fog Saturation",
-                () => EditorGUILayout.Slider("Saturation", _fogColorSaturationProp.floatValue, SaturationRange.x, SaturationRange.y),
-                (prop, newValue) => prop.floatValue = newValue);
+                () => EditorGUILayout.IntSlider("Saturation", _fogColorSaturationProp.intValue, SaturationRange.x, SaturationRange.y),
+                (prop, newValue) => prop.intValue = newValue);
 
             DrawColorBox(_fogColorProp.colorValue);
 

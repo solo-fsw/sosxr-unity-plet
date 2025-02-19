@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -39,36 +40,45 @@ namespace SOSXR.Plet
 
         private void DrawColorSettings(SerializedProperty nameProp, SerializedProperty colorTypeProp, SerializedProperty valueProp, SerializedProperty saturationProp, SerializedProperty alphaProp, SerializedProperty valuedColorProp)
         {
-            EditorGUILayout.Space();
-
-            GUILayout.BeginVertical(EditorStyles.helpBox);
-
-            var label = "Color Type";
-
-            if (!string.IsNullOrEmpty(nameProp.stringValue))
+            try
             {
-                label = nameProp.stringValue;
+                EditorGUILayout.Space();
+
+                GUILayout.BeginVertical(EditorStyles.helpBox);
+
+                var label = "Color Type";
+
+                if (!string.IsNullOrEmpty(nameProp.stringValue))
+                {
+                    label = nameProp.stringValue;
+                }
+
+                DrawProperty(colorTypeProp, "Color Type",
+                    () => (ColorType) EditorGUILayout.EnumPopup(label, (ColorType) colorTypeProp.enumValueIndex),
+                    (prop, value) => prop.enumValueIndex = (int) value);
+
+                DrawProperty(valueProp, "Value",
+                    () => EditorGUILayout.IntSlider("Value", valueProp.intValue, ValueRange.x, ValueRange.y),
+                    (prop, value) => prop.intValue = value);
+
+                DrawProperty(saturationProp, "Saturation",
+                    () => EditorGUILayout.IntSlider("Saturation", saturationProp.intValue, SaturationRange.x, SaturationRange.y),
+                    (prop, value) => prop.intValue = value);
+
+                DrawProperty(alphaProp, "Alpha",
+                    () => EditorGUILayout.Slider("Alpha", alphaProp.floatValue, 0f, 1f),
+                    (prop, value) => prop.floatValue = value);
+
+                DrawColorBox(valuedColorProp.colorValue, true);
+
+                GUILayout.EndVertical();
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
 
-            DrawProperty(colorTypeProp, "Color Type",
-                () => (ColorType) EditorGUILayout.EnumPopup(label, (ColorType) colorTypeProp.enumValueIndex),
-                (prop, value) => prop.enumValueIndex = (int) value);
-
-            DrawProperty(valueProp, "Value",
-                () => EditorGUILayout.Slider("Value", valueProp.floatValue, ValueRange.x, ValueRange.y),
-                (prop, value) => prop.floatValue = value);
-
-            DrawProperty(saturationProp, "Saturation",
-                () => EditorGUILayout.Slider("Saturation", saturationProp.floatValue, SaturationRange.x, SaturationRange.y),
-                (prop, value) => prop.floatValue = value);
-
-            DrawProperty(alphaProp, "Alpha",
-                () => EditorGUILayout.Slider("Alpha", alphaProp.floatValue, 0f, 1f),
-                (prop, value) => prop.floatValue = value);
-
-            DrawColorBox(valuedColorProp.colorValue, true);
-
-            GUILayout.EndVertical();
+                throw;
+            }
         }
 
 
