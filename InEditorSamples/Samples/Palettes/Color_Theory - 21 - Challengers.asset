@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a1f2107c90a4360a4ffd0d4e62c654f, type: 3}
+  m_Name: Color_Theory - 21 - Challengers
+  m_EditorClassIdentifier: 
+  Base: {r: 0.003921569, g: 0.07450981, b: 0.078431375, a: 1}
+  Tone: {r: 0.36862746, g: 0.39215687, b: 0.36862746, a: 1}
+  Accent: {r: 0.023529412, g: 0.14509805, b: 0.42745098, a: 1}
+  m_optionalColorTexture: {fileID: 2800000, guid: 64c9251218d0744ff95d11dd4271268f, type: 3}
+  PaletteHolder: {fileID: 11400000, guid: 30f49701448b4418694bcde88f285cfd, type: 2}

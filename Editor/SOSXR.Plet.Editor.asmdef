@@ -1,0 +1,18 @@
+{
+    "name": "SOSXR.Plet.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:12d141b9c9c2747f4a4ef297f275ad8b"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

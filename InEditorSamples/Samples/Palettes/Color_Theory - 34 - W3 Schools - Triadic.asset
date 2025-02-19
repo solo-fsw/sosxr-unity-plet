@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a1f2107c90a4360a4ffd0d4e62c654f, type: 3}
+  m_Name: Color_Theory - 34 - W3 Schools - Triadic
+  m_EditorClassIdentifier: 
+  Base: {r: 0.59607846, g: 0.7921569, b: 0.19607843, a: 1}
+  Tone: {r: 0.3529412, g: 0.09411765, b: 0.7882353, a: 1}
+  Accent: {r: 0.9882353, g: 0.4509804, b: 0.02745098, a: 1}
+  m_optionalColorTexture: {fileID: 2800000, guid: 7fe9b1646d9f143ac84ce2f7694307e4, type: 3}
+  PaletteHolder: {fileID: 11400000, guid: 30f49701448b4418694bcde88f285cfd, type: 2}

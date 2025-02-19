@@ -1,0 +1,24 @@
+{
+  "name": "com.sosxr.plet",
+  "version": "1.0.0",
+  "displayName": "Plet",
+  "description": "Plet: An opinionated color palette for Unity",
+  "documentationUrl": "https://youtu.be/xvFZjo5PgG0?si=F3cJFXtwofUAeAq2",
+  "unity": "2021.1",
+  "dependencies": {
+    
+  },
+  "samples": [
+    {
+      "displayName": "Samples",
+      "description": "Contains samples of this package",
+      "path": "Samples~/Samples"
+    }
+  ],
+  "author": {
+    "name": "SOSXR",
+    "email": "sosxr@fsw.leidenuniv.nl",
+    "url": "https://youtu.be/xvFZjo5PgG0?si=F3cJFXtwofUAeAq2"
+  },
+  "changelogUrl": "https://github.com/solo-fsw/sosxr-unity-plet/blob/main/CHANGELOG.md"
+}

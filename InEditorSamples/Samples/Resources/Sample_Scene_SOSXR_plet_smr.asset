@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54320d13087d419281c447a7d978a673, type: 3}
+  m_Name: Sample_Scene_SOSXR_plet_smr
+  m_EditorClassIdentifier: 
+  m_palette: {fileID: 11400000, guid: 862e887797c814050be763964b8d3f33, type: 2}
+  m_previousPalette: {fileID: 11400000, guid: 862e887797c814050be763964b8d3f33, type: 2}
+  m_applySkybox: 1
+  m_skyboxMaterial: {fileID: 2100000, guid: 6789d134a6fe34f689a5724fb2d4f22d, type: 2}
+  m_skyColorType: 0
+  m_skyColorValue: 1.106
+  m_skyColorSaturation: 1.57
+  m_skyColor: {r: 0.6314176, g: 0.66546506, b: 0.67227453, a: 1}
+  m_horizonColorType: 0
+  m_horizonColorValue: 1
+  m_horizonColorSaturation: 1
+  m_horizonColor: {r: 0.58431375, g: 0.6039216, b: 0.60784316, a: 1}
+  m_groundColorType: 1
+  m_groundColorValue: 0.667
+  m_groundColorSaturation: 0.97
+  m_groundColor: {r: 0.53360003, g: 0.47524408, b: 0.4194253, a: 1}
+  m_applyAmbientLight: 1
+  m_ambientLightType: 2
+  m_ambientLightValue: 1
+  m_ambientLightSaturation: 1
+  m_ambientLightColor: {r: 0.7088902, g: 0.18658163, b: -0.084427536, a: 1}
+  m_ambientSkyLightType: 0
+  m_ambientSkyLightValue: 1
+  m_ambientSkyLightSaturation: 1
+  m_ambientSkyLightColor: {r: 0.58431375, g: 0.6039216, b: 0.60784316, a: 1}
+  m_ambientEquatorLightType: 1
+  m_ambientEquatorLightValue: 1
+  m_ambientEquatorLightSaturation: 1
+  m_ambientEquatorLightColor: {r: 0.8, g: 0.70980394, b: 0.62352943, a: 1}
+  m_ambientGroundLightType: 2
+  m_ambientGroundLightValue: 1
+  m_ambientGroundLightSaturation: 1
+  m_ambientGroundLightColor: {r: 0.8745098, g: 0.7529412, b: 0.24313724, a: 1}
+  m_applyRealtimeShadows: 1
+  m_shadowColor: {r: 0.58431375, g: 0.6039216, b: 0.60784316, a: 1}
+  m_shadowColorType: 0
+  m_shadowColorValue: 1
+  m_shadowColorSaturation: 1
+  m_applyFog: 1
+  m_fogColor: {r: 0.56666666, g: 0.6009804, b: 0.60784316, a: 1}
+  m_fogColorType: 0
+  m_fogColorValue: 1
+  m_fogColorSaturation: 1.75

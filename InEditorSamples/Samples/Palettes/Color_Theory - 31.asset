@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a1f2107c90a4360a4ffd0d4e62c654f, type: 3}
+  m_Name: Color_Theory - 31
+  m_EditorClassIdentifier: 
+  Base: {r: 0.7921569, g: 0.7882353, b: 0.7764706, a: 1}
+  Tone: {r: 0.49019608, g: 0.25490198, b: 0.13333334, a: 1}
+  Accent: {r: 0.38431373, g: 0.5137255, b: 0.6039216, a: 1}
+  m_optionalColorTexture: {fileID: 2800000, guid: 135ac9d60210441d8afcd44b17d1f851, type: 3}
+  PaletteHolder: {fileID: 11400000, guid: 30f49701448b4418694bcde88f285cfd, type: 2}
