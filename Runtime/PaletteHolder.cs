@@ -154,7 +154,7 @@ namespace SOSXR.plet
             SetFogColor();
 
             #if UNITY_EDITOR
-                SceneView.RepaintAll();
+            SceneView.RepaintAll();
             #endif
         }
 

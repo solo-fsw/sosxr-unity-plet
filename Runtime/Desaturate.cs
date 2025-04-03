@@ -126,7 +126,8 @@ namespace SOSXR.plet
         {
             return Resources.Load<Texture2D>(name);
         }
-        
+
+
         #endif
     }
 }
