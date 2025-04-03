@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54320d13087d419281c447a7d978a673, type: 3}
+  m_Name: Sample_Scene_SOSXR_plet_smr
+  m_EditorClassIdentifier: 
+  Palette: {fileID: 11400000, guid: 5aadd77acc0ff457a9ed23b33e0e0bd4, type: 2}
+  PreviousPalette: {fileID: 11400000, guid: 5aadd77acc0ff457a9ed23b33e0e0bd4, type: 2}
+  ApplySkybox: 0
+  SkyboxMaterial: {fileID: 2100000, guid: 5d9d293ba82354b6b9c55b6f199e8376, type: 2}
+  SkyboxSkyHueType: 0
+  SkyboxSkySaturation: 7
+  SkyboxSkyValue: 16
+  SkyboxSkyColor: {r: 0.83458334, g: 0.83458334, b: 0.552216, a: 1}
+  SkyboxHorizonHueType: 1
+  SkyboxHorizonSaturation: 3
+  SkyboxHorizonValue: 13
+  SkyboxHorizonColor: {r: 0.6691667, g: 0.6034892, b: 0.5903537, a: 1}
+  SkyboxGroundHueType: 2
+  SkyboxGroundSaturation: 4
+  SkyboxGroundValue: 12
+  SkyboxGroundColor: {r: 0.6140278, g: 0.526852, b: 0.50785214, a: 1}
+  ApplyAmbientLight: 0
+  AmbientLightHueType: 0
+  AmbientLightSaturation: 7
+  AmbientLightValue: 16
+  AmbientLightColor: {r: 0, g: 0, b: 0, a: 0}
+  AmbientSkyLightHueType: 0
+  AmbientSkyLightSaturation: 7
+  AmbientSkyLightValue: 16
+  AmbientSkyLightColor: {r: 0.83458334, g: 0.83458334, b: 0.552216, a: 1}
+  AmbientEquatorLightHueType: 0
+  AmbientEquatorLightSaturation: 7
+  AmbientEquatorLightValue: 16
+  AmbientEquatorLightColor: {r: 0.83458334, g: 0.83458334, b: 0.552216, a: 1}
+  AmbientGroundLightHueType: 0
+  AmbientGroundLightSaturation: 7
+  AmbientGroundLightValue: 16
+  AmbientGroundLightColor: {r: 0.83458334, g: 0.83458334, b: 0.552216, a: 1}
+  ApplyRealtimeShadows: 0
+  RealtimeShadowHueType: 0
+  RealtimeShadowSaturation: 7
+  RealtimeShadowValue: 16
+  RealtimeShadowColor: {r: 0.83458334, g: 0.83458334, b: 0.552216, a: 1}
+  ApplyFog: 0
+  FogHueType: 0
+  FogSaturation: 7
+  FogValue: 16
+  FogColor: {r: 0.83458334, g: 0.83458334, b: 0.552216, a: 1}

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 
-namespace SOSXR.Plet
+namespace SOSXR.plet.Editor
 {
     [CustomEditor(typeof(PaletteHolder))]
     public class PaletteHolderEditor : PaletteEditorBase
@@ -14,113 +14,117 @@ namespace SOSXR.Plet
         private SerializedProperty _applySkyboxProp;
 
         private SerializedProperty _skyboxMaterialProp;
-        private SerializedProperty _skyColorTypeProp;
-        private SerializedProperty _skyColorValueProp;
-        private SerializedProperty _skyColorSaturationProp;
-        private SerializedProperty _skyColorProp;
 
-        private SerializedProperty _horizonColorTypeProp;
-        private SerializedProperty _horizonColorValueProp;
-        private SerializedProperty _horizonColorSaturationProp;
-        private SerializedProperty _horizonColorProp;
+        private SerializedProperty _skyboxSkyHueTypeProp;
+        private SerializedProperty _skyboxSkySaturationProp;
+        private SerializedProperty _skyboxSkyValueProp;
+        private SerializedProperty _skyboxSkyColorProp;
 
-        private SerializedProperty _groundColorTypeProp;
-        private SerializedProperty _groundColorValueProp;
-        private SerializedProperty _groundColorSaturationProp;
-        private SerializedProperty _groundColorProp;
+        private SerializedProperty _skyboxHorizonHueTypeProp;
+        private SerializedProperty _skyboxHorizonSaturationProp;
+        private SerializedProperty _skyboxHorizonValueProp;
+        private SerializedProperty _skyboxHorizonColorProp;
+
+        private SerializedProperty _skyboxGroundHueTypeProp;
+        private SerializedProperty _skyboxGroundSaturationProp;
+        private SerializedProperty _skyboxGroundValueProp;
+        private SerializedProperty _skyboxGroundColorProp;
 
         private SerializedProperty _applyAmbientLightProp;
 
-        private SerializedProperty _ambientLightTypeProp;
-        private SerializedProperty _ambientLightValueProp;
+        private SerializedProperty _ambientLightHueTypeProp;
         private SerializedProperty _ambientLightSaturationProp;
+        private SerializedProperty _ambientLightValueProp;
         private SerializedProperty _ambientLightColorProp;
 
         private SerializedProperty _ambientSkyLightTypeProp;
-        private SerializedProperty _ambientSkyLightValueProp;
         private SerializedProperty _ambientSkyLightSaturationProp;
+        private SerializedProperty _ambientSkyLightValueProp;
         private SerializedProperty _ambientSkyLightColorProp;
 
         private SerializedProperty _ambientEquatorLightTypeProp;
-        private SerializedProperty _ambientEquatorLightValueProp;
         private SerializedProperty _ambientEquatorLightSaturationProp;
+        private SerializedProperty _ambientEquatorLightValueProp;
         private SerializedProperty _ambientEquatorLightColorProp;
 
         private SerializedProperty _ambientGroundLightTypeProp;
-        private SerializedProperty _ambientGroundLightValueProp;
         private SerializedProperty _ambientGroundLightSaturationProp;
+        private SerializedProperty _ambientGroundLightValueProp;
         private SerializedProperty _ambientGroundLightColorProp;
 
         private SerializedProperty _applyRealtimeShadowsProp;
-        private SerializedProperty _shadowColorTypeProp;
-        private SerializedProperty _shadowColorValueProp;
-        private SerializedProperty _shadowColorSaturationProp;
-        private SerializedProperty _shadowColorProp;
+
+        private SerializedProperty _realtimeShadowHueTypeProp;
+        private SerializedProperty _realtimeShadowSaturationProp;
+        private SerializedProperty _realtimeShadowValueProp;
+        private SerializedProperty _realtimeShadowColorProp;
 
         private SerializedProperty _applyFogProp;
-        private SerializedProperty _fogColorTypeProp;
-        private SerializedProperty _fogColorValueProp;
-        private SerializedProperty _fogColorSaturationProp;
-        private SerializedProperty _fogColorProp;
 
-        private Material skybox;
+        private SerializedProperty _fogHueTypeProp;
+        private SerializedProperty _fogSaturationProp;
+        private SerializedProperty _fogValueProp;
+        private SerializedProperty _fogColorProp;
 
 
         private void OnEnable()
         {
-            _paletteProp = serializedObject.FindProperty("m_palette");
-            _previousPaletteProp = serializedObject.FindProperty("m_previousPalette");
+            _paletteProp = serializedObject.FindProperty(nameof(PaletteHolder.Palette));
+            _previousPaletteProp = serializedObject.FindProperty(nameof(PaletteHolder.PreviousPalette));
 
-            _applySkyboxProp = serializedObject.FindProperty("m_applySkybox");
-            _skyboxMaterialProp = serializedObject.FindProperty("m_skyboxMaterial");
-            _skyColorTypeProp = serializedObject.FindProperty("m_skyColorType");
-            _skyColorValueProp = serializedObject.FindProperty("m_skyColorValue");
-            _skyColorSaturationProp = serializedObject.FindProperty("m_skyColorSaturation");
-            _skyColorProp = serializedObject.FindProperty("m_skyColor");
+            _applySkyboxProp = serializedObject.FindProperty(nameof(PaletteHolder.ApplySkybox));
 
-            _horizonColorTypeProp = serializedObject.FindProperty("m_horizonColorType");
-            _horizonColorValueProp = serializedObject.FindProperty("m_horizonColorValue");
-            _horizonColorSaturationProp = serializedObject.FindProperty("m_horizonColorSaturation");
-            _horizonColorProp = serializedObject.FindProperty("m_horizonColor");
+            _skyboxMaterialProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxMaterial));
+            _skyboxSkyHueTypeProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxSkyHueType));
+            _skyboxSkySaturationProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxSkySaturation));
+            _skyboxSkyValueProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxSkyValue));
+            _skyboxSkyColorProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxSkyColor));
 
-            _groundColorTypeProp = serializedObject.FindProperty("m_groundColorType");
-            _groundColorValueProp = serializedObject.FindProperty("m_groundColorValue");
-            _groundColorSaturationProp = serializedObject.FindProperty("m_groundColorSaturation");
-            _groundColorProp = serializedObject.FindProperty("m_groundColor");
+            _skyboxHorizonHueTypeProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxHorizonHueType));
+            _skyboxHorizonSaturationProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxHorizonSaturation));
+            _skyboxHorizonValueProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxHorizonValue));
+            _skyboxHorizonColorProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxHorizonColor));
 
-            _applyAmbientLightProp = serializedObject.FindProperty("m_applyAmbientLight");
+            _skyboxGroundHueTypeProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxGroundHueType));
+            _skyboxGroundSaturationProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxGroundSaturation));
+            _skyboxGroundValueProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxGroundValue));
+            _skyboxGroundColorProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxGroundColor));
 
-            _ambientLightTypeProp = serializedObject.FindProperty("m_ambientLightType");
-            _ambientLightValueProp = serializedObject.FindProperty("m_ambientLightValue");
-            _ambientLightSaturationProp = serializedObject.FindProperty("m_ambientLightSaturation");
-            _ambientLightColorProp = serializedObject.FindProperty("m_ambientLightColor");
+            _applyAmbientLightProp = serializedObject.FindProperty(nameof(PaletteHolder.ApplyAmbientLight));
 
-            _ambientSkyLightTypeProp = serializedObject.FindProperty("m_ambientSkyLightType");
-            _ambientSkyLightValueProp = serializedObject.FindProperty("m_ambientSkyLightValue");
-            _ambientSkyLightSaturationProp = serializedObject.FindProperty("m_ambientSkyLightSaturation");
-            _ambientSkyLightColorProp = serializedObject.FindProperty("m_ambientSkyLightColor");
+            _ambientLightHueTypeProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientLightHueType));
+            _ambientLightSaturationProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientLightSaturation));
+            _ambientLightValueProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientLightValue));
+            _ambientLightColorProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientLightColor));
 
-            _ambientEquatorLightTypeProp = serializedObject.FindProperty("m_ambientEquatorLightType");
-            _ambientEquatorLightValueProp = serializedObject.FindProperty("m_ambientEquatorLightValue");
-            _ambientEquatorLightSaturationProp = serializedObject.FindProperty("m_ambientEquatorLightSaturation");
-            _ambientEquatorLightColorProp = serializedObject.FindProperty("m_ambientEquatorLightColor");
+            _ambientSkyLightTypeProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientSkyLightHueType));
+            _ambientSkyLightSaturationProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientSkyLightSaturation));
+            _ambientSkyLightValueProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientSkyLightValue));
+            _ambientSkyLightColorProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientSkyLightColor));
 
-            _ambientGroundLightTypeProp = serializedObject.FindProperty("m_ambientGroundLightType");
-            _ambientGroundLightValueProp = serializedObject.FindProperty("m_ambientGroundLightValue");
-            _ambientGroundLightSaturationProp = serializedObject.FindProperty("m_ambientGroundLightSaturation");
-            _ambientGroundLightColorProp = serializedObject.FindProperty("m_ambientGroundLightColor");
+            _ambientEquatorLightTypeProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientEquatorLightHueType));
+            _ambientEquatorLightSaturationProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientEquatorLightSaturation));
+            _ambientEquatorLightValueProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientEquatorLightValue));
+            _ambientEquatorLightColorProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientEquatorLightColor));
 
-            _applyRealtimeShadowsProp = serializedObject.FindProperty("m_applyRealtimeShadows");
-            _shadowColorTypeProp = serializedObject.FindProperty("m_shadowColorType");
-            _shadowColorValueProp = serializedObject.FindProperty("m_shadowColorValue");
-            _shadowColorSaturationProp = serializedObject.FindProperty("m_shadowColorSaturation");
-            _shadowColorProp = serializedObject.FindProperty("m_shadowColor");
+            _ambientGroundLightTypeProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientGroundLightHueType));
+            _ambientGroundLightSaturationProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientGroundLightSaturation));
+            _ambientGroundLightValueProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientGroundLightValue));
+            _ambientGroundLightColorProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientGroundLightColor));
 
-            _applyFogProp = serializedObject.FindProperty("m_applyFog");
-            _fogColorTypeProp = serializedObject.FindProperty("m_fogColorType");
-            _fogColorValueProp = serializedObject.FindProperty("m_fogColorValue");
-            _fogColorSaturationProp = serializedObject.FindProperty("m_fogColorSaturation");
-            _fogColorProp = serializedObject.FindProperty("m_fogColor");
+            _applyRealtimeShadowsProp = serializedObject.FindProperty(nameof(PaletteHolder.ApplyRealtimeShadows));
+
+            _realtimeShadowHueTypeProp = serializedObject.FindProperty(nameof(PaletteHolder.RealtimeShadowHueType));
+            _realtimeShadowSaturationProp = serializedObject.FindProperty(nameof(PaletteHolder.RealtimeShadowSaturation));
+            _realtimeShadowValueProp = serializedObject.FindProperty(nameof(PaletteHolder.RealtimeShadowValue));
+            _realtimeShadowColorProp = serializedObject.FindProperty(nameof(PaletteHolder.RealtimeShadowColor));
+
+            _applyFogProp = serializedObject.FindProperty(nameof(PaletteHolder.ApplyFog));
+
+            _fogHueTypeProp = serializedObject.FindProperty(nameof(PaletteHolder.FogHueType));
+            _fogSaturationProp = serializedObject.FindProperty(nameof(PaletteHolder.FogSaturation));
+            _fogValueProp = serializedObject.FindProperty(nameof(PaletteHolder.FogValue));
+            _fogColorProp = serializedObject.FindProperty(nameof(PaletteHolder.FogColor));
         }
 
 
@@ -155,6 +159,7 @@ namespace SOSXR.Plet
             }
 
             EditorGUILayout.Space();
+
             DrawSectionHeader("Palette Colors");
             DrawPaletteColorFields((Palette) _paletteProp.objectReferenceValue);
 
@@ -164,7 +169,7 @@ namespace SOSXR.Plet
             {
                 DrawSkyboxField(paletteHolder);
 
-                if (skybox != null)
+                if (_skyboxMaterialProp.objectReferenceValue != null)
                 {
                     DrawSkyboxColorFields(paletteHolder);
                 }
@@ -201,7 +206,7 @@ namespace SOSXR.Plet
 
             EditorGUILayout.Space(10);
 
-            if (DrawToggleHeader("Realtime Shadows", "Apply Realtime Shadow Colors", _applyRealtimeShadowsProp))
+            if (DrawToggleHeader("Realtime Shadows", "Apply Realtime Shadow Color", _applyRealtimeShadowsProp))
             {
                 DrawRealtimeShadowFields(paletteHolder);
             }
@@ -211,7 +216,7 @@ namespace SOSXR.Plet
             {
                 EditorGUILayout.Space(10);
 
-                if (DrawToggleHeader("Fog", "Apply Fog Colors", _applyFogProp))
+                if (DrawToggleHeader("Fog", "Apply Fog Color", _applyFogProp))
                 {
                     DrawFogFields(paletteHolder);
                 }
@@ -281,89 +286,19 @@ namespace SOSXR.Plet
 
         private void DrawPaletteColorFields(Palette palette)
         {
+            var height = 50;
+
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            EditorGUILayout.LabelField(nameof(ColorType.Base), EditorStyles.boldLabel);
-            DrawColorBox(palette.Base, false, false, null);
+            DrawColorBox(palette.Base, false, false, nameof(HueType) + " - " + nameof(HueType.Base), height);
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            EditorGUILayout.LabelField(nameof(ColorType.Tone), EditorStyles.boldLabel);
-            DrawColorBox(palette.Tone, false, false, null);
+            DrawColorBox(palette.Tone, false, false, nameof(HueType) + " - " + nameof(HueType.Tone), height);
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            EditorGUILayout.LabelField(nameof(ColorType.Accent), EditorStyles.boldLabel);
-            DrawColorBox(palette.Accent, false, false, null);
+            DrawColorBox(palette.Accent, false, false, nameof(HueType) + " - " + nameof(HueType.Accent), height);
             EditorGUILayout.EndVertical();
-        }
-
-
-        private void DrawColorBox(Color color, bool alpha = false, bool hdr = false, string label = "Preview")
-        {
-            EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.ColorField(new GUIContent(label), color, false, alpha, hdr, GUILayout.Height(30));
-            EditorGUI.EndDisabledGroup();
-        }
-
-
-        private void DrawSingleAmbientLightFields(PaletteHolder paletteHolder)
-        {
-            EditorGUI.BeginChangeCheck();
-
-            DrawEnvironmentLightSection("Ambient Light",
-                _ambientLightTypeProp,
-                _ambientLightValueProp,
-                _ambientLightSaturationProp,
-                _ambientLightColorProp);
-
-            if (EditorGUI.EndChangeCheck())
-            {
-                serializedObject.ApplyModifiedProperties();
-                paletteHolder.SetAmbientLight();
-            }
-        }
-
-
-        private void DrawTriAmbientLightFields(PaletteHolder paletteHolder)
-        {
-            EditorGUI.BeginChangeCheck();
-
-            DrawEnvironmentLightSection("Ambient Sky Light", _ambientSkyLightTypeProp, _ambientSkyLightValueProp, _ambientSkyLightSaturationProp, _ambientSkyLightColorProp);
-            DrawEnvironmentLightSection("Ambient Equator Light", _ambientEquatorLightTypeProp, _ambientEquatorLightValueProp, _ambientEquatorLightSaturationProp, _ambientEquatorLightColorProp);
-            DrawEnvironmentLightSection("Ambient Ground Light", _ambientGroundLightTypeProp, _ambientGroundLightValueProp, _ambientGroundLightSaturationProp, _ambientGroundLightColorProp);
-
-            if (EditorGUI.EndChangeCheck())
-            {
-                serializedObject.ApplyModifiedProperties();
-
-                paletteHolder.SetAmbientSkyLight();
-                paletteHolder.SetAmbientEquatorLight();
-                paletteHolder.SetAmbientGroundLight();
-            }
-        }
-
-
-        /// <summary>
-        ///     Draws a single ambient light section using the optimized property handling.
-        /// </summary>
-        private void DrawEnvironmentLightSection(string label, SerializedProperty typeProp, SerializedProperty valueProp, SerializedProperty saturationProp, SerializedProperty colorProp)
-        {
-            GUILayout.BeginVertical(EditorStyles.helpBox);
-
-            DrawProperty(typeProp, label,
-                () => (ColorType) EditorGUILayout.EnumPopup(label, (ColorType) typeProp.enumValueIndex),
-                (prop, newValue) => prop.enumValueIndex = (int) newValue);
-
-            DrawProperty(valueProp, $"{label} Value",
-                () => EditorGUILayout.IntSlider("Value", valueProp.intValue, ValueRange.x, ValueRange.y),
-                (prop, newValue) => prop.intValue = newValue);
-
-            DrawProperty(saturationProp, $"{label} Saturation",
-                () => EditorGUILayout.IntSlider("Saturation", saturationProp.intValue, SaturationRange.x, SaturationRange.y),
-                (prop, newValue) => prop.intValue = newValue);
-
-            DrawColorBox(colorProp.colorValue, false, true, "HDR Preview");
-            GUILayout.EndVertical();
         }
 
 
@@ -372,7 +307,7 @@ namespace SOSXR.Plet
             GUILayout.BeginVertical(EditorStyles.helpBox);
 
             DrawProperty(_skyboxMaterialProp, "Skybox Material",
-                () => skybox = (Material) EditorGUILayout.ObjectField("Skybox Material", _skyboxMaterialProp.objectReferenceValue, typeof(Material), false),
+                () => _skyboxMaterialProp.objectReferenceValue = (Material) EditorGUILayout.ObjectField("Skybox Material", _skyboxMaterialProp.objectReferenceValue, typeof(Material), false),
                 (prop, newValue) => prop.objectReferenceValue = newValue);
 
             GUILayout.EndVertical();
@@ -389,63 +324,74 @@ namespace SOSXR.Plet
         {
             EditorGUI.BeginChangeCheck();
 
-            DrawSkyboxColorSection("Sky Color", _skyColorTypeProp, _skyColorValueProp, _skyColorSaturationProp, _skyColorProp);
-            DrawSkyboxColorSection("Horizon Color", _horizonColorTypeProp, _horizonColorValueProp, _horizonColorSaturationProp, _horizonColorProp);
-            DrawSkyboxColorSection("Ground Color", _groundColorTypeProp, _groundColorValueProp, _groundColorSaturationProp, _groundColorProp);
+            DrawSection("Skybox Sky Hue Type", _skyboxSkyHueTypeProp, _skyboxSkyValueProp, _skyboxSkySaturationProp, _skyboxSkyColorProp);
+            DrawSection("Skybox Horizon Hue Type", _skyboxHorizonHueTypeProp, _skyboxHorizonValueProp, _skyboxHorizonSaturationProp, _skyboxHorizonColorProp);
+            DrawSection("Skybox Ground Hue Type", _skyboxGroundHueTypeProp, _skyboxGroundValueProp, _skyboxGroundSaturationProp, _skyboxGroundColorProp);
 
             if (EditorGUI.EndChangeCheck())
             {
                 serializedObject.ApplyModifiedProperties();
-                paletteHolder.SetSkyColor();
-                paletteHolder.SetHorizonColor();
-                paletteHolder.SetGroundColor();
+                paletteHolder.SetSkyboxSkyColor();
+                paletteHolder.SetSkyboxHorizonColor();
+                paletteHolder.SetSkyboxGroundColor();
+            }
+
+            if (GUILayout.Button(ButtonText))
+            {
+                paletteHolder.GetSkyboxSVFromPalette();
             }
         }
 
 
-        /// <summary>
-        ///     Draws a single skybox color section using the optimized property handling.
-        /// </summary>
-        private void DrawSkyboxColorSection(string label, SerializedProperty typeProp, SerializedProperty valueProp, SerializedProperty saturationProp, SerializedProperty colorProp)
+        private void DrawSingleAmbientLightFields(PaletteHolder paletteHolder)
         {
-            GUILayout.BeginVertical(EditorStyles.helpBox);
+            EditorGUI.BeginChangeCheck();
 
-            DrawProperty(typeProp, label,
-                () => (ColorType) EditorGUILayout.EnumPopup(label, (ColorType) typeProp.enumValueIndex),
-                (prop, newValue) => prop.enumValueIndex = (int) newValue);
+            DrawSection("Ambient Light Hue Type", _ambientLightHueTypeProp, _ambientLightValueProp, _ambientLightSaturationProp, _ambientLightColorProp, null, true);
 
-            DrawProperty(valueProp, $"{label} Value",
-                () => EditorGUILayout.IntSlider("Value", valueProp.intValue, ValueRange.x, ValueRange.y),
-                (prop, newValue) => prop.intValue = newValue);
+            if (EditorGUI.EndChangeCheck())
+            {
+                serializedObject.ApplyModifiedProperties();
+                paletteHolder.SetAmbientLightColor();
+            }
 
-            DrawProperty(saturationProp, $"{label} Saturation",
-                () => EditorGUILayout.IntSlider("Saturation", saturationProp.intValue, SaturationRange.x, SaturationRange.y),
-                (prop, newValue) => prop.intValue = newValue);
+            if (GUILayout.Button(ButtonText))
+            {
+                paletteHolder.GetAmbientLightSVFromPalette();
+            }
+        }
 
-            DrawColorBox(colorProp.colorValue);
 
-            GUILayout.EndVertical();
+        private void DrawTriAmbientLightFields(PaletteHolder paletteHolder)
+        {
+            EditorGUI.BeginChangeCheck();
+
+            DrawSection("Ambient Sky Light Hue Type", _ambientSkyLightTypeProp, _ambientSkyLightValueProp, _ambientSkyLightSaturationProp, _ambientSkyLightColorProp, null, true);
+            DrawSection("Ambient Equator Light Hue Type", _ambientEquatorLightTypeProp, _ambientEquatorLightValueProp, _ambientEquatorLightSaturationProp, _ambientEquatorLightColorProp, null, true);
+            DrawSection("Ambient Ground Light Hue Type", _ambientGroundLightTypeProp, _ambientGroundLightValueProp, _ambientGroundLightSaturationProp, _ambientGroundLightColorProp, null, true);
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                serializedObject.ApplyModifiedProperties();
+
+                paletteHolder.SetAmbientSkyTriLightColor();
+                paletteHolder.SetAmbientEquatorTriLightColor();
+                paletteHolder.SetAmbientGroundTriLightColor();
+            }
+
+            if (GUILayout.Button(ButtonText))
+            {
+                paletteHolder.GetAmbientLightSVFromPalette();
+            }
         }
 
 
         private void DrawRealtimeShadowFields(PaletteHolder paletteHolder)
         {
-            GUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUI.BeginChangeCheck();
 
-            DrawProperty(_shadowColorTypeProp, "Shadow Color",
-                () => (ColorType) EditorGUILayout.EnumPopup("Shadow Color", (ColorType) _shadowColorTypeProp.enumValueIndex),
-                (prop, newValue) => prop.enumValueIndex = (int) newValue);
+            DrawSection("Realtime Shadow Hue Type", _realtimeShadowHueTypeProp, _realtimeShadowValueProp, _realtimeShadowSaturationProp, _realtimeShadowColorProp);
 
-            DrawProperty(_shadowColorValueProp, "Shadow Value",
-                () => EditorGUILayout.IntSlider("Value", _shadowColorValueProp.intValue, ValueRange.x, ValueRange.y),
-                (prop, newValue) => prop.intValue = newValue);
-
-            DrawProperty(_shadowColorSaturationProp, "Shadow Saturation",
-                () => EditorGUILayout.IntSlider("Saturation", _shadowColorSaturationProp.intValue, SaturationRange.x, SaturationRange.y),
-                (prop, newValue) => prop.intValue = newValue);
-
-            DrawColorBox(_shadowColorProp.colorValue);
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -453,28 +399,18 @@ namespace SOSXR.Plet
                 paletteHolder.SetRealtimeShadowColor();
             }
 
-            GUILayout.EndVertical();
+            if (GUILayout.Button(nameof(paletteHolder.GetRealtimeShadowSVFromPalette)))
+            {
+                paletteHolder.GetRealtimeShadowSVFromPalette();
+            }
         }
 
 
         private void DrawFogFields(PaletteHolder paletteHolder)
         {
-            GUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUI.BeginChangeCheck();
 
-            DrawProperty(_fogColorTypeProp, "Fog Color",
-                () => (ColorType) EditorGUILayout.EnumPopup("Fog Color", (ColorType) _fogColorTypeProp.enumValueIndex),
-                (prop, newValue) => prop.enumValueIndex = (int) newValue);
-
-            DrawProperty(_fogColorValueProp, "Fog Value",
-                () => EditorGUILayout.IntSlider("Value", _fogColorValueProp.intValue, ValueRange.x, ValueRange.y),
-                (prop, newValue) => prop.intValue = newValue);
-
-            DrawProperty(_fogColorSaturationProp, "Fog Saturation",
-                () => EditorGUILayout.IntSlider("Saturation", _fogColorSaturationProp.intValue, SaturationRange.x, SaturationRange.y),
-                (prop, newValue) => prop.intValue = newValue);
-
-            DrawColorBox(_fogColorProp.colorValue);
+            DrawSection("Fog Hue Type", _fogHueTypeProp, _fogValueProp, _fogSaturationProp, _fogColorProp);
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -482,7 +418,10 @@ namespace SOSXR.Plet
                 paletteHolder.SetFogColor();
             }
 
-            GUILayout.EndVertical();
+            if (GUILayout.Button(ButtonText))
+            {
+                paletteHolder.GetFogSVFromPalette();
+            }
         }
     }
 }

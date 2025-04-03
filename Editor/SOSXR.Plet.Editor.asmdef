@@ -1,6 +1,6 @@
 {
-  "name": "SOSXR.Plet.Editor",
-  "rootNamespace": "",
+  "name": "SOSXR.plet.Editor",
+  "rootNamespace": "SOSXR.plet.Editor",
   "references": [
     "GUID:12d141b9c9c2747f4a4ef297f275ad8b"
   ],

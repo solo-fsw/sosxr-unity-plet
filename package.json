@@ -1,11 +1,12 @@
 {
   "name": "com.sosxr.plet",
-  "version": "1.0.0",
-  "displayName": "Plet",
-  "description": "Plet: An opinionated color palette for Unity",
+  "version": "0.2.1",
+  "displayName": "plet",
+  "description": "plet: An opinionated color palette for Unity",
   "documentationUrl": "https://youtu.be/xvFZjo5PgG0?si=F3cJFXtwofUAeAq2",
-  "unity": "2021.1",
+  "unity": "2021.3",
   "dependencies": {
+    "com.unity.textmeshpro": "3.0.1"
   },
   "samples": [
     {

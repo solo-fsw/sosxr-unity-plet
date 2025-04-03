@@ -1,9 +1,9 @@
 using UnityEngine;
 
 
-namespace SOSXR.Plet
+namespace SOSXR.plet
 {
-    [CreateAssetMenu(fileName = "Palette", menuName = "SOSXR/Plet/Palette")]
+    [CreateAssetMenu(fileName = "Palette", menuName = "SOSXR/plet/Palette")]
     public class Palette : ScriptableObject
     {
         [Header("Use this around 60% of the time. It is a base. Use a rather neutral color.")]
@@ -15,6 +15,7 @@ namespace SOSXR.Plet
 
         [Space(10)]
         [Tooltip("Optional")]
+        [TexturePreview(500)]
         [SerializeField] private Texture m_optionalColorTexture;
 
         [HideInInspector] public PaletteHolder PaletteHolder;

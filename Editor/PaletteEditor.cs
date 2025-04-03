@@ -2,10 +2,10 @@ using UnityEditor;
 using UnityEngine;
 
 
-namespace SOSXR.Plet
+namespace SOSXR.plet.Editor
 {
     [CustomEditor(typeof(Palette))]
-    public class PaletteEditor : Editor
+    public class PaletteEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {

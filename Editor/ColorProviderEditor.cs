@@ -1,9 +1,8 @@
-using System;
 using UnityEditor;
 using UnityEngine;
 
 
-namespace SOSXR.Plet
+namespace SOSXR.plet.Editor
 {
     [CustomEditor(typeof(ColorProvider))] [CanEditMultipleObjects]
     public class ColorProviderEditor : PaletteEditorBase
@@ -13,7 +12,7 @@ namespace SOSXR.Plet
 
         private void OnEnable()
         {
-            _colorSettingsProp = serializedObject.FindProperty("m_colorSettings");
+            _colorSettingsProp = serializedObject.FindProperty(nameof(ColorProvider.ColorSettings));
         }
 
 
@@ -24,69 +23,31 @@ namespace SOSXR.Plet
             for (var i = 0; i < _colorSettingsProp.arraySize; i++)
             {
                 var colorSettingsProp = _colorSettingsProp.GetArrayElementAtIndex(i);
-                var nameProp = colorSettingsProp.FindPropertyRelative("Name");
-                var colorTypeProp = colorSettingsProp.FindPropertyRelative("ColorType");
-                var valueProp = colorSettingsProp.FindPropertyRelative("Value");
-                var saturationProp = colorSettingsProp.FindPropertyRelative("Saturation");
-                var alphaProp = colorSettingsProp.FindPropertyRelative("Alpha");
-                var valuedColorProp = colorSettingsProp.FindPropertyRelative("ValuedColor");
+                var nameProp = colorSettingsProp.FindPropertyRelative(nameof(ColorSettings.Name));
+                var colorTypeProp = colorSettingsProp.FindPropertyRelative(nameof(ColorSettings.HueType));
+                var valueProp = colorSettingsProp.FindPropertyRelative(nameof(ColorSettings.Value));
+                var saturationProp = colorSettingsProp.FindPropertyRelative(nameof(ColorSettings.Saturation));
+                var alphaProp = colorSettingsProp.FindPropertyRelative(nameof(ColorSettings.Alpha));
+                var useAlphaProp = colorSettingsProp.FindPropertyRelative(nameof(ColorSettings.ShowAlpha));
+                var valuedColorProp = colorSettingsProp.FindPropertyRelative(nameof(ColorSettings.FinalColor));
 
-                DrawColorSettings(nameProp, colorTypeProp, valueProp, saturationProp, alphaProp, valuedColorProp);
+                DrawSection(nameProp.stringValue, colorTypeProp, valueProp, saturationProp, valuedColorProp, alphaProp, useAlphaProp.boolValue);
+
+                EditorGUILayout.Space(10);
+            }
+
+
+            if (GUILayout.Button(ButtonText))
+            {
+                foreach (var colorProviderObj in targets)
+                {
+                    ((ColorProvider) colorProviderObj).GetPaletteSaturationAndValue();
+                }
+
+                SceneView.RepaintAll();
             }
 
             serializedObject.ApplyModifiedProperties();
-        }
-
-
-        private void DrawColorSettings(SerializedProperty nameProp, SerializedProperty colorTypeProp, SerializedProperty valueProp, SerializedProperty saturationProp, SerializedProperty alphaProp, SerializedProperty valuedColorProp)
-        {
-            try
-            {
-                EditorGUILayout.Space();
-
-                GUILayout.BeginVertical(EditorStyles.helpBox);
-
-                var label = "Color Type";
-
-                if (!string.IsNullOrEmpty(nameProp.stringValue))
-                {
-                    label = nameProp.stringValue;
-                }
-
-                DrawProperty(colorTypeProp, "Color Type",
-                    () => (ColorType) EditorGUILayout.EnumPopup(label, (ColorType) colorTypeProp.enumValueIndex),
-                    (prop, value) => prop.enumValueIndex = (int) value);
-
-                DrawProperty(valueProp, "Value",
-                    () => EditorGUILayout.IntSlider("Value", valueProp.intValue, ValueRange.x, ValueRange.y),
-                    (prop, value) => prop.intValue = value);
-
-                DrawProperty(saturationProp, "Saturation",
-                    () => EditorGUILayout.IntSlider("Saturation", saturationProp.intValue, SaturationRange.x, SaturationRange.y),
-                    (prop, value) => prop.intValue = value);
-
-                DrawProperty(alphaProp, "Alpha",
-                    () => EditorGUILayout.Slider("Alpha", alphaProp.floatValue, 0f, 1f),
-                    (prop, value) => prop.floatValue = value);
-
-                DrawColorBox(valuedColorProp.colorValue, true);
-
-                GUILayout.EndVertical();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-
-                throw;
-            }
-        }
-
-
-        private void DrawColorBox(Color color, bool alpha = false, bool hdr = false, string label = "Preview")
-        {
-            EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.ColorField(new GUIContent(label), color, false, alpha, hdr, GUILayout.Height(40));
-            EditorGUI.EndDisabledGroup();
         }
     }
 }
