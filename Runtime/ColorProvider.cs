@@ -162,6 +162,12 @@ namespace SOSXR.plet
         }
 
 
+        private void Awake()
+        {
+            Init();
+        }
+
+
         private void Init()
         {
             if (enabled == false)
