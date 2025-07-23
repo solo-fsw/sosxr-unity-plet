@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 
 
-namespace SOSXR.plet.Editor
+namespace SOSXR.plet.EditorScripts
 {
     public class PaletteEditorBase : UnityEditor.Editor
     {

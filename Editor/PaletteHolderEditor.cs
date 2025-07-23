@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 
-namespace SOSXR.plet.Editor
+namespace SOSXR.plet.EditorScripts
 {
     [CustomEditor(typeof(PaletteHolder))]
     public class PaletteHolderEditor : PaletteEditorBase

@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 
 
-namespace SOSXR.plet.Editor
+namespace SOSXR.plet.EditorScripts
 {
     /// <summary>
     ///     Disable reset on a class
