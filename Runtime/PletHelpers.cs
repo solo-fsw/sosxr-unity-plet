@@ -1,21 +1,14 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 namespace SOSXR.plet
 {
-    public class pletHelpers
+    public static class PletHelpers
     {
-        private PaletteHolder _paletteHolder;
-
-
-        public PaletteHolder GetPaletteHolder(GameObject caller)
+        public static PletSceneSettings GetPletSceneSettings()
         {
-            if (_paletteHolder != null)
-            {
-                return _paletteHolder;
-            }
-
-            var paletteHolders = Resources.LoadAll<PaletteHolder>("");
+            var paletteHolders = Resources.LoadAll<PletSceneSettings>("");
 
             if (paletteHolders.Length == 1)
             {
@@ -24,20 +17,22 @@ namespace SOSXR.plet
 
             if (paletteHolders.Length == 0)
             {
-                Debug.LogWarning("No PaletteHolder found in any of the Resources folders.");
+                Debug.LogWarning("No PaletteSceneSettings found in any of the Resources folders.");
 
                 return null;
             }
 
+            var activeScene = SceneManager.GetActiveScene();
+
             foreach (var paletteHolder in paletteHolders)
             {
-                if (paletteHolder.name == caller.scene.name)
+                if (paletteHolder.name == activeScene.name)
                 {
                     return paletteHolder;
                 }
             }
 
-            Debug.LogWarningFormat("Multiple PaletteHolders found in Resources folders, but none with the same name as the scene: {0}", caller.scene.name);
+            Debug.LogWarningFormat("Multiple PaletteSettings found in Resources folders, but none with the same name as the scene: {0}", activeScene.name);
 
             return null;
         }

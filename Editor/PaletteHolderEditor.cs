@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 
 namespace SOSXR.plet.EditorScripts
 {
-    [CustomEditor(typeof(PaletteHolder))]
+    [CustomEditor(typeof(PletSceneSettings))]
     public class PaletteHolderEditor : PaletteEditorBase
     {
         private SerializedProperty _paletteProp;
@@ -69,62 +69,62 @@ namespace SOSXR.plet.EditorScripts
 
         private void OnEnable()
         {
-            _paletteProp = serializedObject.FindProperty(nameof(PaletteHolder.Palette));
-            _previousPaletteProp = serializedObject.FindProperty(nameof(PaletteHolder.PreviousPalette));
+            _paletteProp = serializedObject.FindProperty(nameof(PletSceneSettings.Palette));
+            _previousPaletteProp = serializedObject.FindProperty(nameof(PletSceneSettings.PreviousPalette));
 
-            _applySkyboxProp = serializedObject.FindProperty(nameof(PaletteHolder.ApplySkybox));
+            _applySkyboxProp = serializedObject.FindProperty(nameof(PletSceneSettings.ApplySkybox));
 
-            _skyboxMaterialProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxMaterial));
-            _skyboxSkyHueTypeProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxSkyHueType));
-            _skyboxSkySaturationProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxSkySaturation));
-            _skyboxSkyValueProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxSkyValue));
-            _skyboxSkyColorProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxSkyColor));
+            _skyboxMaterialProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxMaterial));
+            _skyboxSkyHueTypeProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxSkyHueType));
+            _skyboxSkySaturationProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxSkySaturation));
+            _skyboxSkyValueProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxSkyValue));
+            _skyboxSkyColorProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxSkyColor));
 
-            _skyboxHorizonHueTypeProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxHorizonHueType));
-            _skyboxHorizonSaturationProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxHorizonSaturation));
-            _skyboxHorizonValueProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxHorizonValue));
-            _skyboxHorizonColorProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxHorizonColor));
+            _skyboxHorizonHueTypeProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxHorizonHueType));
+            _skyboxHorizonSaturationProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxHorizonSaturation));
+            _skyboxHorizonValueProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxHorizonValue));
+            _skyboxHorizonColorProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxHorizonColor));
 
-            _skyboxGroundHueTypeProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxGroundHueType));
-            _skyboxGroundSaturationProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxGroundSaturation));
-            _skyboxGroundValueProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxGroundValue));
-            _skyboxGroundColorProp = serializedObject.FindProperty(nameof(PaletteHolder.SkyboxGroundColor));
+            _skyboxGroundHueTypeProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxGroundHueType));
+            _skyboxGroundSaturationProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxGroundSaturation));
+            _skyboxGroundValueProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxGroundValue));
+            _skyboxGroundColorProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxGroundColor));
 
-            _applyAmbientLightProp = serializedObject.FindProperty(nameof(PaletteHolder.ApplyAmbientLight));
+            _applyAmbientLightProp = serializedObject.FindProperty(nameof(PletSceneSettings.ApplyAmbientLight));
 
-            _ambientLightHueTypeProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientLightHueType));
-            _ambientLightSaturationProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientLightSaturation));
-            _ambientLightValueProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientLightValue));
-            _ambientLightColorProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientLightColor));
+            _ambientLightHueTypeProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientLightHueType));
+            _ambientLightSaturationProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientLightSaturation));
+            _ambientLightValueProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientLightValue));
+            _ambientLightColorProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientLightColor));
 
-            _ambientSkyLightTypeProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientSkyLightHueType));
-            _ambientSkyLightSaturationProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientSkyLightSaturation));
-            _ambientSkyLightValueProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientSkyLightValue));
-            _ambientSkyLightColorProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientSkyLightColor));
+            _ambientSkyLightTypeProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientSkyLightHueType));
+            _ambientSkyLightSaturationProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientSkyLightSaturation));
+            _ambientSkyLightValueProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientSkyLightValue));
+            _ambientSkyLightColorProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientSkyLightColor));
 
-            _ambientEquatorLightTypeProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientEquatorLightHueType));
-            _ambientEquatorLightSaturationProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientEquatorLightSaturation));
-            _ambientEquatorLightValueProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientEquatorLightValue));
-            _ambientEquatorLightColorProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientEquatorLightColor));
+            _ambientEquatorLightTypeProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientEquatorLightHueType));
+            _ambientEquatorLightSaturationProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientEquatorLightSaturation));
+            _ambientEquatorLightValueProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientEquatorLightValue));
+            _ambientEquatorLightColorProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientEquatorLightColor));
 
-            _ambientGroundLightTypeProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientGroundLightHueType));
-            _ambientGroundLightSaturationProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientGroundLightSaturation));
-            _ambientGroundLightValueProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientGroundLightValue));
-            _ambientGroundLightColorProp = serializedObject.FindProperty(nameof(PaletteHolder.AmbientGroundLightColor));
+            _ambientGroundLightTypeProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientGroundLightHueType));
+            _ambientGroundLightSaturationProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientGroundLightSaturation));
+            _ambientGroundLightValueProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientGroundLightValue));
+            _ambientGroundLightColorProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientGroundLightColor));
 
-            _applyRealtimeShadowsProp = serializedObject.FindProperty(nameof(PaletteHolder.ApplyRealtimeShadows));
+            _applyRealtimeShadowsProp = serializedObject.FindProperty(nameof(PletSceneSettings.ApplyRealtimeShadows));
 
-            _realtimeShadowHueTypeProp = serializedObject.FindProperty(nameof(PaletteHolder.RealtimeShadowHueType));
-            _realtimeShadowSaturationProp = serializedObject.FindProperty(nameof(PaletteHolder.RealtimeShadowSaturation));
-            _realtimeShadowValueProp = serializedObject.FindProperty(nameof(PaletteHolder.RealtimeShadowValue));
-            _realtimeShadowColorProp = serializedObject.FindProperty(nameof(PaletteHolder.RealtimeShadowColor));
+            _realtimeShadowHueTypeProp = serializedObject.FindProperty(nameof(PletSceneSettings.RealtimeShadowHueType));
+            _realtimeShadowSaturationProp = serializedObject.FindProperty(nameof(PletSceneSettings.RealtimeShadowSaturation));
+            _realtimeShadowValueProp = serializedObject.FindProperty(nameof(PletSceneSettings.RealtimeShadowValue));
+            _realtimeShadowColorProp = serializedObject.FindProperty(nameof(PletSceneSettings.RealtimeShadowColor));
 
-            _applyFogProp = serializedObject.FindProperty(nameof(PaletteHolder.ApplyFog));
+            _applyFogProp = serializedObject.FindProperty(nameof(PletSceneSettings.ApplyFog));
 
-            _fogHueTypeProp = serializedObject.FindProperty(nameof(PaletteHolder.FogHueType));
-            _fogSaturationProp = serializedObject.FindProperty(nameof(PaletteHolder.FogSaturation));
-            _fogValueProp = serializedObject.FindProperty(nameof(PaletteHolder.FogValue));
-            _fogColorProp = serializedObject.FindProperty(nameof(PaletteHolder.FogColor));
+            _fogHueTypeProp = serializedObject.FindProperty(nameof(PletSceneSettings.FogHueType));
+            _fogSaturationProp = serializedObject.FindProperty(nameof(PletSceneSettings.FogSaturation));
+            _fogValueProp = serializedObject.FindProperty(nameof(PletSceneSettings.FogValue));
+            _fogColorProp = serializedObject.FindProperty(nameof(PletSceneSettings.FogColor));
         }
 
 
@@ -132,9 +132,9 @@ namespace SOSXR.plet.EditorScripts
         {
             serializedObject.Update();
 
-            var paletteHolder = (PaletteHolder) target;
+            var paletteHolder = (PletSceneSettings) target;
 
-            if (!paletteHolder.UseThisPaletteHolder())
+            if (!PletSceneSettings.UseThisPaletteSceneSettings())
             {
                 EditorGUILayout.HelpBox("This Palette Holder is not being used in the scene. It will not apply any colors. If you thought it should have worked in this scene, please check the following:\n" +
                                         "1. It is either the only PaletteHolder in any of the Resources folders\n" +
@@ -302,7 +302,7 @@ namespace SOSXR.plet.EditorScripts
         }
 
 
-        private void DrawSkyboxField(PaletteHolder paletteHolder)
+        private void DrawSkyboxField(PletSceneSettings pletSceneSettings)
         {
             GUILayout.BeginVertical(EditorStyles.helpBox);
 
@@ -315,12 +315,12 @@ namespace SOSXR.plet.EditorScripts
             if (GUI.changed)
             {
                 serializedObject.ApplyModifiedProperties();
-                paletteHolder.SetSkyboxMaterial();
+                pletSceneSettings.SetSkyboxMaterial();
             }
         }
 
 
-        private void DrawSkyboxColorFields(PaletteHolder paletteHolder)
+        private void DrawSkyboxColorFields(PletSceneSettings pletSceneSettings)
         {
             EditorGUI.BeginChangeCheck();
 
@@ -331,19 +331,19 @@ namespace SOSXR.plet.EditorScripts
             if (EditorGUI.EndChangeCheck())
             {
                 serializedObject.ApplyModifiedProperties();
-                paletteHolder.SetSkyboxSkyColor();
-                paletteHolder.SetSkyboxHorizonColor();
-                paletteHolder.SetSkyboxGroundColor();
+                pletSceneSettings.SetSkyboxSkyColor();
+                pletSceneSettings.SetSkyboxHorizonColor();
+                pletSceneSettings.SetSkyboxGroundColor();
             }
 
             if (GUILayout.Button(ButtonText))
             {
-                paletteHolder.GetSkyboxSVFromPalette();
+                pletSceneSettings.GetSkyboxSVFromPalette();
             }
         }
 
 
-        private void DrawSingleAmbientLightFields(PaletteHolder paletteHolder)
+        private void DrawSingleAmbientLightFields(PletSceneSettings pletSceneSettings)
         {
             EditorGUI.BeginChangeCheck();
 
@@ -352,17 +352,17 @@ namespace SOSXR.plet.EditorScripts
             if (EditorGUI.EndChangeCheck())
             {
                 serializedObject.ApplyModifiedProperties();
-                paletteHolder.SetAmbientLightColor();
+                pletSceneSettings.SetAmbientLightColor();
             }
 
             if (GUILayout.Button(ButtonText))
             {
-                paletteHolder.GetAmbientLightSVFromPalette();
+                pletSceneSettings.GetAmbientLightSVFromPalette();
             }
         }
 
 
-        private void DrawTriAmbientLightFields(PaletteHolder paletteHolder)
+        private void DrawTriAmbientLightFields(PletSceneSettings pletSceneSettings)
         {
             EditorGUI.BeginChangeCheck();
 
@@ -374,19 +374,19 @@ namespace SOSXR.plet.EditorScripts
             {
                 serializedObject.ApplyModifiedProperties();
 
-                paletteHolder.SetAmbientSkyTriLightColor();
-                paletteHolder.SetAmbientEquatorTriLightColor();
-                paletteHolder.SetAmbientGroundTriLightColor();
+                pletSceneSettings.SetAmbientSkyTriLightColor();
+                pletSceneSettings.SetAmbientEquatorTriLightColor();
+                pletSceneSettings.SetAmbientGroundTriLightColor();
             }
 
             if (GUILayout.Button(ButtonText))
             {
-                paletteHolder.GetAmbientLightSVFromPalette();
+                pletSceneSettings.GetAmbientLightSVFromPalette();
             }
         }
 
 
-        private void DrawRealtimeShadowFields(PaletteHolder paletteHolder)
+        private void DrawRealtimeShadowFields(PletSceneSettings pletSceneSettings)
         {
             EditorGUI.BeginChangeCheck();
 
@@ -396,17 +396,17 @@ namespace SOSXR.plet.EditorScripts
             if (EditorGUI.EndChangeCheck())
             {
                 serializedObject.ApplyModifiedProperties();
-                paletteHolder.SetRealtimeShadowColor();
+                pletSceneSettings.SetRealtimeShadowColor();
             }
 
-            if (GUILayout.Button(nameof(paletteHolder.GetRealtimeShadowSVFromPalette)))
+            if (GUILayout.Button(nameof(pletSceneSettings.GetRealtimeShadowSVFromPalette)))
             {
-                paletteHolder.GetRealtimeShadowSVFromPalette();
+                pletSceneSettings.GetRealtimeShadowSVFromPalette();
             }
         }
 
 
-        private void DrawFogFields(PaletteHolder paletteHolder)
+        private void DrawFogFields(PletSceneSettings pletSceneSettings)
         {
             EditorGUI.BeginChangeCheck();
 
@@ -415,12 +415,12 @@ namespace SOSXR.plet.EditorScripts
             if (EditorGUI.EndChangeCheck())
             {
                 serializedObject.ApplyModifiedProperties();
-                paletteHolder.SetFogColor();
+                pletSceneSettings.SetFogColor();
             }
 
             if (GUILayout.Button(ButtonText))
             {
-                paletteHolder.GetFogSVFromPalette();
+                pletSceneSettings.GetFogSVFromPalette();
             }
         }
     }

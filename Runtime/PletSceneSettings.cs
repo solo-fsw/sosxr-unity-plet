@@ -2,13 +2,12 @@ using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.SceneManagement;
 
 
 namespace SOSXR.plet
 {
-    [CreateAssetMenu(fileName = "PaletteHolder", menuName = "SOSXR/plet/PaletteHolder", order = 1)]
-    public class PaletteHolder : ScriptableObject
+    [CreateAssetMenu(fileName = "PletSceneSettings", menuName = "SOSXR/plet/PletSceneSettings", order = 1)]
+    public class PletSceneSettings : ScriptableObject
     {
         public Palette Palette;
         public Palette PreviousPalette;
@@ -88,7 +87,7 @@ namespace SOSXR.plet
 
         private void Init()
         {
-            if (!UseThisPaletteHolder())
+            if (!UseThisPaletteSceneSettings())
             {
                 return;
             }
@@ -100,7 +99,7 @@ namespace SOSXR.plet
                 return;
             }
 
-            Palette.PaletteHolder = this;
+            Palette.SceneSettings = this;
 
             if (ApplySkybox && SkyboxMaterial == null)
             {
@@ -115,29 +114,15 @@ namespace SOSXR.plet
         }
 
 
-        public bool UseThisPaletteHolder()
+        public static bool UseThisPaletteSceneSettings()
         {
-            var paletteHolders = Resources.FindObjectsOfTypeAll<PaletteHolder>();
-
-            if (paletteHolders.Length == 1)
-            {
-                return true;
-            }
-
-            if (paletteHolders.Length == 0)
-            {
-                Debug.LogWarning("No PaletteHolder found in the Resources folder.");
-
-                return false;
-            }
-
-            return name == SceneManager.GetActiveScene().name;
+            return PletHelpers.GetPletSceneSettings() != null;
         }
 
 
         public void SetAllSkyboxAndLights()
         {
-            if (!UseThisPaletteHolder())
+            if (!UseThisPaletteSceneSettings())
             {
                 return;
             }
@@ -162,7 +147,7 @@ namespace SOSXR.plet
         [ContextMenu(nameof(GetPaletteSaturationAndValue))]
         public void GetPaletteSaturationAndValue()
         {
-            if (!UseThisPaletteHolder())
+            if (!UseThisPaletteSceneSettings())
             {
                 return;
             }
@@ -239,7 +224,7 @@ namespace SOSXR.plet
 
         public void SetAmbientLightColor()
         {
-            if (!UseThisPaletteHolder())
+            if (!UseThisPaletteSceneSettings())
             {
                 return;
             }
@@ -256,7 +241,7 @@ namespace SOSXR.plet
 
         public void SetAmbientSkyTriLightColor()
         {
-            if (!UseThisPaletteHolder())
+            if (!UseThisPaletteSceneSettings())
             {
                 return;
             }
@@ -273,7 +258,7 @@ namespace SOSXR.plet
 
         public void SetAmbientEquatorTriLightColor()
         {
-            if (!UseThisPaletteHolder())
+            if (!UseThisPaletteSceneSettings())
             {
                 return;
             }
@@ -290,7 +275,7 @@ namespace SOSXR.plet
 
         public void SetAmbientGroundTriLightColor()
         {
-            if (!UseThisPaletteHolder())
+            if (!UseThisPaletteSceneSettings())
             {
                 return;
             }
@@ -307,7 +292,7 @@ namespace SOSXR.plet
 
         public void SetRealtimeShadowColor()
         {
-            if (!UseThisPaletteHolder())
+            if (!UseThisPaletteSceneSettings())
             {
                 return;
             }
@@ -324,7 +309,7 @@ namespace SOSXR.plet
 
         public void SetFogColor()
         {
-            if (!UseThisPaletteHolder())
+            if (!UseThisPaletteSceneSettings())
             {
                 return;
             }
@@ -341,7 +326,7 @@ namespace SOSXR.plet
 
         public void SetSkyboxSkyColor()
         {
-            if (!UseThisPaletteHolder())
+            if (!UseThisPaletteSceneSettings())
             {
                 return;
             }
@@ -365,7 +350,7 @@ namespace SOSXR.plet
 
         public void SetSkyboxHorizonColor()
         {
-            if (!UseThisPaletteHolder())
+            if (!UseThisPaletteSceneSettings())
             {
                 return;
             }
@@ -389,7 +374,7 @@ namespace SOSXR.plet
 
         public void SetSkyboxGroundColor()
         {
-            if (!UseThisPaletteHolder())
+            if (!UseThisPaletteSceneSettings())
             {
                 return;
             }
@@ -413,7 +398,7 @@ namespace SOSXR.plet
 
         public void SetSkyboxMaterial()
         {
-            if (!UseThisPaletteHolder() || ApplySkybox == false || SkyboxMaterial == null)
+            if (!UseThisPaletteSceneSettings() || ApplySkybox == false || SkyboxMaterial == null)
             {
                 return;
             }

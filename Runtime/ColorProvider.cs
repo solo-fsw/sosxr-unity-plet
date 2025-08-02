@@ -18,7 +18,7 @@ namespace SOSXR.plet
         public List<ColorSettings> ColorSettings = new(1);
 
         [SerializeField] private bool init;
-        [HideInInspector] [SerializeField] private PaletteHolder _paletteHolder;
+        [HideInInspector] [SerializeField] private PletSceneSettings m_pletSceneSettings;
 
         private static readonly Dictionary<Type, Action<Component, Color>> ColorAppliers = new()
         {
@@ -227,13 +227,13 @@ namespace SOSXR.plet
                     ColorSettings[i].HueType = (HueType) ((int) (ColorSettings[0].HueType + i) % hueTypeCount);
                 }
 
-                var satVal = _paletteHolder.GetColorSV(ColorSettings[i].HueType);
+                var satVal = m_pletSceneSettings.GetColorSV(ColorSettings[i].HueType);
                 ColorSettings[i].Saturation = satVal.x;
                 ColorSettings[i].Value = satVal.y;
                 ColorSettings[i].Alpha = 1f;
 
                 // Calculate the final color immediately
-                ColorSettings[i].FinalColor = _paletteHolder.ApplyColor(
+                ColorSettings[i].FinalColor = m_pletSceneSettings.ApplyColor(
                     ColorSettings[i].HueType,
                     ColorSettings[i].Saturation,
                     ColorSettings[i].Value,
@@ -247,14 +247,12 @@ namespace SOSXR.plet
 
         private void GetPaletteHolder()
         {
-            if (_paletteHolder != null)
+            if (m_pletSceneSettings != null)
             {
                 return;
             }
 
-            var pletHelpers = new pletHelpers();
-
-            _paletteHolder = pletHelpers.GetPaletteHolder(gameObject);
+            m_pletSceneSettings = PletHelpers.GetPletSceneSettings();
         }
 
 
@@ -313,12 +311,12 @@ namespace SOSXR.plet
 
         private void OnEnable()
         {
-            if (_paletteHolder == null || !enabled)
+            if (m_pletSceneSettings == null || !enabled)
             {
                 return;
             }
 
-            _paletteHolder.OnPaletteChanged += ApplyColorAction;
+            m_pletSceneSettings.OnPaletteChanged += ApplyColorAction;
         }
 
 
@@ -342,7 +340,7 @@ namespace SOSXR.plet
 
             foreach (var setting in colorSettingsCopy)
             {
-                setting.FinalColor = _paletteHolder.ApplyColor(setting.HueType, setting.Saturation, setting.Value, setting.Alpha);
+                setting.FinalColor = m_pletSceneSettings.ApplyColor(setting.HueType, setting.Saturation, setting.Value, setting.Alpha);
                 _applyColorAction.Invoke(setting.FinalColor);
             }
         }
@@ -350,12 +348,12 @@ namespace SOSXR.plet
 
         private void OnDisable()
         {
-            if (_paletteHolder == null) // Should I check for enabled? That seems like a bad idea.
+            if (m_pletSceneSettings == null) // Should I check for enabled? That seems like a bad idea.
             {
                 return;
             }
 
-            _paletteHolder.OnPaletteChanged -= ApplyColorAction;
+            m_pletSceneSettings.OnPaletteChanged -= ApplyColorAction;
         }
     }
 }

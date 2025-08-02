@@ -18,7 +18,7 @@ namespace SOSXR.plet
         [TexturePreview(500)]
         [SerializeField] private Texture m_optionalColorTexture;
 
-        [HideInInspector] public PaletteHolder PaletteHolder;
+        [HideInInspector] public PletSceneSettings SceneSettings;
 
         private Color _previousBase;
         private Color _previousTone;
@@ -48,7 +48,7 @@ namespace SOSXR.plet
             _previousTone = Tone;
             _previousAccent = Accent;
 
-            PaletteHolder?.OnPaletteChanged?.Invoke();
+            SceneSettings?.OnPaletteChanged?.Invoke();
         }
     }
 }

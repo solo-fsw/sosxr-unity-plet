@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2590944195693901358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60e162484db6428e8b9023e2b444a3f8, type: 3}
+  m_Name: PletSceneSettings
+  m_EditorClassIdentifier: 
+  BackgroundColor:
+    serializedVersion: 2
+    rgba: 4278190080
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b0ef29d0aa8d468f9d87e9256399580, type: 3}
+  m_Name: Sample_Scene_SOSXR_plet_cubes.sceneSettings
+  m_EditorClassIdentifier: 
+--- !u!114 &1061857347528175041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3da315be6b8a4ed6a72ba4c6558bf1fd, type: 3}
+  m_Name: SeaSharkSettingsSample
+  m_EditorClassIdentifier: 
+  name: Default Name
+  value: 42
+--- !u!114 &3272085078635529847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54320d13087d419281c447a7d978a673, type: 3}
+  m_Name: PletSceneSettings
+  m_EditorClassIdentifier: 
+  Palette: {fileID: 11400000, guid: 5c78578563fb7422aa21e065e0f90f46, type: 2}
+  PreviousPalette: {fileID: 11400000, guid: 5c78578563fb7422aa21e065e0f90f46, type: 2}
+  ApplySkybox: 0
+  SkyboxMaterial: {fileID: 2100000, guid: 6789d134a6fe34f689a5724fb2d4f22d, type: 2}
+  SkyboxSkyHueType: 0
+  SkyboxSkySaturation: 5
+  SkyboxSkyValue: 7
+  SkyboxSkyColor: {r: 0.33162388, g: 0.33833334, b: 0.26117453, a: 1}
+  SkyboxHorizonHueType: 1
+  SkyboxHorizonSaturation: 1
+  SkyboxHorizonValue: 13
+  SkyboxHorizonColor: {r: 0.6641479, g: 0.6691667, b: 0.6641479, a: 1}
+  SkyboxGroundHueType: 2
+  SkyboxGroundSaturation: 15
+  SkyboxGroundValue: 13
+  SkyboxGroundColor: {r: 0.6691667, g: 0.22317946, b: 0.14758842, a: 1}
+  ApplyAmbientLight: 0
+  AmbientLightHueType: 0
+  AmbientLightSaturation: 5
+  AmbientLightValue: 7
+  AmbientLightColor: {r: 0.33162388, g: 0.33833334, b: 0.26117453, a: 1}
+  AmbientSkyLightHueType: 0
+  AmbientSkyLightSaturation: 5
+  AmbientSkyLightValue: 7
+  AmbientSkyLightColor: {r: 0, g: 0, b: 0, a: 0}
+  AmbientEquatorLightHueType: 0
+  AmbientEquatorLightSaturation: 5
+  AmbientEquatorLightValue: 7
+  AmbientEquatorLightColor: {r: 0, g: 0, b: 0, a: 0}
+  AmbientGroundLightHueType: 0
+  AmbientGroundLightSaturation: 5
+  AmbientGroundLightValue: 7
+  AmbientGroundLightColor: {r: 0, g: 0, b: 0, a: 0}
+  ApplyRealtimeShadows: 0
+  RealtimeShadowHueType: 0
+  RealtimeShadowSaturation: 5
+  RealtimeShadowValue: 7
+  RealtimeShadowColor: {r: 0.33162388, g: 0.33833334, b: 0.26117453, a: 1}
+  ApplyFog: 0
+  FogHueType: 0
+  FogSaturation: 5
+  FogValue: 7
+  FogColor: {r: 0.33162388, g: 0.33833334, b: 0.26117453, a: 1}
