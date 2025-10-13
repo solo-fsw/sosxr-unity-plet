@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 namespace SOSXR.plet
 {
     [CreateAssetMenu(fileName = "Palette", menuName = "SOSXR/plet/Palette")]
@@ -8,15 +7,15 @@ namespace SOSXR.plet
     {
         [Header("Use this around 60% of the time. It is a base. Use a rather neutral color.")]
         public Color Base = new(1, 1, 1, 1);
+
         [Header("Use this around 30% of the time. This is the 'tone' color.")]
         public Color Tone = new(1, 1, 1, 1);
+
         [Header("Use this around 10% of the time. This is the 'pop' color.")]
         public Color Accent = new(1, 1, 1, 1);
 
-        [Space(10)]
-        [Tooltip("Optional")]
-        [TexturePreview(500)]
-        [SerializeField] private Texture m_optionalColorTexture;
+        [Space(10)] [Tooltip("Optional")] [TexturePreview(500)] [SerializeField]
+        private Texture m_optionalColorTexture;
 
         [HideInInspector] public PletSceneSettings SceneSettings;
 

@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-
 namespace SOSXR.plet
 {
     [Serializable]
@@ -12,7 +11,6 @@ namespace SOSXR.plet
         public int PreviousIndex;
         public string[] TextureNames = new string[TextureProvider.TextureSaturationSteps];
 
-        [TexturePreview(100)]
-        public Texture2D CurrentTexture;
+        [TexturePreview(100)] public Texture2D CurrentTexture;
     }
 }

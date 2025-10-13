@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
-
 namespace SOSXR.plet
 {
     [RequireComponent(typeof(Renderer))]
@@ -13,7 +12,7 @@ namespace SOSXR.plet
     {
         public List<TextureSettings> TextureSettings = new(1);
 
-        [HideInInspector] [SerializeField] private bool m_init = false;
+        [HideInInspector] [SerializeField] private bool m_init;
         private Renderer _rend;
         private static bool _isDesaturating;
 
@@ -26,9 +25,9 @@ namespace SOSXR.plet
 
             TextureSettings ??= new List<TextureSettings>();
 
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             EditorApplication.delayCall += Initialize;
-            #endif
+#endif
 
             if (!m_init)
             {
@@ -73,7 +72,7 @@ namespace SOSXR.plet
 
                 TextureSettings.Add(new TextureSettings
                 {
-                    CurrentTexture = (Texture2D) sharedMat.mainTexture
+                    CurrentTexture = (Texture2D)sharedMat.mainTexture
                 });
 
                 TextureSettings[^1].MaterialName = sharedMat.name;
@@ -104,9 +103,9 @@ namespace SOSXR.plet
 
             for (var i = 0; i < TextureSaturationSteps; i++)
             {
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 textureNames[i] = Desaturate.Texture(currentTexture, i * (TextureSaturationSteps - 1));
-                #endif
+#endif
             }
 
             _isDesaturating = false;
@@ -131,9 +130,9 @@ namespace SOSXR.plet
             }
 
             var allContaining = Resources.LoadAll<Texture2D>("")
-                                         .Where(t => t.name.Contains(textureName) && t.name.Contains(Desaturate.Suffix))
-                                         .OrderBy(t => ExtractNumber(t.name))
-                                         .ToArray();
+                .Where(t => t.name.Contains(textureName) && t.name.Contains(Desaturate.Suffix))
+                .OrderBy(t => ExtractNumber(t.name))
+                .ToArray();
 
             return allContaining;
         }

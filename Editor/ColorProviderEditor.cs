@@ -1,10 +1,10 @@
 using UnityEditor;
 using UnityEngine;
 
-
 namespace SOSXR.plet.EditorScripts
 {
-    [CustomEditor(typeof(ColorProvider))] [CanEditMultipleObjects]
+    [CustomEditor(typeof(ColorProvider))]
+    [CanEditMultipleObjects]
     public class ColorProviderEditor : PaletteEditorBase
     {
         private SerializedProperty _colorSettingsProp;
@@ -41,7 +41,7 @@ namespace SOSXR.plet.EditorScripts
             {
                 foreach (var colorProviderObj in targets)
                 {
-                    ((ColorProvider) colorProviderObj).GetPaletteSaturationAndValue();
+                    ((ColorProvider)colorProviderObj).GetPaletteSaturationAndValue();
                 }
 
                 SceneView.RepaintAll();

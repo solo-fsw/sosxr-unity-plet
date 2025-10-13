@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 namespace SOSXR.plet
 {
     public static class Saturation

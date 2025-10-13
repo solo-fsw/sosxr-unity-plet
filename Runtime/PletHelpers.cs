@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
 namespace SOSXR.plet
 {
     public static class PletHelpers

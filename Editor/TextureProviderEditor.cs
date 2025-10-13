@@ -1,11 +1,11 @@
 using UnityEditor;
 using UnityEngine;
 
-
 namespace SOSXR.plet.EditorScripts
 {
-    [CustomEditor(typeof(TextureProvider))] [CanEditMultipleObjects]
-    public class TextureProviderEditor : UnityEditor.Editor
+    [CustomEditor(typeof(TextureProvider))]
+    [CanEditMultipleObjects]
+    public class TextureProviderEditor : Editor
     {
         private SerializedProperty _textureSettingsProp;
         private TextureProvider _textureProvider;

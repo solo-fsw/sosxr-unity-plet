@@ -3,7 +3,6 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-
 namespace SOSXR.plet
 {
     /// <summary>
@@ -16,7 +15,7 @@ namespace SOSXR.plet
         private static readonly string _folderPath = "Assets/_SOSXR/Resources";
 
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         public static string Texture(Texture2D source, int saturationPercentage)
         {
             if (source == null)
@@ -52,7 +51,7 @@ namespace SOSXR.plet
 
             var savePath = $"{_folderPath}/{newFileName}.png";
 
-            var saturation = (float) Math.Round(saturationPercentage / 100f, 1);
+            var saturation = (float)Math.Round(saturationPercentage / 100f, 1);
             var desaturatedTexture = CalculateDesaturation(source, saturation);
 
             SaveAsPNG(desaturatedTexture, savePath);
@@ -66,7 +65,7 @@ namespace SOSXR.plet
 
         private static bool IsReadable(string assetPath, bool force = false)
         {
-            var textureImporter = (TextureImporter) AssetImporter.GetAtPath(assetPath);
+            var textureImporter = (TextureImporter)AssetImporter.GetAtPath(assetPath);
 
             if (force && textureImporter != null && !textureImporter.isReadable)
             {
@@ -128,6 +127,6 @@ namespace SOSXR.plet
         }
 
 
-        #endif
+#endif
     }
 }

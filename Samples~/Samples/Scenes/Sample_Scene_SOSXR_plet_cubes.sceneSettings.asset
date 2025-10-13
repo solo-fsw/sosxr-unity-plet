@@ -39,8 +39,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3da315be6b8a4ed6a72ba4c6558bf1fd, type: 3}
   m_Name: SeaSharkSettingsSample
   m_EditorClassIdentifier: 
-  name: Default Name
-  value: 42
+  Name: Default Name
+  Value: 42
 --- !u!114 &3272085078635529847
 MonoBehaviour:
   m_ObjectHideFlags: 0
