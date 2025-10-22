@@ -396,7 +396,7 @@ namespace SOSXR.plet
 
             if (baseMat == null)
             {
-                this.Warning("Base skybox material not found in Resources/TriColorSkybox/plet_skybox");
+                // this.Warning("Base skybox material not found in Resources/TriColorSkybox/plet_skybox");
 
                 return;
             }

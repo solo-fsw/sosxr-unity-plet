@@ -130,9 +130,9 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _HorizonBlend: 0.6
+    - _HorizonBlend: 0.91
     - _Metallic: 0
-    - _NadirBlend: 0.04
+    - _NadirBlend: 0.087
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0
@@ -149,7 +149,7 @@ Material:
     - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
-    - _ZenithBlend: 0.12
+    - _ZenithBlend: 0.128
     m_Colors:
     - _Accent: {r: 0.9339623, g: 0.1189479, b: 0.91023, a: 1}
     - _BaseColor: {r: 0.21568628, g: 0.29019606, b: 0.56078434, a: 1}
