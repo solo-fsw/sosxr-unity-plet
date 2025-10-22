@@ -35,7 +35,6 @@ namespace SOSXR.plet
                 return;
             }
 
-
             GetNextTexture();
         }
 
@@ -123,15 +122,15 @@ namespace SOSXR.plet
 
         private static Texture2D[] FindTextures(string textureName)
         {
-            if (textureName.Contains(Desaturate.Suffix))
+            if (textureName.Contains(PletHelpers.Suffix))
             {
-                var last = Desaturate.Suffix.Substring(Desaturate.Suffix.Length - 1);
+                var last = PletHelpers.Suffix.Substring(PletHelpers.Suffix.Length - 1);
                 var suffixIndex = textureName.LastIndexOf(last, StringComparison.Ordinal);
                 textureName = textureName.Remove(suffixIndex);
             }
 
             var allContaining = Resources.LoadAll<Texture2D>("")
-                                         .Where(t => t.name.Contains(textureName) && t.name.Contains(Desaturate.Suffix))
+                                         .Where(t => t.name.Contains(textureName) && t.name.Contains(PletHelpers.Suffix))
                                          .OrderBy(t => ExtractNumber(t.name))
                                          .ToArray();
 

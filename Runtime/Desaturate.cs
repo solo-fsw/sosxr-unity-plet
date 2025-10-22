@@ -12,10 +12,6 @@ namespace SOSXR.plet
     /// </summary>
     public static class Desaturate
     {
-        public static string Suffix => "_saturated_";
-        private static readonly string _folderPath = "Assets/_SOSXR/Resources";
-
-
         #if UNITY_EDITOR
         public static string Texture(Texture2D source, int saturationPercentage)
         {
@@ -42,15 +38,15 @@ namespace SOSXR.plet
                 return null;
             }
 
-            if (!Directory.Exists(_folderPath))
+            if (!Directory.Exists(PletHelpers.FolderPath))
             {
-                Directory.CreateDirectory(_folderPath);
+                Directory.CreateDirectory(PletHelpers.FolderPath);
             }
 
             var filename = Path.GetFileNameWithoutExtension(assetPath);
-            var newFileName = $"{filename}{Suffix}{saturationPercentage}";
+            var newFileName = $"{filename}{PletHelpers.Suffix}{saturationPercentage}";
 
-            var savePath = $"{_folderPath}/{newFileName}.png";
+            var savePath = $"{PletHelpers.FolderPath}/{newFileName}.png";
 
             var saturation = (float) Math.Round(saturationPercentage / 100f, 1);
             var desaturatedTexture = CalculateDesaturation(source, saturation);

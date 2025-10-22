@@ -8,6 +8,8 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 ### Changed
 
 - Unity "6000.0"
+- General fixes in ease of use.
+- Changing palette now gets the hue and value of that palette for all involved.
 
 ## [0.2.1] - 02-04-2025
 

@@ -1,7 +1,10 @@
-using System;
+using SOSXR.EnhancedLogger;
+using SOSXR.SeaShark;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
+using Header = SOSXR.SeaShark.HeaderAttribute;
 
 
 namespace SOSXR.plet
@@ -10,12 +13,10 @@ namespace SOSXR.plet
     public class PletSceneSettings : ScriptableObject
     {
         public Palette Palette;
-        public Palette PreviousPalette;
 
-        public bool ApplySkybox = true;
+        [Header("Skybox Settings")]
+        public bool ApplySkybox = false;
         public Material SkyboxMaterial;
-
-
         public HueType SkyboxSkyHueType;
         public int SkyboxSkySaturation = 10;
         public int SkyboxSkyValue = 10;
@@ -31,7 +32,8 @@ namespace SOSXR.plet
         public int SkyboxGroundValue = 10;
         public Color SkyboxGroundColor;
 
-        public bool ApplyAmbientLight = true;
+        [Header("Ambient Light Settings")]
+        public bool ApplyAmbientLight = false;
 
         public HueType AmbientLightHueType;
         public int AmbientLightSaturation = 10;
@@ -53,15 +55,15 @@ namespace SOSXR.plet
         public int AmbientGroundLightValue = 10;
         public Color AmbientGroundLightColor;
 
-        public bool ApplyRealtimeShadows = true;
-
+        [Header("Shadow Settings")]
+        public bool ApplyRealtimeShadows = false;
         public HueType RealtimeShadowHueType;
         public int RealtimeShadowSaturation = 10;
         public int RealtimeShadowValue = 10;
         public Color RealtimeShadowColor;
 
-        public bool ApplyFog = true;
-
+        [Header("Fog Settings")]
+        public bool ApplyFog = false;
         public HueType FogHueType;
         public int FogSaturation = 10;
         public int FogValue = 10;
@@ -70,72 +72,58 @@ namespace SOSXR.plet
         private readonly int _skyColorShaderId = Shader.PropertyToID("_SkyColor");
         private readonly int _horizonColorShaderId = Shader.PropertyToID("_HorizonColor");
         private readonly int _groundColorShaderId = Shader.PropertyToID("_GroundColor");
-
-        public Action OnPaletteChanged;
+        private Palette _previousPalette;
+        private ColorProvider[] _allColorProviders = null;
 
 
         private void OnValidate()
         {
-            Init();
-        }
-
-
-        private void Reset()
-        {
-            Init();
-        }
-
-
-        private void Init()
-        {
-            if (!UseThisPaletteSceneSettings())
+            if (!IsActiveSceneSettings() || Palette == null)
             {
-                return;
-            }
-
-            if (Palette == null)
-            {
-                Debug.LogWarning("Palette is null");
+                if (Palette == null)
+                {
+                    Debug.LogWarning("Palette is null", this);
+                }
 
                 return;
             }
-
-            Palette.SceneSettings = this;
-
-            if (ApplySkybox && SkyboxMaterial == null)
-            {
-                SkyboxMaterial = Resources.Load<Material>("TriColorSkybox/plet_skybox"); // It's in the Resources folder in the Samples of this package.
-            }
-
-            PreviousPalette = Palette;
 
             SetAllSkyboxAndLights();
 
-            OnPaletteChanged?.Invoke();
+            if (_previousPalette != Palette)
+            {
+                _allColorProviders = FindObjectsByType<ColorProvider>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+                foreach (var colorProvider in _allColorProviders)
+                {
+                    colorProvider.Init();
+                }
+
+
+                _previousPalette = Palette;
+            }
         }
 
 
-        public static bool UseThisPaletteSceneSettings()
+        public bool IsActiveSceneSettings()
         {
-            return PletHelpers.GetPletSceneSettings() != null;
+            var isThis = PletHelpers.GetPletSceneSettings() == this;
+//            this.Verbose($"IsActiveSceneSettings(): {isThis}");
+
+            return isThis;
         }
 
 
         public void SetAllSkyboxAndLights()
         {
-            if (!UseThisPaletteSceneSettings())
+            if (!IsActiveSceneSettings())
             {
                 return;
             }
 
             SetSkyboxMaterial();
-            SetSkyboxSkyColor();
-            SetSkyboxHorizonColor();
-            SetSkyboxGroundColor();
-            SetAmbientLightColor();
-            SetAmbientSkyTriLightColor();
-            SetAmbientEquatorTriLightColor();
-            SetAmbientGroundTriLightColor();
+            SetSkyboxColors();
+            SetAmbientLightColors();
             SetRealtimeShadowColor();
             SetFogColor();
 
@@ -145,92 +133,108 @@ namespace SOSXR.plet
         }
 
 
-        [ContextMenu(nameof(GetPaletteSaturationAndValue))]
-        public void GetPaletteSaturationAndValue()
+        [Button]
+        public void GetColorProvidersSVFromPalette()
         {
-            if (!UseThisPaletteSceneSettings())
+            if (!IsActiveSceneSettings())
             {
                 return;
             }
 
-            GetSkyboxSVFromPalette();
+            _allColorProviders = FindObjectsByType<ColorProvider>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
-            GetAmbientLightSVFromPalette();
-
-            GetRealtimeShadowSVFromPalette();
-
-            GetFogSVFromPalette();
+            foreach (var colorProvider in _allColorProviders)
+            {
+                colorProvider.GetPaletteSaturationAndValue();
+            }
         }
 
 
+        [Button]
         public void GetSkyboxSVFromPalette()
         {
-            var skySV = GetColorSV(SkyboxSkyHueType);
-            SkyboxSkySaturation = skySV.x;
-            SkyboxSkyValue = skySV.y;
-
-            var horizonSV = GetColorSV(SkyboxHorizonHueType);
-            SkyboxHorizonSaturation = horizonSV.x;
-            SkyboxHorizonValue = horizonSV.y;
-
-            var groundSV = GetColorSV(SkyboxGroundHueType);
-            SkyboxGroundSaturation = groundSV.x;
-            SkyboxGroundValue = groundSV.y;
-
-            SetAllSkyboxAndLights();
-        }
-
-
-        public void GetAmbientLightSVFromPalette()
-        {
-            var ambientSV = GetColorSV(AmbientLightHueType);
-            AmbientLightSaturation = ambientSV.x;
-            AmbientLightValue = ambientSV.y;
-
-            var ambientSkySV = GetColorSV(AmbientSkyLightHueType);
-            AmbientSkyLightSaturation = ambientSkySV.x;
-            AmbientSkyLightValue = ambientSkySV.y;
-
-            var ambientEquatorSV = GetColorSV(AmbientEquatorLightHueType);
-            AmbientEquatorLightSaturation = ambientEquatorSV.x;
-            AmbientEquatorLightValue = ambientEquatorSV.y;
-
-            var ambientGroundSV = GetColorSV(AmbientGroundLightHueType);
-            AmbientGroundLightSaturation = ambientGroundSV.x;
-            AmbientGroundLightValue = ambientGroundSV.y;
-
-            SetAllSkyboxAndLights();
-        }
-
-
-        public void GetRealtimeShadowSVFromPalette()
-        {
-            var shadowSV = GetColorSV(RealtimeShadowHueType);
-            RealtimeShadowSaturation = shadowSV.x;
-            RealtimeShadowValue = shadowSV.y;
-
-            SetAllSkyboxAndLights();
-        }
-
-
-        public void GetFogSVFromPalette()
-        {
-            var fogSV = GetColorSV(FogHueType);
-            FogSaturation = fogSV.x;
-            FogValue = fogSV.y;
-
-            SetAllSkyboxAndLights();
-        }
-
-
-        public void SetAmbientLightColor()
-        {
-            if (!UseThisPaletteSceneSettings())
+            if (!IsActiveSceneSettings())
             {
                 return;
             }
 
-            if (!ApplyAmbientLight || RenderSettings.ambientMode != AmbientMode.Flat)
+            SetSVFromPalette(SkyboxSkyHueType, out SkyboxSkySaturation, out SkyboxSkyValue);
+            SetSVFromPalette(SkyboxHorizonHueType, out SkyboxHorizonSaturation, out SkyboxHorizonValue);
+            SetSVFromPalette(SkyboxGroundHueType, out SkyboxGroundSaturation, out SkyboxGroundValue);
+            SetAllSkyboxAndLights();
+        }
+
+
+        [Button]
+        public void GetAmbientLightSVFromPalette()
+        {
+            if (!IsActiveSceneSettings())
+            {
+                return;
+            }
+
+            SetSVFromPalette(AmbientLightHueType, out AmbientLightSaturation, out AmbientLightValue);
+            SetSVFromPalette(AmbientSkyLightHueType, out AmbientSkyLightSaturation, out AmbientSkyLightValue);
+            SetSVFromPalette(AmbientEquatorLightHueType, out AmbientEquatorLightSaturation, out AmbientEquatorLightValue);
+            SetSVFromPalette(AmbientGroundLightHueType, out AmbientGroundLightSaturation, out AmbientGroundLightValue);
+            SetAllSkyboxAndLights();
+        }
+
+
+        [Button]
+        public void GetRealtimeShadowSVFromPalette()
+        {
+            if (!IsActiveSceneSettings())
+            {
+                return;
+            }
+
+            SetSVFromPalette(RealtimeShadowHueType, out RealtimeShadowSaturation, out RealtimeShadowValue);
+            SetAllSkyboxAndLights();
+        }
+
+
+        [Button]
+        public void GetFogSVFromPalette()
+        {
+            if (!IsActiveSceneSettings())
+            {
+                return;
+            }
+
+            SetSVFromPalette(FogHueType, out FogSaturation, out FogValue);
+            SetAllSkyboxAndLights();
+        }
+
+
+        private void SetSVFromPalette(HueType hueType, out int saturation, out int value)
+        {
+            var sv = GetColorSV(hueType);
+            saturation = sv.x;
+            value = sv.y;
+        }
+
+
+        private void SetSkyboxColors()
+        {
+            SetSkyboxSkyColor();
+            SetSkyboxHorizonColor();
+            SetSkyboxGroundColor();
+        }
+
+
+        private void SetAmbientLightColors()
+        {
+            SetAmbientLightColor();
+            SetAmbientSkyTriLightColor();
+            SetAmbientEquatorTriLightColor();
+            SetAmbientGroundTriLightColor();
+        }
+
+
+        private void SetAmbientLightColor()
+        {
+            if (!IsActiveSceneSettings() || !ApplyAmbientLight || RenderSettings.ambientMode != AmbientMode.Flat)
             {
                 return;
             }
@@ -240,14 +244,9 @@ namespace SOSXR.plet
         }
 
 
-        public void SetAmbientSkyTriLightColor()
+        private void SetAmbientSkyTriLightColor()
         {
-            if (!UseThisPaletteSceneSettings())
-            {
-                return;
-            }
-
-            if (!ApplyAmbientLight || RenderSettings.ambientMode != AmbientMode.Trilight)
+            if (!IsActiveSceneSettings() || !ApplyAmbientLight || RenderSettings.ambientMode != AmbientMode.Trilight)
             {
                 return;
             }
@@ -257,14 +256,9 @@ namespace SOSXR.plet
         }
 
 
-        public void SetAmbientEquatorTriLightColor()
+        private void SetAmbientEquatorTriLightColor()
         {
-            if (!UseThisPaletteSceneSettings())
-            {
-                return;
-            }
-
-            if (!ApplyAmbientLight || RenderSettings.ambientMode != AmbientMode.Trilight)
+            if (!IsActiveSceneSettings() || !ApplyAmbientLight || RenderSettings.ambientMode != AmbientMode.Trilight)
             {
                 return;
             }
@@ -274,14 +268,9 @@ namespace SOSXR.plet
         }
 
 
-        public void SetAmbientGroundTriLightColor()
+        private void SetAmbientGroundTriLightColor()
         {
-            if (!UseThisPaletteSceneSettings())
-            {
-                return;
-            }
-
-            if (!ApplyAmbientLight || RenderSettings.ambientMode != AmbientMode.Trilight)
+            if (!IsActiveSceneSettings() || !ApplyAmbientLight || RenderSettings.ambientMode != AmbientMode.Trilight)
             {
                 return;
             }
@@ -293,12 +282,7 @@ namespace SOSXR.plet
 
         public void SetRealtimeShadowColor()
         {
-            if (!UseThisPaletteSceneSettings())
-            {
-                return;
-            }
-
-            if (!ApplyRealtimeShadows)
+            if (!IsActiveSceneSettings() || !ApplyRealtimeShadows)
             {
                 return;
             }
@@ -310,12 +294,7 @@ namespace SOSXR.plet
 
         public void SetFogColor()
         {
-            if (!UseThisPaletteSceneSettings())
-            {
-                return;
-            }
-
-            if (!ApplyFog)
+            if (!IsActiveSceneSettings() || !ApplyFog)
             {
                 return;
             }
@@ -325,22 +304,10 @@ namespace SOSXR.plet
         }
 
 
-        public void SetSkyboxSkyColor()
+        private void SetSkyboxSkyColor()
         {
-            if (!UseThisPaletteSceneSettings())
+            if (!CanApplySkybox())
             {
-                return;
-            }
-
-            if (!ApplySkybox || SkyboxMaterial == null || Palette == null)
-            {
-                return;
-            }
-
-            if (_skyColorShaderId == 0)
-            {
-                Debug.LogWarningFormat(this, "Skybox does not have the correct properties. Does it have the correct shader ({0})?", "SkyboxShader");
-
                 return;
             }
 
@@ -349,22 +316,10 @@ namespace SOSXR.plet
         }
 
 
-        public void SetSkyboxHorizonColor()
+        private void SetSkyboxHorizonColor()
         {
-            if (!UseThisPaletteSceneSettings())
+            if (!CanApplySkybox())
             {
-                return;
-            }
-
-            if (!ApplySkybox || SkyboxMaterial == null || Palette == null)
-            {
-                return;
-            }
-
-            if (_horizonColorShaderId == 0)
-            {
-                Debug.LogWarningFormat(this, "Skybox does not have the correct properties. Does it have the correct shader ({0})?", "SkyboxShader");
-
                 return;
             }
 
@@ -373,22 +328,10 @@ namespace SOSXR.plet
         }
 
 
-        public void SetSkyboxGroundColor()
+        private void SetSkyboxGroundColor()
         {
-            if (!UseThisPaletteSceneSettings())
+            if (!CanApplySkybox())
             {
-                return;
-            }
-
-            if (!ApplySkybox || SkyboxMaterial == null || Palette == null)
-            {
-                return;
-            }
-
-            if (_horizonColorShaderId == 0)
-            {
-                Debug.LogWarningFormat(this, "Skybox does not have the correct properties. Does it have the correct shader ({0})?", "SkyboxShader");
-
                 return;
             }
 
@@ -397,26 +340,92 @@ namespace SOSXR.plet
         }
 
 
+        private bool CanApplySkybox()
+        {
+            if (!IsActiveSceneSettings() || !ApplySkybox || SkyboxMaterial == null || Palette == null)
+            {
+                return false;
+            }
+
+            if (_skyColorShaderId == 0 || _horizonColorShaderId == 0 || _groundColorShaderId == 0)
+            {
+                this.Warning("Skybox material missing required shader properties");
+
+                return false;
+            }
+
+            return true;
+        }
+
+
         public void SetSkyboxMaterial()
         {
-            if (!UseThisPaletteSceneSettings() || !ApplySkybox || SkyboxMaterial == null)
+            if (!IsActiveSceneSettings() || !ApplySkybox)
             {
                 return;
             }
 
-            RenderSettings.skybox = SkyboxMaterial;
+            var sceneName = SceneManager.GetActiveScene().name;
+            var sceneMatName = $"{sceneName}_plet_skybox";
+
+            if (RenderSettings.skybox != null && RenderSettings.skybox.name == sceneMatName)
+            {
+                SkyboxMaterial = RenderSettings.skybox;
+                return;
+            }
+
+            var sceneMat = Resources.Load<Material>(sceneMatName);
+
+            if (sceneMat != null)
+            {
+                SkyboxMaterial = sceneMat;
+                RenderSettings.skybox = sceneMat;
+                this.Verbose("Plet scene skybox applied");
+
+                return;
+            }
+
+            CreateSceneSkyboxMaterial(sceneMatName);
+        }
+
+
+        private void CreateSceneSkyboxMaterial(string sceneMatName)
+        {
+            var baseMat = Resources.Load<Material>("TriColorSkybox/plet_skybox");
+
+            if (baseMat == null)
+            {
+                this.Warning("Base skybox material not found in Resources/TriColorSkybox/plet_skybox");
+
+                return;
+            }
+
+            var targetPath = $"{PletHelpers.FolderPath}/{sceneMatName}.mat";
+            var newMat = Instantiate(baseMat);
+            newMat.name = sceneMatName;
+
+            #if UNITY_EDITOR
+            AssetDatabase.CreateAsset(newMat, targetPath);
+            AssetDatabase.SaveAssets();
+            #endif
+
+            SkyboxMaterial = newMat;
+            RenderSettings.skybox = newMat;
+            this.Verbose($"Created new skybox material: {sceneMatName}");
         }
 
 
         public Color ApplyColor(HueType type, int saturation, int value, float alpha = 1f)
         {
             var baseColor = GetColorFromPalette(type);
+            Color.RGBToHSV(baseColor, out var h, out _, out _);
 
-            Color.RGBToHSV(baseColor, out var h, out var s, out var v);
+            // Map display range to clamped HSV values
+            var s = Mathf.Lerp(Saturation.Clamp.x, Saturation.Clamp.y,
+                (saturation - 1) / (float) (Saturation.DisplayRange.y - 1));
 
-            // Map the Ranges.cs DisplayRange to a correctly clamped HSV value (0-1)
-            s = Mathf.Lerp(Saturation.Clamp.x, Saturation.Clamp.y, (saturation - 1) / ((float) Saturation.DisplayRange.y - 1));
-            v = Mathf.Lerp(Value.Clamp.x, Value.Clamp.y, (value - 1) / ((float) Value.DisplayRange.y - 1));
+            var v = Mathf.Lerp(Value.Clamp.x, Value.Clamp.y,
+                (value - 1) / (float) (Value.DisplayRange.y - 1));
 
             var newColor = Color.HSVToRGB(h, s, v);
             newColor.a = alpha;
@@ -428,11 +437,16 @@ namespace SOSXR.plet
         public Vector2Int GetColorSV(HueType type)
         {
             var baseColor = GetColorFromPalette(type);
-            Color.RGBToHSV(baseColor, out var h, out var s, out var v);
+            Color.RGBToHSV(baseColor, out _, out var s, out var v);
 
-            // Map the Ranges.cs DisplayRange to a correctly clamped HSV value (0-1)
-            var saturation = Mathf.RoundToInt((s - Saturation.Clamp.x) / (Saturation.Clamp.y - Saturation.Clamp.x) * ((float) Saturation.DisplayRange.y - 1)) + 1;
-            var value = Mathf.RoundToInt((v - Value.Clamp.x) / (Value.Clamp.y - Value.Clamp.x) * ((float) Value.DisplayRange.y - 1)) + 1;
+            // Map HSV values back to display range
+            var saturation = Mathf.RoundToInt(
+                (s - Saturation.Clamp.x) / (Saturation.Clamp.y - Saturation.Clamp.x) *
+                (Saturation.DisplayRange.y - 1)) + 1;
+
+            var value = Mathf.RoundToInt(
+                (v - Value.Clamp.x) / (Value.Clamp.y - Value.Clamp.x) *
+                (Value.DisplayRange.y - 1)) + 1;
 
             return new Vector2Int(saturation, value);
         }
@@ -445,15 +459,13 @@ namespace SOSXR.plet
                 return Color.black;
             }
 
-            var baseColor = type switch
-                            {
-                                HueType.Base => Palette.Base,
-                                HueType.Tone => Palette.Tone,
-                                HueType.Accent => Palette.Accent,
-                                _ => Color.white
-                            };
-
-            return baseColor;
+            return type switch
+                   {
+                       HueType.Base => Palette.Base,
+                       HueType.Tone => Palette.Tone,
+                       HueType.Accent => Palette.Accent,
+                       _ => Color.white
+                   };
         }
     }
 }

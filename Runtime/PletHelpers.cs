@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using SOSXR.EnhancedLogger;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +9,24 @@ namespace SOSXR.plet
 {
     public static class PletHelpers
     {
+        public static string Suffix => "_saturated_";
+
+        public static string FolderPath
+        {
+            get
+            {
+                var path = "Assets/_SOSXR/Resources";
+
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                return path;
+            }
+        }
+
+
         public static PletSceneSettings GetPletSceneSettings()
         {
             var paletteHolders = Resources.LoadAll<PletSceneSettings>("");
@@ -18,7 +38,7 @@ namespace SOSXR.plet
 
             if (paletteHolders.Length == 0)
             {
-                Debug.LogWarning("No PaletteSceneSettings found in any of the Resources folders.");
+                Log.Static("No PaletteSceneSettings found in any of the Resources folders.");
 
                 return null;
             }
@@ -33,7 +53,7 @@ namespace SOSXR.plet
                 }
             }
 
-            Debug.LogWarningFormat("Multiple PaletteSettings found in Resources folders, but none with the same name as the scene: {0}", activeScene.name);
+            Log.Static("Multiple PaletteSettings found in Resources folders, but none with the same name as the scene: {0}", activeScene.name);
 
             return null;
         }

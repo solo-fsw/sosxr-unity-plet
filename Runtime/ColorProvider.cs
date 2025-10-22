@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using SOSXR.SeaShark;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,72 +19,51 @@ namespace SOSXR.plet
         [SerializeField] private bool init;
         [HideInInspector] [SerializeField] private PletSceneSettings m_pletSceneSettings;
 
-        private static readonly Dictionary<Type, Action<Component, Color>> ColorAppliers = new()
+        private static readonly Dictionary<Type, Action<Component, ColorProvider>> ColorAppliers = new()
         {
+            {typeof(SpriteRenderer), (c, cp) => ((SpriteRenderer) c).color = cp.ColorSettings[0].FinalColor},
+            {typeof(Renderer), ApplyColorToRenderer},
+            {typeof(Selectable), ApplyColorToSelectable},
+            {typeof(Image), (c, cp) => ((Image) c).color = cp.ColorSettings[0].FinalColor},
+            {typeof(TMP_Text), (c, cp) => ((TMP_Text) c).color = cp.ColorSettings[0].FinalColor},
             {
-                typeof(SpriteRenderer), (c, col) => ((SpriteRenderer) c).color = col
-            },
-            {
-                typeof(Renderer), (c, _) => ApplyColorToRenderer((Renderer) c, c.GetComponent<ColorProvider>())
-            },
-            {
-                typeof(Selectable), (c, _) => ApplyColorToSelectable((Selectable) c, c.GetComponent<ColorProvider>())
-            },
-            {
-                typeof(Image), (c, col) =>
+                typeof(Light), (c, cp) =>
                 {
-                    var img = (Image) c;
-                    img.color = col;
+                    ((Light) c).color = cp.ColorSettings[0].FinalColor;
+                    cp.ColorSettings[0].ShowAlpha = false;
                 }
             },
             {
-                typeof(TMP_Text), (c, col) =>
+                typeof(Camera), (c, cp) =>
                 {
-                    var text = (TMP_Text) c;
-                    text.color = col;
+                    var cam = (Camera) c;
+                    cam.clearFlags = CameraClearFlags.Color;
+                    cam.backgroundColor = cp.ColorSettings[0].FinalColor;
+                    cp.ColorSettings[0].ShowAlpha = false;
                 }
             },
             {
-                typeof(Light), (c, col) =>
+                typeof(ParticleSystem), (c, cp) =>
                 {
-                    ((Light) c).color = col;
-                    c.GetComponent<ColorProvider>().ColorSettings[0].ShowAlpha = false;
-                }
-            },
-            {
-                typeof(Camera), (c, col) =>
-                {
-                    ((Camera) c).clearFlags = CameraClearFlags.Color;
-                    ((Camera) c).backgroundColor = col;
-                    c.GetComponent<ColorProvider>().ColorSettings[0].ShowAlpha = false;
-                }
-            },
-            {
-                typeof(ParticleSystem), (c, col) =>
-                {
-                    var main = ((ParticleSystem) c).main;
-                    main.startColor = col;
+                    var ps = (ParticleSystem) c;
+                    var main = ps.main;
+                    main.startColor = cp.ColorSettings[0].FinalColor;
                 }
             }
         };
 
-
         private readonly int _colorShaderId = Shader.PropertyToID("_BaseColor");
-
-        private Component _component;
-        private Action<Color> _applyColorAction;
         private MaterialPropertyBlock _mpb;
-        private HueType _cachedHueType;
+        private Component _component;
+        private Action _applyColorAction;
 
 
-        private static void ApplyColorToSelectable(Selectable selectable, ColorProvider colorProvider)
+        private static void ApplyColorToSelectable(Component c, ColorProvider colorProvider)
         {
+            var selectable = (Selectable) c;
             var colors = selectable.colors;
 
-            while (colorProvider.ColorSettings.Count < 5)
-            {
-                colorProvider.ColorSettings.Add(new ColorSettings());
-            }
+            EnsureCorrectLength(colorProvider, 5);
 
             colorProvider.ColorSettings[0].Name = nameof(colors.normalColor);
             colors.normalColor = colorProvider.ColorSettings[0].FinalColor;
@@ -106,42 +84,47 @@ namespace SOSXR.plet
         }
 
 
-        private static void ApplyColorToRenderer(Renderer renderer, ColorProvider colorProvider)
+        private static void ApplyColorToRenderer(Component c, ColorProvider colorProvider)
         {
-            colorProvider._mpb ??= new MaterialPropertyBlock();
+            var renderer = (Renderer) c;
 
             if (renderer.sharedMaterials.Length == 0)
             {
-                Debug.LogWarning($"{renderer.GetType().Name} with no materials not supported.");
+                Debug.LogWarning($"{renderer.GetType().Name} has no materials.", renderer);
 
                 return;
             }
+
+            colorProvider._mpb ??= new MaterialPropertyBlock();
 
             EnsureCorrectLength(colorProvider, renderer.sharedMaterials.Length);
 
             for (var i = 0; i < renderer.sharedMaterials.Length; i++)
             {
-                colorProvider.ColorSettings[i].Name = renderer.sharedMaterials[i].name;
+                var material = renderer.sharedMaterials[i];
+
+                if (material == null)
+                {
+                    continue;
+                }
+
+                colorProvider.ColorSettings[i].Name = material.name;
                 renderer.GetPropertyBlock(colorProvider._mpb, i);
                 colorProvider._mpb.SetColor(colorProvider._colorShaderId, colorProvider.ColorSettings[i].FinalColor);
                 renderer.SetPropertyBlock(colorProvider._mpb, i);
-                colorProvider.ColorSettings[i].ShowAlpha = UsesAlpha(renderer.sharedMaterials[i]);
+                colorProvider.ColorSettings[i].ShowAlpha = UsesAlpha(material);
             }
         }
 
 
         private static void EnsureCorrectLength(ColorProvider colorProvider, int lengthNeeded)
         {
-            // Fix: Create individual ColorSettings instances instead of reusing the same one
-            if (colorProvider.ColorSettings.Count < lengthNeeded)
+            while (colorProvider.ColorSettings.Count < lengthNeeded)
             {
-                // Create separate instances for each new ColorSettings
-                for (var i = colorProvider.ColorSettings.Count; i < lengthNeeded; i++)
-                {
-                    colorProvider.ColorSettings.Add(new ColorSettings());
-                }
+                colorProvider.ColorSettings.Add(new ColorSettings());
             }
-            else if (colorProvider.ColorSettings.Count > lengthNeeded)
+
+            if (colorProvider.ColorSettings.Count > lengthNeeded)
             {
                 colorProvider.ColorSettings.RemoveRange(lengthNeeded, colorProvider.ColorSettings.Count - lengthNeeded);
             }
@@ -150,32 +133,26 @@ namespace SOSXR.plet
 
         private static bool UsesAlpha(Material material)
         {
-            return material.IsKeywordEnabled("_ALPHAPREMULTIPLY_ON") || material.IsKeywordEnabled("_ALPHATEST_ON");
+            return material.IsKeywordEnabled("_ALPHAPREMULTIPLY_ON") ||
+                   material.IsKeywordEnabled("_ALPHATEST_ON");
         }
 
 
         private void OnValidate()
         {
-            #if UNITY_EDITOR
-            EditorApplication.delayCall += Init;
-            #endif
-        }
-
-
-        private void Awake()
-        {
             Init();
         }
 
 
-        private void Init()
+        [Button]
+        public void Init()
         {
             if (!enabled)
             {
                 return;
             }
 
-            GetPaletteHolder();
+            GetSceneSettings();
 
             if (ColorSettings.Count == 0)
             {
@@ -185,7 +162,6 @@ namespace SOSXR.plet
             if (!init)
             {
                 GetPaletteSaturationAndValue();
-
                 init = true;
 
                 return;
@@ -195,36 +171,36 @@ namespace SOSXR.plet
         }
 
 
-        [ContextMenu(nameof(GetPaletteSaturationAndValue))]
+        [Button]
         public void GetPaletteSaturationAndValue()
         {
-            GetPaletteHolder(); // Ensure we have a palette holder
+            if (!GetSceneSettings())
+            {
+                return;
+            }
 
-            // Make sure we have the right number of settings for the attached renderer
+            // Ensure correct settings count for renderer materials
             if (TryGetComponent<Renderer>(out var rend) && rend.sharedMaterials.Length > 0)
             {
                 EnsureCorrectLength(this, rend.sharedMaterials.Length);
 
-                // Initialize the names from the materials
                 for (var i = 0; i < rend.sharedMaterials.Length; i++)
                 {
-                    if (i < ColorSettings.Count)
+                    if (rend.sharedMaterials[i] != null && i < ColorSettings.Count)
                     {
                         ColorSettings[i].Name = rend.sharedMaterials[i].name;
                     }
                 }
             }
 
-            // Initialize all color settings properly
+            // Initialize all color settings
             for (var i = 0; i < ColorSettings.Count; i++)
             {
-                // If this is the first initialization, assign a default hue type 
-                // that varies for each material to create visual distinction
+                // Distribute different hue types across materials on first init
                 if (!init && i > 0)
                 {
-                    // Distribute hue types across materials (cycling through enum values)
                     var hueTypeCount = Enum.GetValues(typeof(HueType)).Length;
-                    ColorSettings[i].HueType = (HueType) ((int) (ColorSettings[0].HueType + i) % hueTypeCount);
+                    ColorSettings[i].HueType = (HueType) (((int) ColorSettings[0].HueType + i) % hueTypeCount);
                 }
 
                 var satVal = m_pletSceneSettings.GetColorSV(ColorSettings[i].HueType);
@@ -232,7 +208,6 @@ namespace SOSXR.plet
                 ColorSettings[i].Value = satVal.y;
                 ColorSettings[i].Alpha = 1f;
 
-                // Calculate the final color immediately
                 ColorSettings[i].FinalColor = m_pletSceneSettings.ApplyColor(
                     ColorSettings[i].HueType,
                     ColorSettings[i].Saturation,
@@ -245,115 +220,81 @@ namespace SOSXR.plet
         }
 
 
-        private void GetPaletteHolder()
+        private bool GetSceneSettings()
         {
             if (m_pletSceneSettings != null)
             {
-                return;
+                return true;
             }
 
             m_pletSceneSettings = PletHelpers.GetPletSceneSettings();
+
+            return m_pletSceneSettings != null;
         }
 
 
-        private void TryGetComponent()
+        private void CacheComponent()
         {
             _component = null;
+            _applyColorAction = null;
 
-            if (TryGetComponent(out Light lite))
+            // Try to find a supported component type
+            var componentTypes = new[]
             {
-                _component = lite;
-            }
-            else if (TryGetComponent(out SpriteRenderer spriteRenderer))
-            {
-                _component = spriteRenderer;
-            }
-            else if (TryGetComponent<Renderer>(out var rend))
-            {
-                _component = rend;
-            }
-            else if (TryGetComponent(out Camera cam))
-            {
-                _component = cam;
-            }
-            else if (TryGetComponent(out ParticleSystem ps))
-            {
-                _component = ps;
-            }
-            else if (TryGetComponent<Selectable>(out var selectable))
-            {
-                _component = selectable;
-            }
-            else if (TryGetComponent<Image>(out var img))
-            {
-                _component = img;
-            }
-            else if (TryGetComponent<TMP_Text>(out var text))
-            {
-                _component = text;
-            }
+                typeof(Light), typeof(SpriteRenderer), typeof(Renderer), typeof(Camera),
+                typeof(ParticleSystem), typeof(Selectable), typeof(Image), typeof(TMP_Text)
+            };
 
-            if (_component == null)
+            foreach (var type in componentTypes)
             {
-                _applyColorAction = null;
+                if (TryGetComponent(type, out var component))
+                {
+                    _component = component;
 
-                return;
-            }
+                    // Find matching applier
+                    foreach (var entry in ColorAppliers)
+                    {
+                        if (component.GetType() == entry.Key || component.GetType().IsSubclassOf(entry.Key))
+                        {
+                            _applyColorAction = () => entry.Value(component, this);
 
-            foreach (var entry in ColorAppliers.Where(entry => _component.GetType() == entry.Key || _component.GetType().IsSubclassOf(entry.Key)))
-            {
-                _applyColorAction = color => entry.Value(_component, color);
-
-                return;
+                            return;
+                        }
+                    }
+                }
             }
         }
 
 
-        private void OnEnable()
+        [Button]
+        public void ApplyColorAction()
         {
-            if (m_pletSceneSettings == null || !enabled)
+            if (!enabled || !GetSceneSettings())
             {
                 return;
             }
 
-            m_pletSceneSettings.OnPaletteChanged += ApplyColorAction;
-        }
-
-
-        private void ApplyColorAction()
-        {
-            if (!enabled)
-            {
-                return;
-            }
-
-            TryGetComponent();
+            CacheComponent();
 
             if (_applyColorAction == null)
             {
-                Debug.LogWarningFormat(this, "Component type not supported, or not found.");
+                Debug.LogWarning("Component type not supported or not found.", this);
 
                 return;
             }
 
-            var colorSettingsCopy = new List<ColorSettings>(ColorSettings); // Create a copy to iterate
-
-            foreach (var setting in colorSettingsCopy)
+            // Update final colors from palette
+            foreach (var setting in ColorSettings)
             {
-                setting.FinalColor = m_pletSceneSettings.ApplyColor(setting.HueType, setting.Saturation, setting.Value, setting.Alpha);
-                _applyColorAction.Invoke(setting.FinalColor);
-            }
-        }
-
-
-        private void OnDisable()
-        {
-            if (m_pletSceneSettings == null) // Should I check for enabled? That seems like a bad idea.
-            {
-                return;
+                setting.FinalColor = m_pletSceneSettings.ApplyColor(
+                    setting.HueType,
+                    setting.Saturation,
+                    setting.Value,
+                    setting.Alpha
+                );
             }
 
-            m_pletSceneSettings.OnPaletteChanged -= ApplyColorAction;
+            _applyColorAction.Invoke();
         }
     }
 }

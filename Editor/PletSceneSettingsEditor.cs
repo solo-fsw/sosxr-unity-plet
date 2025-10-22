@@ -6,15 +6,13 @@ using UnityEngine.Rendering;
 namespace SOSXR.plet.EditorScripts
 {
     [CustomEditor(typeof(PletSceneSettings))]
-    public class PaletteHolderEditor : PaletteEditorBase
+    public class PletSceneSettingsEditor : PaletteEditorBase
     {
         private SerializedProperty _paletteProp;
-        private SerializedProperty _previousPaletteProp;
-
         private SerializedProperty _applySkyboxProp;
-
         private SerializedProperty _skyboxMaterialProp;
 
+        // Skybox properties
         private SerializedProperty _skyboxSkyHueTypeProp;
         private SerializedProperty _skyboxSkySaturationProp;
         private SerializedProperty _skyboxSkyValueProp;
@@ -30,8 +28,8 @@ namespace SOSXR.plet.EditorScripts
         private SerializedProperty _skyboxGroundValueProp;
         private SerializedProperty _skyboxGroundColorProp;
 
+        // Ambient light properties
         private SerializedProperty _applyAmbientLightProp;
-
         private SerializedProperty _ambientLightHueTypeProp;
         private SerializedProperty _ambientLightSaturationProp;
         private SerializedProperty _ambientLightValueProp;
@@ -52,15 +50,16 @@ namespace SOSXR.plet.EditorScripts
         private SerializedProperty _ambientGroundLightValueProp;
         private SerializedProperty _ambientGroundLightColorProp;
 
+        // Shadow properties
         private SerializedProperty _applyRealtimeShadowsProp;
-
         private SerializedProperty _realtimeShadowHueTypeProp;
         private SerializedProperty _realtimeShadowSaturationProp;
         private SerializedProperty _realtimeShadowValueProp;
         private SerializedProperty _realtimeShadowColorProp;
 
-        private SerializedProperty _applyFogProp;
 
+        // Fog properties
+        private SerializedProperty _applyFogProp;
         private SerializedProperty _fogHueTypeProp;
         private SerializedProperty _fogSaturationProp;
         private SerializedProperty _fogValueProp;
@@ -69,12 +68,17 @@ namespace SOSXR.plet.EditorScripts
 
         private void OnEnable()
         {
+            if (target == null)
+            {
+                return;
+            }
+
+            // Main settings
             _paletteProp = serializedObject.FindProperty(nameof(PletSceneSettings.Palette));
-            _previousPaletteProp = serializedObject.FindProperty(nameof(PletSceneSettings.PreviousPalette));
-
             _applySkyboxProp = serializedObject.FindProperty(nameof(PletSceneSettings.ApplySkybox));
-
             _skyboxMaterialProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxMaterial));
+
+            // Skybox
             _skyboxSkyHueTypeProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxSkyHueType));
             _skyboxSkySaturationProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxSkySaturation));
             _skyboxSkyValueProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxSkyValue));
@@ -90,8 +94,8 @@ namespace SOSXR.plet.EditorScripts
             _skyboxGroundValueProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxGroundValue));
             _skyboxGroundColorProp = serializedObject.FindProperty(nameof(PletSceneSettings.SkyboxGroundColor));
 
+            // Ambient light
             _applyAmbientLightProp = serializedObject.FindProperty(nameof(PletSceneSettings.ApplyAmbientLight));
-
             _ambientLightHueTypeProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientLightHueType));
             _ambientLightSaturationProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientLightSaturation));
             _ambientLightValueProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientLightValue));
@@ -112,15 +116,15 @@ namespace SOSXR.plet.EditorScripts
             _ambientGroundLightValueProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientGroundLightValue));
             _ambientGroundLightColorProp = serializedObject.FindProperty(nameof(PletSceneSettings.AmbientGroundLightColor));
 
+            // Shadows
             _applyRealtimeShadowsProp = serializedObject.FindProperty(nameof(PletSceneSettings.ApplyRealtimeShadows));
-
             _realtimeShadowHueTypeProp = serializedObject.FindProperty(nameof(PletSceneSettings.RealtimeShadowHueType));
             _realtimeShadowSaturationProp = serializedObject.FindProperty(nameof(PletSceneSettings.RealtimeShadowSaturation));
             _realtimeShadowValueProp = serializedObject.FindProperty(nameof(PletSceneSettings.RealtimeShadowValue));
             _realtimeShadowColorProp = serializedObject.FindProperty(nameof(PletSceneSettings.RealtimeShadowColor));
 
+            // Fog
             _applyFogProp = serializedObject.FindProperty(nameof(PletSceneSettings.ApplyFog));
-
             _fogHueTypeProp = serializedObject.FindProperty(nameof(PletSceneSettings.FogHueType));
             _fogSaturationProp = serializedObject.FindProperty(nameof(PletSceneSettings.FogSaturation));
             _fogValueProp = serializedObject.FindProperty(nameof(PletSceneSettings.FogValue));
@@ -132,101 +136,37 @@ namespace SOSXR.plet.EditorScripts
         {
             serializedObject.Update();
 
-            var paletteHolder = (PletSceneSettings) target;
+            var pletSceneSettings = (PletSceneSettings) target;
 
-            if (!PletSceneSettings.UseThisPaletteSceneSettings())
+            if (!IsActiveSceneSettings(pletSceneSettings))
             {
-                EditorGUILayout.HelpBox("This Palette Holder is not being used in the scene. It will not apply any colors. If you thought it should have worked in this scene, please check the following:\n" +
-                                        "1. It is either the only PaletteHolder in any of the Resources folders\n" +
-                                        "2. It is one of multiple PaletteHolder in any Resource folder, but it has the (exact) name of the current scene\n" +
-                                        "3. (In case of 2) It is the only PaletteHolder with the name of the scene\n" +
-                                        "4. You are currently in the scene where this PaletteHolder belongs to.", MessageType.Warning);
+                DrawInactiveSettingsWarning();
 
                 return;
             }
 
-            if (!HasPalette())
+            if (!DrawPaletteSelector())
             {
                 return;
+            }
+
+            if (GUILayout.Button(ButtonText + " for all " + nameof(ColorProvider) + "s in the scene"))
+            {
+                pletSceneSettings.GetColorProvidersSVFromPalette();
             }
 
             var palette = (Palette) _paletteProp.objectReferenceValue;
 
-            if (palette != _previousPaletteProp.objectReferenceValue)
-            {
-                _paletteProp.objectReferenceValue = palette;
-                serializedObject.ApplyModifiedProperties();
-            }
-
             EditorGUILayout.Space();
-
             DrawSectionHeader("Palette Colors");
-            DrawPaletteColorFields((Palette) _paletteProp.objectReferenceValue);
-
+            DrawPaletteColorFields(palette);
             EditorGUILayout.Space(10);
 
-            if (DrawToggleHeader("Skybox", "Apply Skybox", _applySkyboxProp))
-            {
-                DrawSkyboxField(paletteHolder);
+            DrawSkyboxSection(pletSceneSettings);
+            DrawAmbientLightSection(pletSceneSettings);
+            DrawRealtimeShadowsSection(pletSceneSettings);
+            DrawFogSection(pletSceneSettings);
 
-                if (_skyboxMaterialProp.objectReferenceValue != null)
-                {
-                    DrawSkyboxColorFields(paletteHolder);
-                }
-                else
-                {
-                    EditorGUILayout.Space(10);
-
-                    EditorGUILayout.HelpBox("Please assign a Skybox Material to apply colors.", MessageType.Warning);
-                }
-            }
-
-
-            if (RenderSettings.ambientMode != AmbientMode.Skybox)
-            {
-                EditorGUILayout.Space(10);
-
-                if (DrawToggleHeader("Ambient Light", "Apply Ambient Light Colors", _applyAmbientLightProp))
-                {
-                    if (RenderSettings.ambientMode == AmbientMode.Flat)
-                    {
-                        DrawSingleAmbientLightFields(paletteHolder);
-                    }
-                    else if (RenderSettings.ambientMode == AmbientMode.Trilight)
-                    {
-                        DrawTriAmbientLightFields(paletteHolder);
-                    }
-                }
-            }
-            else
-            {
-                EditorGUILayout.Space(10);
-                EditorGUILayout.HelpBox("Ambient Light is disabled because the Environment Lighting is set to Skybox in the Lighting - Environment", MessageType.Info);
-            }
-
-            EditorGUILayout.Space(10);
-
-            if (DrawToggleHeader("Realtime Shadows", "Apply Realtime Shadow Color", _applyRealtimeShadowsProp))
-            {
-                DrawRealtimeShadowFields(paletteHolder);
-            }
-
-
-            if (RenderSettings.fog)
-            {
-                EditorGUILayout.Space(10);
-
-                if (DrawToggleHeader("Fog", "Apply Fog Color", _applyFogProp))
-                {
-                    DrawFogFields(paletteHolder);
-                }
-            }
-            else
-            {
-                EditorGUILayout.Space(10);
-
-                EditorGUILayout.HelpBox("Fog is disabled in the Lighting - Environment", MessageType.Info);
-            }
 
             if (serializedObject.ApplyModifiedProperties())
             {
@@ -235,35 +175,108 @@ namespace SOSXR.plet.EditorScripts
         }
 
 
-        /// <summary>
-        ///     Draws the palette selector and handles palette changes.
-        /// </summary>
-        /// <returns>True if a valid palette is selected</returns>
-        private bool HasPalette()
+        private bool IsActiveSceneSettings(PletSceneSettings settings)
         {
-            EditorGUILayout.PropertyField(_paletteProp);
-
-            if (_paletteProp.objectReferenceValue == null)
-            {
-                return false;
-            }
-
-            var palette = (Palette) _paletteProp.objectReferenceValue;
-
-            if (palette != _previousPaletteProp.objectReferenceValue)
-            {
-                _paletteProp.objectReferenceValue = palette;
-                serializedObject.ApplyModifiedProperties();
-            }
-
-            return true;
+            return PletHelpers.GetPletSceneSettings() == settings;
         }
 
 
-        /// <summary>
-        ///     Draws a header with a toggle and returns the toggle state.
-        /// </summary>
-        /// <returns>Current toggle value</returns>
+        private void DrawInactiveSettingsWarning()
+        {
+            EditorGUILayout.HelpBox(
+                "This Palette Holder is not being used in the scene. It will not apply any colors. " +
+                "Please check the following:\n" +
+                "1. It is either the only PaletteHolder in any Resources folder\n" +
+                "2. It is one of multiple PaletteHolders in any Resources folder, but has the exact name of the current scene\n" +
+                "3. (In case of 2) It is the only PaletteHolder with the name of the scene\n" +
+                "4. You are currently in the scene where this PaletteHolder belongs",
+                MessageType.Warning);
+        }
+
+
+        private bool DrawPaletteSelector()
+        {
+            EditorGUILayout.PropertyField(_paletteProp);
+
+            return _paletteProp.objectReferenceValue != null;
+        }
+
+
+        private void DrawSkyboxSection(PletSceneSettings pletSceneSettings)
+        {
+            if (DrawToggleHeader("Skybox", "Apply Skybox", _applySkyboxProp))
+            {
+                DrawSkyboxMaterialField(pletSceneSettings);
+
+                if (_skyboxMaterialProp.objectReferenceValue != null)
+                {
+                    DrawSkyboxColorFields(pletSceneSettings);
+                }
+                else
+                {
+                    EditorGUILayout.Space(10);
+                    EditorGUILayout.HelpBox("Please assign a Skybox Material to apply colors.", MessageType.Warning);
+                }
+            }
+        }
+
+
+        private void DrawAmbientLightSection(PletSceneSettings pletSceneSettings)
+        {
+            EditorGUILayout.Space(10);
+
+            if (RenderSettings.ambientMode == AmbientMode.Skybox)
+            {
+                EditorGUILayout.HelpBox(
+                    "Ambient Light is disabled because the Environment Lighting is set to Skybox in Lighting - Environment",
+                    MessageType.Info);
+
+                return;
+            }
+
+            if (DrawToggleHeader("Ambient Light", "Apply Ambient Light Colors", _applyAmbientLightProp))
+            {
+                if (RenderSettings.ambientMode == AmbientMode.Flat)
+                {
+                    DrawFlatAmbientLightFields(pletSceneSettings);
+                }
+                else if (RenderSettings.ambientMode == AmbientMode.Trilight)
+                {
+                    DrawTriAmbientLightFields(pletSceneSettings);
+                }
+            }
+        }
+
+
+        private void DrawRealtimeShadowsSection(PletSceneSettings pletSceneSettings)
+        {
+            EditorGUILayout.Space(10);
+
+            if (DrawToggleHeader("Realtime Shadows", "Apply Realtime Shadow Color", _applyRealtimeShadowsProp))
+            {
+                DrawRealtimeShadowFields(pletSceneSettings);
+            }
+        }
+
+
+        private void DrawFogSection(PletSceneSettings pletSceneSettings)
+        {
+            EditorGUILayout.Space(10);
+
+            if (!RenderSettings.fog)
+            {
+                EditorGUILayout.HelpBox("Fog is disabled in Lighting - Environment", MessageType.Info);
+
+                return;
+            }
+
+            if (DrawToggleHeader("Fog", "Apply Fog Color", _applyFogProp))
+            {
+                DrawFogFields(pletSceneSettings);
+            }
+        }
+
+
         private bool DrawToggleHeader(string label, string toggleLabel, SerializedProperty toggleProp)
         {
             EditorGUILayout.BeginHorizontal();
@@ -275,9 +288,6 @@ namespace SOSXR.plet.EditorScripts
         }
 
 
-        /// <summary>
-        ///     Draws a section header with bold styling.
-        /// </summary>
         private void DrawSectionHeader(string label)
         {
             EditorGUILayout.LabelField(label, EditorStyles.boldLabel);
@@ -286,33 +296,36 @@ namespace SOSXR.plet.EditorScripts
 
         private void DrawPaletteColorFields(Palette palette)
         {
-            var height = 50;
+            const int height = 50;
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            DrawColorBox(palette.Base, false, false, nameof(HueType) + " - " + nameof(HueType.Base), height);
+            DrawColorBox(palette.Base, false, false, $"{nameof(HueType)} - {nameof(HueType.Base)}", height);
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            DrawColorBox(palette.Tone, false, false, nameof(HueType) + " - " + nameof(HueType.Tone), height);
+            DrawColorBox(palette.Tone, false, false, $"{nameof(HueType)} - {nameof(HueType.Tone)}", height);
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            DrawColorBox(palette.Accent, false, false, nameof(HueType) + " - " + nameof(HueType.Accent), height);
+            DrawColorBox(palette.Accent, false, false, $"{nameof(HueType)} - {nameof(HueType.Accent)}", height);
             EditorGUILayout.EndVertical();
         }
 
 
-        private void DrawSkyboxField(PletSceneSettings pletSceneSettings)
+        private void DrawSkyboxMaterialField(PletSceneSettings pletSceneSettings)
         {
+            EditorGUI.BeginChangeCheck();
+
             GUILayout.BeginVertical(EditorStyles.helpBox);
 
             DrawProperty(_skyboxMaterialProp, "Skybox Material",
-                () => _skyboxMaterialProp.objectReferenceValue = (Material) EditorGUILayout.ObjectField("Skybox Material", _skyboxMaterialProp.objectReferenceValue, typeof(Material), false),
+                () => (Material) EditorGUILayout.ObjectField("Skybox Material",
+                    _skyboxMaterialProp.objectReferenceValue, typeof(Material), false),
                 (prop, newValue) => prop.objectReferenceValue = newValue);
 
             GUILayout.EndVertical();
 
-            if (GUI.changed)
+            if (EditorGUI.EndChangeCheck())
             {
                 serializedObject.ApplyModifiedProperties();
                 pletSceneSettings.SetSkyboxMaterial();
@@ -324,16 +337,19 @@ namespace SOSXR.plet.EditorScripts
         {
             EditorGUI.BeginChangeCheck();
 
-            DrawSection("Skybox Sky Hue Type", _skyboxSkyHueTypeProp, _skyboxSkyValueProp, _skyboxSkySaturationProp, _skyboxSkyColorProp);
-            DrawSection("Skybox Horizon Hue Type", _skyboxHorizonHueTypeProp, _skyboxHorizonValueProp, _skyboxHorizonSaturationProp, _skyboxHorizonColorProp);
-            DrawSection("Skybox Ground Hue Type", _skyboxGroundHueTypeProp, _skyboxGroundValueProp, _skyboxGroundSaturationProp, _skyboxGroundColorProp);
+            DrawSection("Skybox Sky", _skyboxSkyHueTypeProp, _skyboxSkyValueProp,
+                _skyboxSkySaturationProp, _skyboxSkyColorProp);
+
+            DrawSection("Skybox Horizon", _skyboxHorizonHueTypeProp, _skyboxHorizonValueProp,
+                _skyboxHorizonSaturationProp, _skyboxHorizonColorProp);
+
+            DrawSection("Skybox Ground", _skyboxGroundHueTypeProp, _skyboxGroundValueProp,
+                _skyboxGroundSaturationProp, _skyboxGroundColorProp);
 
             if (EditorGUI.EndChangeCheck())
             {
                 serializedObject.ApplyModifiedProperties();
-                pletSceneSettings.SetSkyboxSkyColor();
-                pletSceneSettings.SetSkyboxHorizonColor();
-                pletSceneSettings.SetSkyboxGroundColor();
+                pletSceneSettings.SetAllSkyboxAndLights();
             }
 
             if (GUILayout.Button(ButtonText))
@@ -343,16 +359,16 @@ namespace SOSXR.plet.EditorScripts
         }
 
 
-        private void DrawSingleAmbientLightFields(PletSceneSettings pletSceneSettings)
+        private void DrawFlatAmbientLightFields(PletSceneSettings pletSceneSettings)
         {
             EditorGUI.BeginChangeCheck();
 
-            DrawSection("Ambient Light Hue Type", _ambientLightHueTypeProp, _ambientLightValueProp, _ambientLightSaturationProp, _ambientLightColorProp, null, true);
+            DrawSection("Ambient Light", _ambientLightHueTypeProp, _ambientLightValueProp, _ambientLightSaturationProp, _ambientLightColorProp, null, true);
 
             if (EditorGUI.EndChangeCheck())
             {
                 serializedObject.ApplyModifiedProperties();
-                pletSceneSettings.SetAmbientLightColor();
+                pletSceneSettings.SetAllSkyboxAndLights();
             }
 
             if (GUILayout.Button(ButtonText))
@@ -366,17 +382,19 @@ namespace SOSXR.plet.EditorScripts
         {
             EditorGUI.BeginChangeCheck();
 
-            DrawSection("Ambient Sky Light Hue Type", _ambientSkyLightTypeProp, _ambientSkyLightValueProp, _ambientSkyLightSaturationProp, _ambientSkyLightColorProp, null, true);
-            DrawSection("Ambient Equator Light Hue Type", _ambientEquatorLightTypeProp, _ambientEquatorLightValueProp, _ambientEquatorLightSaturationProp, _ambientEquatorLightColorProp, null, true);
-            DrawSection("Ambient Ground Light Hue Type", _ambientGroundLightTypeProp, _ambientGroundLightValueProp, _ambientGroundLightSaturationProp, _ambientGroundLightColorProp, null, true);
+            DrawSection("Ambient Sky Light", _ambientSkyLightTypeProp, _ambientSkyLightValueProp,
+                _ambientSkyLightSaturationProp, _ambientSkyLightColorProp, null, true);
+
+            DrawSection("Ambient Equator Light", _ambientEquatorLightTypeProp, _ambientEquatorLightValueProp,
+                _ambientEquatorLightSaturationProp, _ambientEquatorLightColorProp, null, true);
+
+            DrawSection("Ambient Ground Light", _ambientGroundLightTypeProp, _ambientGroundLightValueProp,
+                _ambientGroundLightSaturationProp, _ambientGroundLightColorProp, null, true);
 
             if (EditorGUI.EndChangeCheck())
             {
                 serializedObject.ApplyModifiedProperties();
-
-                pletSceneSettings.SetAmbientSkyTriLightColor();
-                pletSceneSettings.SetAmbientEquatorTriLightColor();
-                pletSceneSettings.SetAmbientGroundTriLightColor();
+                pletSceneSettings.SetAllSkyboxAndLights();
             }
 
             if (GUILayout.Button(ButtonText))
@@ -390,8 +408,8 @@ namespace SOSXR.plet.EditorScripts
         {
             EditorGUI.BeginChangeCheck();
 
-            DrawSection("Realtime Shadow Hue Type", _realtimeShadowHueTypeProp, _realtimeShadowValueProp, _realtimeShadowSaturationProp, _realtimeShadowColorProp);
-
+            DrawSection("Realtime Shadow", _realtimeShadowHueTypeProp, _realtimeShadowValueProp,
+                _realtimeShadowSaturationProp, _realtimeShadowColorProp);
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -399,7 +417,7 @@ namespace SOSXR.plet.EditorScripts
                 pletSceneSettings.SetRealtimeShadowColor();
             }
 
-            if (GUILayout.Button(nameof(pletSceneSettings.GetRealtimeShadowSVFromPalette)))
+            if (GUILayout.Button(ButtonText))
             {
                 pletSceneSettings.GetRealtimeShadowSVFromPalette();
             }
@@ -410,7 +428,7 @@ namespace SOSXR.plet.EditorScripts
         {
             EditorGUI.BeginChangeCheck();
 
-            DrawSection("Fog Hue Type", _fogHueTypeProp, _fogValueProp, _fogSaturationProp, _fogColorProp);
+            DrawSection("Fog", _fogHueTypeProp, _fogValueProp, _fogSaturationProp, _fogColorProp);
 
             if (EditorGUI.EndChangeCheck())
             {

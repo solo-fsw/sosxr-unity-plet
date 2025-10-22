@@ -17,38 +17,5 @@ namespace SOSXR.plet
 
         [Space(10)] [Tooltip("Optional")] [TexturePreview(500)] [SerializeField]
         private Texture m_optionalColorTexture;
-
-        [HideInInspector] public PletSceneSettings SceneSettings;
-
-        private Color _previousBase;
-        private Color _previousTone;
-        private Color _previousAccent;
-
-
-        private void OnValidate()
-        {
-            RegisterPaletteChanges();
-        }
-
-
-        private void Reset()
-        {
-            RegisterPaletteChanges();
-        }
-
-
-        public void RegisterPaletteChanges()
-        {
-            if (_previousBase == Base && _previousTone == Tone && _previousAccent == Accent)
-            {
-                return;
-            }
-
-            _previousBase = Base;
-            _previousTone = Tone;
-            _previousAccent = Accent;
-
-            SceneSettings?.OnPaletteChanged?.Invoke();
-        }
     }
 }
