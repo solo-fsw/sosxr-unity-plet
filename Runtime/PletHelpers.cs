@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 
 namespace SOSXR.plet
 {
@@ -35,5 +37,53 @@ namespace SOSXR.plet
 
             return null;
         }
+    }
+
+
+    public enum HueType
+    {
+        Base,
+        Tone,
+        Accent
+    }
+
+
+    [Serializable]
+    public class ColorSettings
+    {
+        public string Name;
+        public HueType HueType;
+
+        public int Saturation;
+        public int Value;
+        public bool ShowAlpha = true;
+        public float Alpha = 1f;
+        public Color FinalColor;
+    }
+
+
+    public static class Saturation
+    {
+        public static readonly Vector2Int DisplayRange = new(1, 19);
+        public static readonly Vector2 Clamp = new(0.0075f, 1.0f);
+    }
+
+
+    public static class Value
+    {
+        public static readonly Vector2Int DisplayRange = new(1, 19);
+        public static readonly Vector2 Clamp = new(0.0075f, 1.0f);
+    }
+
+
+    [Serializable]
+    public class TextureSettings
+    {
+        public string MaterialName;
+        public int Index = TextureProvider.TextureSaturationSteps - 1;
+        public int PreviousIndex;
+        public string[] TextureNames = new string[TextureProvider.TextureSaturationSteps];
+
+        [TexturePreview(100)] public Texture2D CurrentTexture;
     }
 }

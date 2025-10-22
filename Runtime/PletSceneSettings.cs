@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 
+
 namespace SOSXR.plet
 {
     [CreateAssetMenu(fileName = "PletSceneSettings", menuName = "SOSXR/plet/PletSceneSettings", order = 1)]
@@ -13,6 +14,7 @@ namespace SOSXR.plet
 
         public bool ApplySkybox = true;
         public Material SkyboxMaterial;
+
 
         public HueType SkyboxSkyHueType;
         public int SkyboxSkySaturation = 10;
@@ -137,9 +139,9 @@ namespace SOSXR.plet
             SetRealtimeShadowColor();
             SetFogColor();
 
-#if UNITY_EDITOR
+            #if UNITY_EDITOR
             SceneView.RepaintAll();
-#endif
+            #endif
         }
 
 
@@ -413,8 +415,8 @@ namespace SOSXR.plet
             Color.RGBToHSV(baseColor, out var h, out var s, out var v);
 
             // Map the Ranges.cs DisplayRange to a correctly clamped HSV value (0-1)
-            s = Mathf.Lerp(Saturation.Clamp.x, Saturation.Clamp.y, (saturation - 1) / ((float)Saturation.DisplayRange.y - 1));
-            v = Mathf.Lerp(Value.Clamp.x, Value.Clamp.y, (value - 1) / ((float)Value.DisplayRange.y - 1));
+            s = Mathf.Lerp(Saturation.Clamp.x, Saturation.Clamp.y, (saturation - 1) / ((float) Saturation.DisplayRange.y - 1));
+            v = Mathf.Lerp(Value.Clamp.x, Value.Clamp.y, (value - 1) / ((float) Value.DisplayRange.y - 1));
 
             var newColor = Color.HSVToRGB(h, s, v);
             newColor.a = alpha;
@@ -429,8 +431,8 @@ namespace SOSXR.plet
             Color.RGBToHSV(baseColor, out var h, out var s, out var v);
 
             // Map the Ranges.cs DisplayRange to a correctly clamped HSV value (0-1)
-            var saturation = Mathf.RoundToInt((s - Saturation.Clamp.x) / (Saturation.Clamp.y - Saturation.Clamp.x) * ((float)Saturation.DisplayRange.y - 1)) + 1;
-            var value = Mathf.RoundToInt((v - Value.Clamp.x) / (Value.Clamp.y - Value.Clamp.x) * ((float)Value.DisplayRange.y - 1)) + 1;
+            var saturation = Mathf.RoundToInt((s - Saturation.Clamp.x) / (Saturation.Clamp.y - Saturation.Clamp.x) * ((float) Saturation.DisplayRange.y - 1)) + 1;
+            var value = Mathf.RoundToInt((v - Value.Clamp.x) / (Value.Clamp.y - Value.Clamp.x) * ((float) Value.DisplayRange.y - 1)) + 1;
 
             return new Vector2Int(saturation, value);
         }
@@ -444,12 +446,12 @@ namespace SOSXR.plet
             }
 
             var baseColor = type switch
-            {
-                HueType.Base => Palette.Base,
-                HueType.Tone => Palette.Tone,
-                HueType.Accent => Palette.Accent,
-                _ => Color.white
-            };
+                            {
+                                HueType.Base => Palette.Base,
+                                HueType.Tone => Palette.Tone,
+                                HueType.Accent => Palette.Accent,
+                                _ => Color.white
+                            };
 
             return baseColor;
         }

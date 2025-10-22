@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 namespace SOSXR.plet
 {
     [CreateAssetMenu(fileName = "Palette", menuName = "SOSXR/plet/Palette")]

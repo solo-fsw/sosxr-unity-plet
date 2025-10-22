@@ -2,6 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
+
 namespace SOSXR.plet.EditorScripts
 {
     public class PaletteEditorBase : Editor
@@ -22,8 +23,8 @@ namespace SOSXR.plet.EditorScripts
             }
 
             DrawProperty(typeProp, label,
-                () => (HueType)EditorGUILayout.EnumPopup(label, (HueType)typeProp.enumValueIndex),
-                (prop, newValue) => prop.enumValueIndex = (int)newValue);
+                () => (HueType) EditorGUILayout.EnumPopup(label, (HueType) typeProp.enumValueIndex),
+                (prop, newValue) => prop.enumValueIndex = (int) newValue);
 
             DrawProperty(saturationProp, "Saturation",
                 () => EditorGUILayout.IntSlider("Saturation", saturationProp.intValue, Saturation.DisplayRange.x, Saturation.DisplayRange.y),

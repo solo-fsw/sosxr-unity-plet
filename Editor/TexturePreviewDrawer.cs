@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
+
 namespace SOSXR.plet.EditorScripts
 {
     [CustomPropertyDrawer(typeof(TexturePreviewAttribute))]
@@ -10,17 +11,17 @@ namespace SOSXR.plet.EditorScripts
         {
             EditorGUI.BeginProperty(position, label, property);
 
-            var attr = (TexturePreviewAttribute)attribute;
-            var maxSize = (float)attr.MaxSize;
+            var attr = (TexturePreviewAttribute) attribute;
+            var maxSize = (float) attr.MaxSize;
 
             var fieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
             EditorGUI.PropertyField(fieldRect, property, label);
 
-            var texture = (Texture)property.objectReferenceValue;
+            var texture = (Texture) property.objectReferenceValue;
 
             if (texture)
             {
-                var aspectRatio = (float)texture.width / texture.height;
+                var aspectRatio = (float) texture.width / texture.height;
                 var previewWidth = maxSize;
                 var previewHeight = maxSize;
 
@@ -45,7 +46,7 @@ namespace SOSXR.plet.EditorScripts
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            var attr = (TexturePreviewAttribute)attribute;
+            var attr = (TexturePreviewAttribute) attribute;
 
             return attr.MaxSize + EditorGUIUtility.singleLineHeight + 5;
         }

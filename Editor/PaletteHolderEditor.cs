@@ -2,6 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 
+
 namespace SOSXR.plet.EditorScripts
 {
     [CustomEditor(typeof(PletSceneSettings))]
@@ -131,7 +132,7 @@ namespace SOSXR.plet.EditorScripts
         {
             serializedObject.Update();
 
-            var paletteHolder = (PletSceneSettings)target;
+            var paletteHolder = (PletSceneSettings) target;
 
             if (!PletSceneSettings.UseThisPaletteSceneSettings())
             {
@@ -149,7 +150,7 @@ namespace SOSXR.plet.EditorScripts
                 return;
             }
 
-            var palette = (Palette)_paletteProp.objectReferenceValue;
+            var palette = (Palette) _paletteProp.objectReferenceValue;
 
             if (palette != _previousPaletteProp.objectReferenceValue)
             {
@@ -160,7 +161,7 @@ namespace SOSXR.plet.EditorScripts
             EditorGUILayout.Space();
 
             DrawSectionHeader("Palette Colors");
-            DrawPaletteColorFields((Palette)_paletteProp.objectReferenceValue);
+            DrawPaletteColorFields((Palette) _paletteProp.objectReferenceValue);
 
             EditorGUILayout.Space(10);
 
@@ -247,7 +248,7 @@ namespace SOSXR.plet.EditorScripts
                 return false;
             }
 
-            var palette = (Palette)_paletteProp.objectReferenceValue;
+            var palette = (Palette) _paletteProp.objectReferenceValue;
 
             if (palette != _previousPaletteProp.objectReferenceValue)
             {
@@ -306,7 +307,7 @@ namespace SOSXR.plet.EditorScripts
             GUILayout.BeginVertical(EditorStyles.helpBox);
 
             DrawProperty(_skyboxMaterialProp, "Skybox Material",
-                () => _skyboxMaterialProp.objectReferenceValue = (Material)EditorGUILayout.ObjectField("Skybox Material", _skyboxMaterialProp.objectReferenceValue, typeof(Material), false),
+                () => _skyboxMaterialProp.objectReferenceValue = (Material) EditorGUILayout.ObjectField("Skybox Material", _skyboxMaterialProp.objectReferenceValue, typeof(Material), false),
                 (prop, newValue) => prop.objectReferenceValue = newValue);
 
             GUILayout.EndVertical();

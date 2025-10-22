@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 namespace SOSXR.plet
 {
     /// <summary>
@@ -22,47 +23,47 @@ namespace SOSXR.plet
         private static readonly Dictionary<Type, Action<Component, Color>> ColorAppliers = new()
         {
             {
-                typeof(SpriteRenderer), (c, col) => ((SpriteRenderer)c).color = col
+                typeof(SpriteRenderer), (c, col) => ((SpriteRenderer) c).color = col
             },
             {
-                typeof(Renderer), (c, _) => ApplyColorToRenderer((Renderer)c, c.GetComponent<ColorProvider>())
+                typeof(Renderer), (c, _) => ApplyColorToRenderer((Renderer) c, c.GetComponent<ColorProvider>())
             },
             {
-                typeof(Selectable), (c, _) => ApplyColorToSelectable((Selectable)c, c.GetComponent<ColorProvider>())
+                typeof(Selectable), (c, _) => ApplyColorToSelectable((Selectable) c, c.GetComponent<ColorProvider>())
             },
             {
                 typeof(Image), (c, col) =>
                 {
-                    var img = (Image)c;
+                    var img = (Image) c;
                     img.color = col;
                 }
             },
             {
                 typeof(TMP_Text), (c, col) =>
                 {
-                    var text = (TMP_Text)c;
+                    var text = (TMP_Text) c;
                     text.color = col;
                 }
             },
             {
                 typeof(Light), (c, col) =>
                 {
-                    ((Light)c).color = col;
+                    ((Light) c).color = col;
                     c.GetComponent<ColorProvider>().ColorSettings[0].ShowAlpha = false;
                 }
             },
             {
                 typeof(Camera), (c, col) =>
                 {
-                    ((Camera)c).clearFlags = CameraClearFlags.Color;
-                    ((Camera)c).backgroundColor = col;
+                    ((Camera) c).clearFlags = CameraClearFlags.Color;
+                    ((Camera) c).backgroundColor = col;
                     c.GetComponent<ColorProvider>().ColorSettings[0].ShowAlpha = false;
                 }
             },
             {
                 typeof(ParticleSystem), (c, col) =>
                 {
-                    var main = ((ParticleSystem)c).main;
+                    var main = ((ParticleSystem) c).main;
                     main.startColor = col;
                 }
             }
@@ -155,9 +156,9 @@ namespace SOSXR.plet
 
         private void OnValidate()
         {
-#if UNITY_EDITOR
+            #if UNITY_EDITOR
             EditorApplication.delayCall += Init;
-#endif
+            #endif
         }
 
 
@@ -223,7 +224,7 @@ namespace SOSXR.plet
                 {
                     // Distribute hue types across materials (cycling through enum values)
                     var hueTypeCount = Enum.GetValues(typeof(HueType)).Length;
-                    ColorSettings[i].HueType = (HueType)((int)(ColorSettings[0].HueType + i) % hueTypeCount);
+                    ColorSettings[i].HueType = (HueType) ((int) (ColorSettings[0].HueType + i) % hueTypeCount);
                 }
 
                 var satVal = m_pletSceneSettings.GetColorSV(ColorSettings[i].HueType);
