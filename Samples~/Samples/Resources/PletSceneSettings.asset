@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54320d13087d419281c447a7d978a673, type: 3}
   m_Name: PletSceneSettings
   m_EditorClassIdentifier: SOSXR.plet::SOSXR.plet.PletSceneSettings
-  Palette: {fileID: 11400000, guid: 10024bd4894e14c0d8bda11eefac5eff, type: 2}
+  Palette: {fileID: 11400000, guid: b6a3e72b97af14341b579568827a2aca, type: 2}
   ApplySkybox: 0
   SkyboxMaterial: {fileID: 2100000, guid: 36e4936097b80479ab55039c1ac61c4a, type: 2}
   SkyboxSkyHueType: 1
