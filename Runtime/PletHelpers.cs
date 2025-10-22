@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using SOSXR.EnhancedLogger;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -36,14 +37,22 @@ namespace SOSXR.plet
                 return paletteHolders[0];
             }
 
+            var activeScene = SceneManager.GetActiveScene();
+
             if (paletteHolders.Length == 0)
             {
-                Log.Static("No PaletteSceneSettings found in any of the Resources folders.");
+                Log.Static($"No PaletteSceneSettings found in any of the Resources folders, will create a new one at {FolderPath}.");
+                
+                var pletSceneSettings = ScriptableObject.CreateInstance<PletSceneSettings>();
 
-                return null;
+                var assetPath = Path.Combine(FolderPath, activeScene.name + ".asset");
+                AssetDatabase.CreateAsset(pletSceneSettings, assetPath);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+
+                return pletSceneSettings;
             }
 
-            var activeScene = SceneManager.GetActiveScene();
 
             foreach (var paletteHolder in paletteHolders)
             {
