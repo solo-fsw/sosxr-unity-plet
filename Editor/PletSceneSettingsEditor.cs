@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -145,6 +146,11 @@ namespace SOSXR.plet.EditorScripts
                 return;
             }
 
+            if (_paletteProp.objectReferenceValue == null)
+            {
+                DrawCreatePaletteButton();
+            }
+
             if (!DrawPaletteSelector())
             {
                 return;
@@ -171,6 +177,24 @@ namespace SOSXR.plet.EditorScripts
             if (serializedObject.ApplyModifiedProperties())
             {
                 Repaint();
+            }
+        }
+
+
+        private void DrawCreatePaletteButton()
+        {
+            if (GUILayout.Button("Create Palette"))
+            {
+                var palette = CreateInstance<Palette>();
+                palette.name = "Palette";
+
+                var assetPath = Path.Combine(PletHelpers.FolderPath, palette.name + ".asset");
+                AssetDatabase.CreateAsset(palette, assetPath);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+
+                var pletSceneSettings = (PletSceneSettings) target;
+                pletSceneSettings.Palette = AssetDatabase.LoadAssetAtPath<Palette>(assetPath);
             }
         }
 

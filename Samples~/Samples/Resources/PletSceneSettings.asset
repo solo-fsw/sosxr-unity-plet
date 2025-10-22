@@ -12,45 +12,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54320d13087d419281c447a7d978a673, type: 3}
   m_Name: PletSceneSettings
   m_EditorClassIdentifier: SOSXR.plet::SOSXR.plet.PletSceneSettings
-  Palette: {fileID: 11400000, guid: d4eb5664475d74bcc8662f7e1598a330, type: 2}
+  Palette: {fileID: 11400000, guid: d7d5646b11b2d41c1950687e7eef0699, type: 2}
   ApplySkybox: 1
   SkyboxMaterial: {fileID: 2100000, guid: 36e4936097b80479ab55039c1ac61c4a, type: 2}
   SkyboxSkyHueType: 1
-  SkyboxSkySaturation: 12
-  SkyboxSkyValue: 14
-  SkyboxSkyColor: {r: 0.72430557, g: 0.6636587, b: 0.27956182, a: 1}
+  SkyboxSkySaturation: 14
+  SkyboxSkyValue: 15
+  SkyboxSkyColor: {r: 0.35139823, g: 0.77944446, b: 0.2148885, a: 1}
   SkyboxHorizonHueType: 2
-  SkyboxHorizonSaturation: 18
+  SkyboxHorizonSaturation: 16
   SkyboxHorizonValue: 15
-  SkyboxHorizonColor: {r: 0.77944446, g: 0.2945657, b: 0.0429777, a: 1}
+  SkyboxHorizonColor: {r: 0.1289331, g: 0.1893436, b: 0.77944446, a: 1}
   SkyboxGroundHueType: 0
-  SkyboxGroundSaturation: 11
-  SkyboxGroundValue: 8
-  SkyboxGroundColor: {r: 0.39347222, g: 0.3411772, b: 0.17356496, a: 1}
+  SkyboxGroundSaturation: 16
+  SkyboxGroundValue: 14
+  SkyboxGroundColor: {r: 0.72430557, g: 0.119812205, b: 0.119812205, a: 1}
   ApplyAmbientLight: 0
   AmbientLightHueType: 0
-  AmbientLightSaturation: 7
-  AmbientLightValue: 16
+  AmbientLightSaturation: 10
+  AmbientLightValue: 10
   AmbientLightColor: {r: 0, g: 0, b: 0, a: 0}
-  AmbientSkyLightHueType: 1
-  AmbientSkyLightSaturation: 17
-  AmbientSkyLightValue: 9
-  AmbientSkyLightColor: {r: 0.049471833, g: 0.24333954, b: 0.4486111, a: 1}
-  AmbientEquatorLightHueType: 2
-  AmbientEquatorLightSaturation: 4
-  AmbientEquatorLightValue: 11
-  AmbientEquatorLightColor: {r: 0.5588889, g: 0.4622477, b: 0.4677476, a: 1}
+  AmbientSkyLightHueType: 0
+  AmbientSkyLightSaturation: 10
+  AmbientSkyLightValue: 10
+  AmbientSkyLightColor: {r: 0, g: 0, b: 0, a: 0}
+  AmbientEquatorLightHueType: 0
+  AmbientEquatorLightSaturation: 10
+  AmbientEquatorLightValue: 10
+  AmbientEquatorLightColor: {r: 0, g: 0, b: 0, a: 0}
   AmbientGroundLightHueType: 0
-  AmbientGroundLightSaturation: 7
-  AmbientGroundLightValue: 16
-  AmbientGroundLightColor: {r: 0.83458334, g: 0.7343885, b: 0.552216, a: 1}
-  ApplyRealtimeShadows: 0
+  AmbientGroundLightSaturation: 10
+  AmbientGroundLightValue: 10
+  AmbientGroundLightColor: {r: 0, g: 0, b: 0, a: 0}
+  ApplyRealtimeShadows: 1
   RealtimeShadowHueType: 0
-  RealtimeShadowSaturation: 7
-  RealtimeShadowValue: 16
-  RealtimeShadowColor: {r: 0.83458334, g: 0.7343885, b: 0.552216, a: 1}
+  RealtimeShadowSaturation: 16
+  RealtimeShadowValue: 14
+  RealtimeShadowColor: {r: 0.72430557, g: 0.119812205, b: 0.119812205, a: 1}
   ApplyFog: 0
-  FogHueType: 2
-  FogSaturation: 4
-  FogValue: 11
-  FogColor: {r: 0.5588889, g: 0.4622477, b: 0.4677476, a: 1}
+  FogHueType: 0
+  FogSaturation: 10
+  FogValue: 10
+  FogColor: {r: 0, g: 0, b: 0, a: 0}
