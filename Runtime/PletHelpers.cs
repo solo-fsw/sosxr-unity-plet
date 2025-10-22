@@ -42,15 +42,19 @@ namespace SOSXR.plet
             if (paletteHolders.Length == 0)
             {
                 Log.Static($"No PaletteSceneSettings found in any of the Resources folders, will create a new one at {FolderPath}.");
-                
-                var pletSceneSettings = ScriptableObject.CreateInstance<PletSceneSettings>();
 
-                var assetPath = Path.Combine(FolderPath, activeScene.name + ".asset");
-                AssetDatabase.CreateAsset(pletSceneSettings, assetPath);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
+                var sceneName = SceneManager.GetActiveScene().name;
 
-                return pletSceneSettings;
+                EditorApplication.delayCall += () =>
+                {
+                    var pletSceneSettings = ScriptableObject.CreateInstance<PletSceneSettings>();
+                    var assetPath = Path.Combine(FolderPath, sceneName + ".asset");
+                    AssetDatabase.CreateAsset(pletSceneSettings, assetPath);
+                    AssetDatabase.SaveAssets();
+                    AssetDatabase.Refresh();
+                };
+
+                return null; // return null now, it’ll be created soon
             }
 
 

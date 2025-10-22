@@ -371,6 +371,7 @@ namespace SOSXR.plet
             if (RenderSettings.skybox != null && RenderSettings.skybox.name == sceneMatName)
             {
                 SkyboxMaterial = RenderSettings.skybox;
+
                 return;
             }
 

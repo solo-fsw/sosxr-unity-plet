@@ -12,21 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54320d13087d419281c447a7d978a673, type: 3}
   m_Name: PletSceneSettings
   m_EditorClassIdentifier: SOSXR.plet::SOSXR.plet.PletSceneSettings
-  Palette: {fileID: 11400000, guid: b6a3e72b97af14341b579568827a2aca, type: 2}
-  ApplySkybox: 0
+  Palette: {fileID: 11400000, guid: d4eb5664475d74bcc8662f7e1598a330, type: 2}
+  ApplySkybox: 1
   SkyboxMaterial: {fileID: 2100000, guid: 36e4936097b80479ab55039c1ac61c4a, type: 2}
   SkyboxSkyHueType: 1
-  SkyboxSkySaturation: 17
-  SkyboxSkyValue: 9
-  SkyboxSkyColor: {r: 0.049471833, g: 0.24333954, b: 0.4486111, a: 1}
+  SkyboxSkySaturation: 12
+  SkyboxSkyValue: 14
+  SkyboxSkyColor: {r: 0.72430557, g: 0.6636587, b: 0.27956182, a: 1}
   SkyboxHorizonHueType: 2
-  SkyboxHorizonSaturation: 4
-  SkyboxHorizonValue: 11
-  SkyboxHorizonColor: {r: 0.5588889, g: 0.4622477, b: 0.4677476, a: 1}
+  SkyboxHorizonSaturation: 18
+  SkyboxHorizonValue: 15
+  SkyboxHorizonColor: {r: 0.77944446, g: 0.2945657, b: 0.0429777, a: 1}
   SkyboxGroundHueType: 0
-  SkyboxGroundSaturation: 7
-  SkyboxGroundValue: 16
-  SkyboxGroundColor: {r: 0.83458334, g: 0.7343885, b: 0.552216, a: 1}
+  SkyboxGroundSaturation: 11
+  SkyboxGroundValue: 8
+  SkyboxGroundColor: {r: 0.39347222, g: 0.3411772, b: 0.17356496, a: 1}
   ApplyAmbientLight: 0
   AmbientLightHueType: 0
   AmbientLightSaturation: 7
