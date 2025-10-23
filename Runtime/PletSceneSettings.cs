@@ -80,27 +80,24 @@ namespace SOSXR.plet
         {
             if (!IsActiveSceneSettings() || Palette == null)
             {
-                if (Palette == null)
-                {
-                    Debug.LogWarning("Palette is null", this);
-                }
-
                 return;
+            }
+
+            if (_previousPalette == Palette)
+            {
+                return;
+            }
+
+            _allColorProviders = FindObjectsByType<ColorProvider>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+            foreach (var colorProvider in _allColorProviders)
+            {
+                colorProvider.Init();
             }
 
             SetAllSkyboxAndLights();
 
-            if (_previousPalette != Palette)
-            {
-                _allColorProviders = FindObjectsByType<ColorProvider>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-
-                foreach (var colorProvider in _allColorProviders)
-                {
-                    colorProvider.Init();
-                }
-
-                _previousPalette = Palette;
-            }
+            _previousPalette = Palette;
         }
 
 
