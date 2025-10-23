@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using SOSXR.SeaShark;
 using TMPro;
 using UnityEngine;
@@ -26,6 +27,7 @@ namespace SOSXR.plet
             {typeof(Selectable), ApplyColorToSelectable},
             {typeof(Image), (c, cp) => ((Image) c).color = cp.ColorSettings[0].FinalColor},
             {typeof(TMP_Text), (c, cp) => ((TMP_Text) c).color = cp.ColorSettings[0].FinalColor},
+            {typeof(Text), (c, cp) => ((Text) c).color = cp.ColorSettings[0].FinalColor},
             {
                 typeof(Light), (c, cp) =>
                 {
@@ -238,29 +240,27 @@ namespace SOSXR.plet
             _component = null;
             _applyColorAction = null;
 
-            // Try to find a supported component type
+            /*// Try to find a supported component type
             var componentTypes = new[]
             {
                 typeof(Light), typeof(SpriteRenderer), typeof(Renderer), typeof(Camera),
                 typeof(ParticleSystem), typeof(Selectable), typeof(Image), typeof(TMP_Text)
-            };
+            };*/
 
-            foreach (var type in componentTypes)
+            foreach (var type in ColorAppliers.Keys)
             {
-                if (TryGetComponent(type, out var component))
+                if (!TryGetComponent(type, out var component))
                 {
-                    _component = component;
+                    continue;
+                }
 
-                    // Find matching applier
-                    foreach (var entry in ColorAppliers)
-                    {
-                        if (component.GetType() == entry.Key || component.GetType().IsSubclassOf(entry.Key))
-                        {
-                            _applyColorAction = () => entry.Value(component, this);
+                _component = component;
 
-                            return;
-                        }
-                    }
+                foreach (var entry in ColorAppliers.Where(entry => component.GetType() == entry.Key || component.GetType().IsSubclassOf(entry.Key)))
+                {
+                    _applyColorAction = () => entry.Value(component, this);
+
+                    break;
                 }
             }
         }
