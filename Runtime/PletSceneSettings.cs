@@ -99,7 +99,6 @@ namespace SOSXR.plet
                     colorProvider.Init();
                 }
 
-
                 _previousPalette = Palette;
             }
         }
@@ -107,10 +106,7 @@ namespace SOSXR.plet
 
         public bool IsActiveSceneSettings()
         {
-            var isThis = PletHelpers.GetPletSceneSettings() == this;
-//            this.Verbose($"IsActiveSceneSettings(): {isThis}");
-
-            return isThis;
+            return PletHelpers.GetPletSceneSettings() == this;
         }
 
 
@@ -386,7 +382,8 @@ namespace SOSXR.plet
                 return;
             }
 
-            CreateSceneSkyboxMaterial(sceneMatName);
+            // Editor delay call
+            EditorApplication.delayCall += () => { CreateSceneSkyboxMaterial(sceneMatName); };
         }
 
 
@@ -396,8 +393,6 @@ namespace SOSXR.plet
 
             if (baseMat == null)
             {
-                // this.Warning("Base skybox material not found in Resources/TriColorSkybox/plet_skybox");
-
                 return;
             }
 
