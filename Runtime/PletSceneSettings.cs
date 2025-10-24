@@ -1,6 +1,8 @@
 using SOSXR.EnhancedLogger;
 using SOSXR.SeaShark;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
@@ -379,8 +381,9 @@ namespace SOSXR.plet
                 return;
             }
 
-            // Editor delay call
+            #if UNITY_EDITOR
             EditorApplication.delayCall += () => { CreateSceneSkyboxMaterial(sceneMatName); };
+            #endif
         }
 
 
