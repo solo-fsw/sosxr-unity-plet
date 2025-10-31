@@ -1,8 +1,8 @@
-using SOSXR.EnhancedLogger;
-using SOSXR.SeaShark;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+using SOSXR.EnhancedLogger;
+using SOSXR.SeaShark;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
