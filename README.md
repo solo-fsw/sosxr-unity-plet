@@ -4,7 +4,7 @@ MOC:
 related:
 tags: []
 date_created: 2025-02-25
-date_modified: 2025-03-31
+date_modified: 2026-02-26
 ---
 
 # Plet: A _Highly_ Opinionated Color Palette Manager for Unity
@@ -44,6 +44,55 @@ For the latest (and possibly unstable) version, you can do any of the above on t
 
 - TextMeshPro
 
+## Architecture
+
+plet's core types form a simple pipeline from design asset to rendered pixel:
+
+| Type | Kind | Role |
+|---|---|---|
+| **`Palette`** | ScriptableObject | Defines exactly three colors: `Base` (~60%), `Tone` (~30%), and `Accent` (~10%). Optionally holds a reference texture for design reference. |
+| **`PletSceneSettings`** | ScriptableObject | The **PaletteHolder** (see Usage below). Lives in a `Resources` folder; links an active `Palette` to a scene and controls optional overrides for skybox, ambient light, realtime shadow, and fog. Either one global instance or one per scene (named exactly after the scene). |
+| **`ColorProvider`** | MonoBehaviour | Added to any GameObject with a supported component (Renderer, Light, Camera, SpriteRenderer, Image, TMP_Text, Text, Selectable, ParticleSystem). Reads the hue from the active `PletSceneSettings` → `Palette`, then applies per-instance saturation and value multipliers. Uses `MaterialPropertyBlock` for Renderers; direct assignment for lights, cameras, and UI. |
+| **`TextureProvider`** | MonoBehaviour | Optional add-on for Renderers. Pre-bakes a set of desaturated texture variants per material slot (via `Desaturate`) and lets you pick a saturation step at runtime. |
+| **`Desaturate`** | Static utility (Editor) | Produces the pre-baked texture variants consumed by `TextureProvider`. |
+
+**Data flow:**
+```
+Palette
+  └─► PletSceneSettings ─► ColorProvider ─► FinalColor ─► MaterialPropertyBlock / Light.color / …
+                        └─► RenderSettings (skybox, ambient light, shadows, fog)
+```
+
+> **Note:** `PletSceneSettings` is the C# class name; the README calls it **PaletteHolder** throughout.
+
+## Quick Start (Code)
+
+Most workflows need **zero code** — just add a `ColorProvider` component in the Inspector and it handles everything. When you do need runtime palette access:
+
+```csharp
+using SOSXR.plet;
+using UnityEngine;
+
+public class PletExample : MonoBehaviour
+{
+    private void Start()
+    {
+        // Locate the active PletSceneSettings (loaded automatically from Resources).
+        var settings = PletHelpers.GetPletSceneSettings();
+        if (settings == null || settings.Palette == null) return;
+
+        // Option A — read a raw palette color directly.
+        Color baseColor = settings.Palette.Base;
+
+        // Option B — derive an adjusted color with saturation/value overrides.
+        // Both saturation and value use a 1–19 display scale (10 = palette default).
+        Color accentAdjusted = settings.ApplyColor(HueType.Accent, saturation: 14, value: 12);
+
+        Debug.Log($"Base: {baseColor}  AccentAdjusted: {accentAdjusted}");
+    }
+}
+```
+
 ## Reasoning
 
 Restrictions are sometimes good. A color palette is one such example. By restricting the colors that can be used in a project, you can ensure a consistent look and feel throughout the scene or project. `plet` ("Palette") is even more opinionated in stating that you should only use __three__ colors in each palette. This is 1) done because you sometimes just have to make choices, and 2) because the [60/30/10 rule](https://youtu.be/RdAEf6A7WwQ?si=dyM5K3SIXHOAaYGp).
@@ -69,6 +118,9 @@ Then, for ease of use: either get the colorpicker to the right of each color to 
 Palettes have useful links at the bottom to W3 Schools' [analogous](https://www.w3schools.com/colors/colors_analogous.asp), [compound](https://www.w3schools.com/colors/colors_compound.asp), and [triadic](https://www.w3schools.com/colors/colors_triadic.asp) color wheels. These can be useful to find colors that work well together. As with images: you can take screenshots from the website and add them to the Palette for easy reference, or copy the HEX values from the website and paste them into the Palette.
 
 ### PaletteHolder(s)
+
+> In code this section refers to **`PletSceneSettings`** — the ScriptableObject placed in a `Resources` folder.
+> The Unity create-menu now reads `Create → SOSXR → plet → PletSceneSettings`.
 
 Create one or more PaletteHolders in a Resources folder of your choosing. Right-click in the Project window, and select `Create -> SOSXR -> plet -> PaletteHolder`. You can create _either_ one PaletteHolder for your entire project, or one per scene.
 
