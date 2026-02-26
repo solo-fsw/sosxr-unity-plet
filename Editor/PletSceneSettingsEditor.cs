@@ -6,6 +6,11 @@ using UnityEngine.Rendering;
 
 namespace SOSXR.plet.EditorScripts
 {
+    /// <summary>
+    ///     Custom inspector for <see cref="PletSceneSettings"/>. Draws the palette selector and collapsible
+    ///     sections for skybox, ambient light, realtime shadow, and fog overrides, each with live preview
+    ///     swatches and a "Get Palette Saturation and Value" sync button.
+    /// </summary>
     [CustomEditor(typeof(PletSceneSettings))]
     public class PletSceneSettingsEditor : PaletteEditorBase
     {

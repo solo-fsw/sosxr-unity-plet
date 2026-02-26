@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace SOSXR.plet.EditorScripts
 {
+    /// <summary>
+    ///     Property drawer for <see cref="TexturePreviewAttribute"/>. Renders the standard object field
+    ///     followed by a centred, aspect-ratio-correct texture preview scaled to <see cref="TexturePreviewAttribute.MaxSize"/>.
+    /// </summary>
     [CustomPropertyDrawer(typeof(TexturePreviewAttribute))]
     public class TexturePreviewDrawer : PropertyDrawer
     {

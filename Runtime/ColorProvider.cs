@@ -10,14 +10,23 @@ using UnityEngine.UI;
 namespace SOSXR.plet
 {
     /// <summary>
-    ///     Add this component to a GameObject to apply color settings to its components.
+    ///     MonoBehaviour that applies palette-driven colors to a supported component on the same GameObject.
+    ///     Supports <see cref="Renderer"/> (via MaterialPropertyBlock), <see cref="Light"/>,
+    ///     <see cref="Camera"/>, <see cref="SpriteRenderer"/>, <see cref="UnityEngine.UI.Image"/>,
+    ///     <see cref="TMPro.TMP_Text"/>, <see cref="UnityEngine.UI.Text"/>,
+    ///     <see cref="UnityEngine.UI.Selectable"/>, and <see cref="ParticleSystem"/>.
+    ///     Each material slot gets its own <see cref="ColorSettings"/> entry with an independently
+    ///     adjustable hue type, saturation (1–19 scale), value/brightness (1–19 scale), and alpha.
     /// </summary>
     [ExecuteInEditMode]
     public class ColorProvider : MonoBehaviour
     {
+        /// <summary>One entry per material slot (or per color channel for UI <see cref="UnityEngine.UI.Selectable"/>s).</summary>
         public List<ColorSettings> ColorSettings = new(1);
 
+        /// <summary>Tracks whether this provider has performed its one-time palette-derived initialisation.</summary>
         [SerializeField] private bool init;
+        /// <summary>Cached active scene settings used to resolve palette colors and SV mapping.</summary>
         [HideInInspector] [SerializeField] private PletSceneSettings m_pletSceneSettings;
 
         private static readonly Dictionary<Type, Action<Component, ColorProvider>> ColorAppliers = new()
@@ -146,6 +155,11 @@ namespace SOSXR.plet
         }
 
 
+        /// <summary>
+        ///     Initialises this provider: fetches the active <see cref="PletSceneSettings"/>, ensures at least
+        ///     one <see cref="ColorSettings"/> entry exists, and on first run reads saturation/value from the
+        ///     palette. On subsequent calls it applies the current color settings to the target component.
+        /// </summary>
         [Button]
         public void Init()
         {
@@ -173,6 +187,11 @@ namespace SOSXR.plet
         }
 
 
+        /// <summary>
+        ///     Reads saturation and value from the active palette for each <see cref="ColorSettings"/> entry
+        ///     and distributes hue types across multiple material slots on first initialisation.
+        ///     Call this whenever the palette changes or the component is first set up.
+        /// </summary>
         [Button]
         public void GetPaletteSaturationAndValue()
         {
@@ -266,6 +285,11 @@ namespace SOSXR.plet
         }
 
 
+        /// <summary>
+        ///     Resolves the appropriate color-application delegate for the component type and invokes it,
+        ///     updating all target color channels from the active palette.
+        ///     Safe to call every frame or on demand.
+        /// </summary>
         [Button]
         public void ApplyColorAction()
         {

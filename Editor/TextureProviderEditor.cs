@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace SOSXR.plet.EditorScripts
 {
+    /// <summary>Custom inspector for <see cref="TextureProvider"/> that renders a saturation-step slider per material slot and updates the material texture immediately on change.</summary>
     [CustomEditor(typeof(TextureProvider))]
     [CanEditMultipleObjects]
     public class TextureProviderEditor : Editor

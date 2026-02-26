@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace SOSXR.plet.EditorScripts
 {
+    /// <summary>Custom inspector for <see cref="Palette"/> that appends color-theory reference links (W3 Schools analogous, compound, and triadic pickers) below the default fields.</summary>
     [CustomEditor(typeof(Palette))]
     public class PaletteEditor : Editor
     {

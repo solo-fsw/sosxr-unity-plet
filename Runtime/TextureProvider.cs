@@ -8,15 +8,23 @@ using UnityEngine;
 
 namespace SOSXR.plet
 {
+    /// <summary>
+    ///     MonoBehaviour that manages a set of pre-generated desaturated texture variants for a <see cref="Renderer"/>.
+    ///     On initialisation it produces <see cref="TextureSaturationSteps"/> variants of each material's main texture
+    ///     at evenly spaced saturation levels using <see cref="Desaturate"/>, then lets you scrub between them
+    ///     at runtime via <see cref="TextureSettings.Index"/>.
+    /// </summary>
     [RequireComponent(typeof(Renderer))]
     public class TextureProvider : MonoBehaviour
     {
+        /// <summary>Per-material-slot configuration including the saturation index and resolved current texture reference.</summary>
         public List<TextureSettings> TextureSettings = new(1);
 
         [HideInInspector] [SerializeField] private bool m_init;
         private Renderer _rend;
         private static bool _isDesaturating;
 
+        /// <summary>Number of discrete saturation steps generated per source texture (0 = fully desaturated through max = fully saturated).</summary>
         public const int TextureSaturationSteps = 11;
 
 
@@ -39,6 +47,10 @@ namespace SOSXR.plet
         }
 
 
+        /// <summary>
+        ///     Checks each slot for an index change and loads the corresponding pre-generated texture variant
+        ///     into the material's <c>mainTexture</c>. Call after modifying any <see cref="TextureSettings.Index"/>.
+        /// </summary>
         public void GetNextTexture()
         {
             for (var index = 0; index < TextureSettings.Count; index++)
@@ -55,6 +67,10 @@ namespace SOSXR.plet
         }
 
 
+        /// <summary>
+        ///     Scans the Renderer's shared materials, registers each slot that has a main texture, and
+        ///     generates all desaturated variants via <see cref="Desaturate"/>. No-op if already initialised.
+        /// </summary>
         [ContextMenu(nameof(Initialize))]
         public void Initialize()
         {

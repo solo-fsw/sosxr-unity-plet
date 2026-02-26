@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace SOSXR.plet.EditorScripts
 {
+    /// <summary>Custom inspector for <see cref="ColorProvider"/> that renders a per-slot colour section (hue type, saturation, value sliders and preview swatch) and a "Get Palette Saturation and Value" button.</summary>
     [CustomEditor(typeof(ColorProvider))]
     [CanEditMultipleObjects]
     public class ColorProviderEditor : PaletteEditorBase
