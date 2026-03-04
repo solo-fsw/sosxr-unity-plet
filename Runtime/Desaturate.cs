@@ -109,7 +109,7 @@ namespace SOSXR.plet
 
         private static void SaveAsPNG(Texture2D texture, string filePath)
         {
-            var pngData = texture.EncodeToPNG();
+            var pngData = ImageConversion.EncodeToPNG(texture);
 
             if (pngData == null)
             {
