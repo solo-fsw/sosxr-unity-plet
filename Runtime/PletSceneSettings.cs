@@ -1,7 +1,6 @@
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using SOSXR.EnhancedLogger;
 using SOSXR.SeaShark;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -414,7 +413,7 @@ namespace SOSXR.plet
 
             if (_skyColorShaderId == 0 || _horizonColorShaderId == 0 || _groundColorShaderId == 0)
             {
-                this.Warning("Skybox material missing required shader properties");
+                Debug.LogWarning("Skybox material missing required shader properties");
 
                 return false;
             }
@@ -451,7 +450,7 @@ namespace SOSXR.plet
             {
                 SkyboxMaterial = sceneMat;
                 RenderSettings.skybox = sceneMat;
-                this.Verbose("Plet scene skybox applied");
+                // Debug.Log("Plet scene skybox applied");
 
                 return;
             }
@@ -482,7 +481,7 @@ namespace SOSXR.plet
 
             SkyboxMaterial = newMat;
             RenderSettings.skybox = newMat;
-            this.Verbose($"Created new skybox material: {sceneMatName}");
+            // Debug.Log($"Created new skybox material: {sceneMatName}");
         }
 
 

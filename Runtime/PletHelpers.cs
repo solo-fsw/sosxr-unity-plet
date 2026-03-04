@@ -1,12 +1,10 @@
 using System;
 using System.IO;
-using SOSXR.EnhancedLogger;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-
 
 namespace SOSXR.plet
 {
@@ -62,7 +60,7 @@ namespace SOSXR.plet
                 }
             }
 
-            Log.Static("Multiple PaletteSettings found in Resources folders, but none with the same name as the scene: {0}", activeScene.name);
+            Debug.Log(string.Format("Multiple PaletteSettings found in Resources folders, but none with the same name as the scene: {0}", activeScene.name));
 
             return null;
         }
@@ -73,7 +71,7 @@ namespace SOSXR.plet
             #if UNITY_EDITOR
             if (paletteHolders.Length == 0)
             {
-                Log.Static($"No PaletteSceneSettings found in any of the Resources folders, will create a new one at {FolderPath}.");
+                Debug.Log($"No PaletteSceneSettings found in any of the Resources folders, will create a new one at {FolderPath}.");
 
                 var sceneName = SceneManager.GetActiveScene().name;
 
