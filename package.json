@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "displayName": "plet",
   "description": "plet: An opinionated color palette for Unity",
-  "documentationUrl": "https://youtu.be/xvFZjo5PgG0?si=F3cJFXtwofUAeAq2",
+  "documentationUrl": "https://github.com/solo-fsw/sosxr-unity-plet",
   "unity": "6000.0",
   "dependencies": {
     "com.unity.textmeshpro": "3.0.1",
