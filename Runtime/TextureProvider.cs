@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 
 namespace SOSXR.plet
@@ -26,6 +28,13 @@ namespace SOSXR.plet
 
         /// <summary>Number of discrete saturation steps generated per source texture (0 = fully desaturated through max = fully saturated).</summary>
         public const int TextureSaturationSteps = 11;
+
+        /// <summary>
+        ///     Editor-injected delegate that desaturates a source texture to the given saturation percentage
+        ///     and returns the new asset name (without extension), or <c>null</c> on failure.
+        ///     Registered by the Editor assembly at load time; <c>null</c> in builds.
+        /// </summary>
+        public static Func<Texture2D, int, string> DesaturateTexture;
 
 
         private void OnValidate()
@@ -119,9 +128,7 @@ namespace SOSXR.plet
 
             for (var i = 0; i < TextureSaturationSteps; i++)
             {
-                #if UNITY_EDITOR
-                textureNames[i] = Desaturate.Texture(currentTexture, i * (TextureSaturationSteps - 1));
-                #endif
+                textureNames[i] = DesaturateTexture?.Invoke(currentTexture, i * (TextureSaturationSteps - 1));
             }
 
             _isDesaturating = false;
