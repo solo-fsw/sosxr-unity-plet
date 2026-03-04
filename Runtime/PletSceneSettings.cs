@@ -119,10 +119,10 @@ namespace SOSXR.plet
         /// <summary>Resolved fog color currently applied to <see cref="RenderSettings.fogColor"/>.</summary>
         public Color FogColor;
 
-        private readonly int _skyColorShaderId = Shader.PropertyToID("_SkyColor");
-        private readonly int _horizonColorShaderId = Shader.PropertyToID("_HorizonColor");
-        private readonly int _groundColorShaderId = Shader.PropertyToID("_GroundColor");
-        private Palette _previousPalette;
+        private static readonly int _skyColorShaderId = Shader.PropertyToID("_SkyColor");
+        private static readonly int _horizonColorShaderId = Shader.PropertyToID("_HorizonColor");
+        private static readonly int _groundColorShaderId = Shader.PropertyToID("_GroundColor");
+        [HideInInspector] [SerializeField] private Palette _previousPalette;
         private ColorProvider[] _allColorProviders = null;
 
 
@@ -411,9 +411,11 @@ namespace SOSXR.plet
                 return false;
             }
 
-            if (_skyColorShaderId == 0 || _horizonColorShaderId == 0 || _groundColorShaderId == 0)
+            if (!SkyboxMaterial.HasProperty(_skyColorShaderId) ||
+                !SkyboxMaterial.HasProperty(_horizonColorShaderId) ||
+                !SkyboxMaterial.HasProperty(_groundColorShaderId))
             {
-                Debug.LogWarning("Skybox material missing required shader properties");
+                Debug.LogWarning("Skybox material missing required shader properties (_SkyColor, _HorizonColor, or _GroundColor).", SkyboxMaterial);
 
                 return false;
             }

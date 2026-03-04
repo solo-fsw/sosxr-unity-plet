@@ -50,9 +50,16 @@ namespace SOSXR.plet.EditorScripts
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            var attr = (TexturePreviewAttribute) attribute;
+            var baseHeight = EditorGUIUtility.singleLineHeight;
 
-            return attr.MaxSize + EditorGUIUtility.singleLineHeight + 5;
+            if (property.objectReferenceValue is Texture)
+            {
+                var attr = (TexturePreviewAttribute) attribute;
+
+                return attr.MaxSize + baseHeight + 5;
+            }
+
+            return baseHeight;
         }
     }
 }

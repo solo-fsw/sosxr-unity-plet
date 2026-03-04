@@ -14,6 +14,9 @@ namespace SOSXR.plet
         /// <summary>Filename suffix appended to desaturated texture variants (e.g. <c>texture_saturated_50</c>).</summary>
         public static string Suffix => "_saturated_";
 
+        private static PletSceneSettings _cachedSettings;
+        private static int _cachedSceneHandle;
+
         /// <summary>
         ///     Path to the SOSXR Resources folder used for generated assets (palette holders, skybox materials,
         ///     desaturated textures). Creates the directory automatically if it does not exist.
@@ -38,17 +41,26 @@ namespace SOSXR.plet
         ///     Loads all <see cref="PletSceneSettings"/> assets from every Resources folder.
         ///     Returns the sole instance if exactly one exists; otherwise returns the instance whose name
         ///     matches the active scene. Creates a new asset in the editor if none are found.
+        ///     Results are cached per scene to avoid repeated <see cref="Resources.LoadAll{T}"/> calls.
         /// </summary>
         public static PletSceneSettings GetPletSceneSettings()
         {
+            var activeScene = SceneManager.GetActiveScene();
+
+            if (_cachedSettings != null && _cachedSceneHandle == activeScene.handle)
+            {
+                return _cachedSettings;
+            }
+
             var paletteHolders = Resources.LoadAll<PletSceneSettings>("");
 
             if (paletteHolders.Length == 1)
             {
-                return paletteHolders[0];
-            }
+                _cachedSettings = paletteHolders[0];
+                _cachedSceneHandle = activeScene.handle;
 
-            var activeScene = SceneManager.GetActiveScene();
+                return _cachedSettings;
+            }
 
             CreatePaletteHolder(paletteHolders);
 
@@ -56,13 +68,24 @@ namespace SOSXR.plet
             {
                 if (paletteHolder.name == activeScene.name)
                 {
-                    return paletteHolder;
+                    _cachedSettings = paletteHolder;
+                    _cachedSceneHandle = activeScene.handle;
+
+                    return _cachedSettings;
                 }
             }
 
             Debug.Log(string.Format("Multiple PaletteSettings found in Resources folders, but none with the same name as the scene: {0}", activeScene.name));
 
             return null;
+        }
+
+
+        /// <summary>Clears the cached <see cref="PletSceneSettings"/> so the next call to <see cref="GetPletSceneSettings"/> will re-scan.</summary>
+        public static void InvalidateCache()
+        {
+            _cachedSettings = null;
+            _cachedSceneHandle = 0;
         }
 
 

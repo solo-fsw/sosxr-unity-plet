@@ -124,16 +124,21 @@ namespace SOSXR.plet
 
             _isDesaturating = true;
 
-            var textureNames = new string[TextureSaturationSteps];
-
-            for (var i = 0; i < TextureSaturationSteps; i++)
+            try
             {
-                textureNames[i] = DesaturateTexture?.Invoke(currentTexture, i * (TextureSaturationSteps - 1));
+                var textureNames = new string[TextureSaturationSteps];
+
+                for (var i = 0; i < TextureSaturationSteps; i++)
+                {
+                    textureNames[i] = DesaturateTexture?.Invoke(currentTexture, i * (TextureSaturationSteps - 1));
+                }
+
+                return textureNames;
             }
-
-            _isDesaturating = false;
-
-            return textureNames;
+            finally
+            {
+                _isDesaturating = false;
+            }
         }
 
 
@@ -147,13 +152,16 @@ namespace SOSXR.plet
         {
             if (textureName.Contains(PletHelpers.Suffix))
             {
-                var last = PletHelpers.Suffix.Substring(PletHelpers.Suffix.Length - 1);
-                var suffixIndex = textureName.LastIndexOf(last, StringComparison.Ordinal);
-                textureName = textureName.Remove(suffixIndex);
+                var suffixIndex = textureName.IndexOf(PletHelpers.Suffix, StringComparison.Ordinal);
+
+                if (suffixIndex >= 0)
+                {
+                    textureName = textureName.Remove(suffixIndex);
+                }
             }
 
             var allContaining = Resources.LoadAll<Texture2D>("")
-                                         .Where(t => t.name.Contains(textureName) && t.name.Contains(PletHelpers.Suffix))
+                                         .Where(t => t.name.StartsWith(textureName + PletHelpers.Suffix))
                                          .OrderBy(t => ExtractNumber(t.name))
                                          .ToArray();
 
@@ -164,9 +172,13 @@ namespace SOSXR.plet
         private static int ExtractNumber(string name)
         {
             var matches = Regex.Matches(name, @"\d+");
-            var lastMatch = matches[^1];
 
-            return matches.Count > 0 ? int.Parse(lastMatch.Value) : int.MaxValue;
+            if (matches.Count == 0)
+            {
+                return int.MaxValue;
+            }
+
+            return int.Parse(matches[^1].Value);
         }
     }
 }

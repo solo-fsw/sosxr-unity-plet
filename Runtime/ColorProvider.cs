@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using SOSXR.SeaShark;
 using TMPro;
 using UnityEngine;
@@ -63,7 +62,7 @@ namespace SOSXR.plet
             }
         };
 
-        private readonly int _colorShaderId = Shader.PropertyToID("_BaseColor");
+        private static readonly int _colorShaderId = Shader.PropertyToID("_BaseColor");
         private MaterialPropertyBlock _mpb;
         private Component _component;
         private Action _applyColorAction;
@@ -121,7 +120,7 @@ namespace SOSXR.plet
 
                 colorProvider.ColorSettings[i].Name = material.name;
                 renderer.GetPropertyBlock(colorProvider._mpb, i);
-                colorProvider._mpb.SetColor(colorProvider._colorShaderId, colorProvider.ColorSettings[i].FinalColor);
+                colorProvider._mpb.SetColor(_colorShaderId, colorProvider.ColorSettings[i].FinalColor);
                 renderer.SetPropertyBlock(colorProvider._mpb, i);
                 colorProvider.ColorSettings[i].ShowAlpha = UsesAlpha(material);
             }
@@ -259,28 +258,18 @@ namespace SOSXR.plet
             _component = null;
             _applyColorAction = null;
 
-            /*// Try to find a supported component type
-            var componentTypes = new[]
+            foreach (var kvp in ColorAppliers)
             {
-                typeof(Light), typeof(SpriteRenderer), typeof(Renderer), typeof(Camera),
-                typeof(ParticleSystem), typeof(Selectable), typeof(Image), typeof(TMP_Text)
-            };*/
-
-            foreach (var type in ColorAppliers.Keys)
-            {
-                if (!TryGetComponent(type, out var component))
+                if (!TryGetComponent(kvp.Key, out var component))
                 {
                     continue;
                 }
 
                 _component = component;
+                var applier = kvp.Value;
+                _applyColorAction = () => applier(component, this);
 
-                foreach (var entry in ColorAppliers.Where(entry => component.GetType() == entry.Key || component.GetType().IsSubclassOf(entry.Key)))
-                {
-                    _applyColorAction = () => entry.Value(component, this);
-
-                    break;
-                }
+                break;
             }
         }
 
@@ -298,7 +287,10 @@ namespace SOSXR.plet
                 return;
             }
 
-            CacheComponent();
+            if (_component == null || _applyColorAction == null)
+            {
+                CacheComponent();
+            }
 
             if (_applyColorAction == null)
             {
