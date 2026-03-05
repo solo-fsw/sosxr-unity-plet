@@ -1,5 +1,6 @@
 using System;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 
@@ -74,7 +75,7 @@ namespace SOSXR.plet.EditorScripts
         }
 
 
-        /// <summary>Draws a read-only colour swatch using a disabled <see cref="UnityEditor.EditorGUILayout.ColorField"/> with optional alpha and HDR support.</summary>
+        /// <summary>Draws a read-only colour swatch using a disabled <see cref="ColorField"/> with optional alpha and HDR support.</summary>
         protected static void DrawColorBox(Color color, bool alpha = false, bool hdr = false, string label = "Preview", int height = 35)
         {
             EditorGUI.BeginDisabledGroup(true);
