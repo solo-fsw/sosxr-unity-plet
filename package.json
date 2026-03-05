@@ -1,6 +1,6 @@
 {
   "name": "com.sosxr.plet",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "displayName": "plet",
   "description": "plet: An opinionated color palette for Unity",
   "documentationUrl": "https://github.com/solo-fsw/sosxr-unity-plet",
@@ -11,9 +11,9 @@
   },
   "samples": [
     {
-      "displayName": "Samples",
-      "description": "Contains samples of this package",
-      "path": "Samples~/Samples"
+      "displayName": "Palettes",
+      "description": "Contains samples of palettes that you can use, most from iconic movie scenes",
+      "path": "Samples~/Palettes"
     }
   ],
   "author": {
