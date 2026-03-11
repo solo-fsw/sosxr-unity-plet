@@ -6,7 +6,8 @@
   "documentationUrl": "https://github.com/solo-fsw/sosxr-unity-plet",
   "unity": "6000.0",
   "dependencies": {
-    "com.unity.textmeshpro": "3.0.1"
+    "com.unity.textmeshpro": "3.0.1",
+    "com.unity.modules.particlesystem": "1.0.0"
   },
   "samples": [
     {
