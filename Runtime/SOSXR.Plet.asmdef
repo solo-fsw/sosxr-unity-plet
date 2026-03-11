@@ -2,8 +2,7 @@
   "name": "SOSXR.plet",
   "rootNamespace": "SOSXR.plet",
   "references": [
-    "GUID:6055be8ebefd69e48b49212b09b47b2f",
-    "GUID:3d2c2e10f47a24e279eb7163f3b379e7"
+    "GUID:6055be8ebefd69e48b49212b09b47b2f"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

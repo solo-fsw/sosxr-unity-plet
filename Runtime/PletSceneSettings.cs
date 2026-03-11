@@ -1,11 +1,9 @@
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using SOSXR.SeaShark;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
-using Header = SOSXR.SeaShark.HeaderAttribute;
 
 
 namespace SOSXR.plet

@@ -2,8 +2,7 @@
   "name": "SOSXR.plet.Editor",
   "rootNamespace": "SOSXR.plet.Editor",
   "references": [
-    "GUID:12d141b9c9c2747f4a4ef297f275ad8b",
-    "GUID:68db50dc80037431a8086e002c380c1f"
+    "GUID:12d141b9c9c2747f4a4ef297f275ad8b"
   ],
   "includePlatforms": [
     "Editor"
