@@ -1,7 +1,7 @@
 {
   "name": "com.sosxr.plet",
   "version": "0.4.0",
-  "displayName": "plet",
+  "displayName": "Plet",
   "description": "plet: An opinionated color palette for Unity",
   "documentationUrl": "https://github.com/solo-fsw/sosxr-unity-plet",
   "unity": "6000.0",
