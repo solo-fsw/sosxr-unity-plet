@@ -12,6 +12,13 @@ namespace SOSXR.plet.EditorScripts
         private TextureProvider _textureProvider;
 
 
+        [InitializeOnLoadMethod]
+        private static void RegisterDesaturateDelegate()
+        {
+            TextureProvider.DesaturateTexture = Desaturate.Texture;
+        }
+
+
         private void OnEnable()
         {
             _textureProvider = target as TextureProvider;

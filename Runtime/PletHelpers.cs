@@ -1,19 +1,26 @@
 using System;
 using System.IO;
-using SOSXR.EnhancedLogger;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-
 namespace SOSXR.plet
 {
+    /// <summary>Static utilities for locating the active <see cref="PletSceneSettings"/> and managing the generated-asset Resources folder path.</summary>
     public static class PletHelpers
     {
+        /// <summary>Filename suffix appended to desaturated texture variants (e.g. <c>texture_saturated_50</c>).</summary>
         public static string Suffix => "_saturated_";
 
+        private static PletSceneSettings _cachedSettings;
+        private static int _cachedSceneHandle;
+
+        /// <summary>
+        ///     Path to the SOSXR Resources folder used for generated assets (palette holders, skybox materials,
+        ///     desaturated textures). Creates the directory automatically if it does not exist.
+        /// </summary>
         public static string FolderPath
         {
             get
@@ -30,16 +37,30 @@ namespace SOSXR.plet
         }
 
 
+        /// <summary>
+        ///     Loads all <see cref="PletSceneSettings"/> assets from every Resources folder.
+        ///     Returns the sole instance if exactly one exists; otherwise returns the instance whose name
+        ///     matches the active scene. Creates a new asset in the editor if none are found.
+        ///     Results are cached per scene to avoid repeated <see cref="Resources.LoadAll{T}"/> calls.
+        /// </summary>
         public static PletSceneSettings GetPletSceneSettings()
         {
+            var activeScene = SceneManager.GetActiveScene();
+
+            if (_cachedSettings != null && _cachedSceneHandle == activeScene.handle)
+            {
+                return _cachedSettings;
+            }
+
             var paletteHolders = Resources.LoadAll<PletSceneSettings>("");
 
             if (paletteHolders.Length == 1)
             {
-                return paletteHolders[0];
-            }
+                _cachedSettings = paletteHolders[0];
+                _cachedSceneHandle = activeScene.handle;
 
-            var activeScene = SceneManager.GetActiveScene();
+                return _cachedSettings;
+            }
 
             CreatePaletteHolder(paletteHolders);
 
@@ -47,13 +68,24 @@ namespace SOSXR.plet
             {
                 if (paletteHolder.name == activeScene.name)
                 {
-                    return paletteHolder;
+                    _cachedSettings = paletteHolder;
+                    _cachedSceneHandle = activeScene.handle;
+
+                    return _cachedSettings;
                 }
             }
 
-            Log.Static("Multiple PaletteSettings found in Resources folders, but none with the same name as the scene: {0}", activeScene.name);
+            Debug.Log(string.Format("Multiple PaletteSettings found in Resources folders, but none with the same name as the scene: {0}", activeScene.name));
 
             return null;
+        }
+
+
+        /// <summary>Clears the cached <see cref="PletSceneSettings"/> so the next call to <see cref="GetPletSceneSettings"/> will re-scan.</summary>
+        public static void InvalidateCache()
+        {
+            _cachedSettings = null;
+            _cachedSceneHandle = 0;
         }
 
 
@@ -62,7 +94,7 @@ namespace SOSXR.plet
             #if UNITY_EDITOR
             if (paletteHolders.Length == 0)
             {
-                Log.Static($"No PaletteSceneSettings found in any of the Resources folders, will create a new one at {FolderPath}.");
+                Debug.Log($"No PaletteSceneSettings found in any of the Resources folders, will create a new one at {FolderPath}.");
 
                 var sceneName = SceneManager.GetActiveScene().name;
 
@@ -80,6 +112,7 @@ namespace SOSXR.plet
     }
 
 
+    /// <summary>Identifies which of the three palette colors to use for a color slot.</summary>
     public enum HueType
     {
         Base,
@@ -88,13 +121,20 @@ namespace SOSXR.plet
     }
 
 
+    /// <summary>
+    ///     Serializable per-slot color configuration used by <see cref="ColorProvider"/>.
+    ///     Tracks the chosen hue type, saturation/value on a 1–19 display scale (10 = palette default),
+    ///     alpha, and the resolved final color.
+    /// </summary>
     [Serializable]
     public class ColorSettings
     {
         public string Name;
         public HueType HueType;
 
+        /// <summary>Saturation multiplier on a 1–19 display scale (10 = palette default; maps linearly to HSV 0.0075–1.0).</summary>
         public int Saturation;
+        /// <summary>Brightness (HSV value) multiplier on a 1–19 display scale (10 = palette default; maps linearly to HSV 0.0075–1.0).</summary>
         public int Value;
         public bool ShowAlpha = true;
         public float Alpha = 1f;
@@ -102,6 +142,10 @@ namespace SOSXR.plet
     }
 
 
+    /// <summary>
+    ///     Constants defining the editor display range and HSV clamp range for saturation sliders.
+    ///     Display range 1–19 maps linearly to HSV values 0.0075–1.0.
+    /// </summary>
     public static class Saturation
     {
         public static readonly Vector2Int DisplayRange = new(1, 19);
@@ -109,6 +153,10 @@ namespace SOSXR.plet
     }
 
 
+    /// <summary>
+    ///     Constants defining the editor display range and HSV clamp range for value (brightness) sliders.
+    ///     Display range 1–19 maps linearly to HSV values 0.0075–1.0.
+    /// </summary>
     public static class Value
     {
         public static readonly Vector2Int DisplayRange = new(1, 19);
@@ -116,12 +164,18 @@ namespace SOSXR.plet
     }
 
 
+    /// <summary>
+    ///     Serializable configuration for one material slot in a <see cref="TextureProvider"/>.
+    ///     Tracks the set of available desaturation-step texture names and the currently selected index.
+    /// </summary>
     [Serializable]
     public class TextureSettings
     {
         public string MaterialName;
+        /// <summary>Current saturation step index into <see cref="TextureNames"/> (0 = fully desaturated, max = fully saturated).</summary>
         public int Index = TextureProvider.TextureSaturationSteps - 1;
         public int PreviousIndex;
+        /// <summary>Resource names of all pre-generated desaturation-step textures, produced by <see cref="Desaturate"/>.</summary>
         public string[] TextureNames = new string[TextureProvider.TextureSaturationSteps];
 
         [TexturePreview(100)] public Texture2D CurrentTexture;

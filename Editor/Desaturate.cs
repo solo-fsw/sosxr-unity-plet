@@ -13,6 +13,11 @@ namespace SOSXR.plet
     public static class Desaturate
     {
         #if UNITY_EDITOR
+        /// <summary>
+        ///     Desaturates <paramref name="source"/> to <paramref name="saturationPercentage"/> percent of its original
+        ///     saturation (0 = greyscale, 100 = fully saturated) and saves the result as a PNG in the SOSXR
+        ///     Resources folder. Returns the new asset name (without extension), or <c>null</c> on failure.
+        /// </summary>
         public static string Texture(Texture2D source, int saturationPercentage)
         {
             if (source == null)
@@ -118,6 +123,7 @@ namespace SOSXR.plet
         }
 
 
+        /// <summary>Loads a <see cref="Texture2D"/> by resource name from the Resources folder.</summary>
         public static Texture2D LoadTexture(string name)
         {
             return Resources.Load<Texture2D>(name);

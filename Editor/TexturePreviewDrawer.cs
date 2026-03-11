@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace SOSXR.plet.EditorScripts
 {
+    /// <summary>
+    ///     Property drawer for <see cref="TexturePreviewAttribute"/>. Renders the standard object field
+    ///     followed by a centred, aspect-ratio-correct texture preview scaled to <see cref="TexturePreviewAttribute.MaxSize"/>.
+    /// </summary>
     [CustomPropertyDrawer(typeof(TexturePreviewAttribute))]
     public class TexturePreviewDrawer : PropertyDrawer
     {
@@ -46,9 +50,16 @@ namespace SOSXR.plet.EditorScripts
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            var attr = (TexturePreviewAttribute) attribute;
+            var baseHeight = EditorGUIUtility.singleLineHeight;
 
-            return attr.MaxSize + EditorGUIUtility.singleLineHeight + 5;
+            if (property.objectReferenceValue is Texture)
+            {
+                var attr = (TexturePreviewAttribute) attribute;
+
+                return attr.MaxSize + baseHeight + 5;
+            }
+
+            return baseHeight;
         }
     }
 }

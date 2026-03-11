@@ -1,10 +1,15 @@
 using System;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 
 namespace SOSXR.plet.EditorScripts
 {
+    /// <summary>
+    ///     Shared base class for plet custom inspectors. Provides helpers for drawing colour sections
+    ///     (hue-type dropdown, saturation/value sliders, preview swatch) used by multiple editors.
+    /// </summary>
     public class PaletteEditorBase : Editor
     {
         protected const string ButtonText = "Get Palette Saturation and Value";
@@ -70,6 +75,7 @@ namespace SOSXR.plet.EditorScripts
         }
 
 
+        /// <summary>Draws a read-only colour swatch using a disabled <see cref="ColorField"/> with optional alpha and HDR support.</summary>
         protected static void DrawColorBox(Color color, bool alpha = false, bool hdr = false, string label = "Preview", int height = 35)
         {
             EditorGUI.BeginDisabledGroup(true);

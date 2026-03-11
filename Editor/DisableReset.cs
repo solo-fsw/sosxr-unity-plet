@@ -21,7 +21,7 @@ namespace SOSXR.plet.EditorScripts
         [MenuItem("CONTEXT/" + nameof(ColorProvider) + "/Reset")]
         private static void OnReset()
         {
-            Debug.LogWarning("MyScript doesn't support Reset.");
+            Debug.LogWarning("ColorProvider doesn't support Reset. Re-initialize via the Init button instead.");
         }
     }
 }
