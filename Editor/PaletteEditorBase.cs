@@ -57,6 +57,11 @@ namespace SOSXR.plet.EditorScripts
         /// </summary>
         protected void DrawProperty<T>(SerializedProperty property, string undoName, Func<T> drawField, Action<SerializedProperty, T> applyChange)
         {
+            if (serializedObject?.targetObjects == null || property == null)
+            {
+                return;
+            }
+
             EditorGUI.BeginChangeCheck();
             var newValue = drawField();
 
@@ -66,6 +71,11 @@ namespace SOSXR.plet.EditorScripts
 
                 foreach (var targetObject in serializedObject.targetObjects)
                 {
+                    if (targetObject == null)
+                    {
+                        continue;
+                    }
+
                     var so = new SerializedObject(targetObject);
                     var prop = so.FindProperty(property.propertyPath); // Get the correct property path
                     applyChange(prop, newValue);

@@ -1,5 +1,4 @@
-using UnityEngine;
-
+﻿using UnityEngine;
 
 namespace SOSXR.plet
 {
@@ -12,10 +11,6 @@ namespace SOSXR.plet
         /// <summary>Maximum dimension (width or height) of the in-inspector preview image, in pixels.</summary>
         public readonly int MaxSize;
 
-
-        public TexturePreviewAttribute(int maxSize)
-        {
-            MaxSize = maxSize;
-        }
+        public TexturePreviewAttribute(int maxSize) => MaxSize = maxSize;
     }
 }

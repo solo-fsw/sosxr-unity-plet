@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -25,17 +25,16 @@ namespace SOSXR.plet
         {
             get
             {
-                var path = "Assets/_SOSXR/Resources";
+                string path = "Assets/_SOSXR/Resources";
 
                 if (!Directory.Exists(path))
                 {
-                    Directory.CreateDirectory(path);
+                    _ = Directory.CreateDirectory(path);
                 }
 
                 return path;
             }
         }
-
 
         /// <summary>
         ///     Loads all <see cref="PletSceneSettings"/> assets from every Resources folder.
@@ -80,7 +79,6 @@ namespace SOSXR.plet
             return null;
         }
 
-
         /// <summary>Clears the cached <see cref="PletSceneSettings"/> so the next call to <see cref="GetPletSceneSettings"/> will re-scan.</summary>
         public static void InvalidateCache()
         {
@@ -88,29 +86,27 @@ namespace SOSXR.plet
             _cachedSceneHandle = 0;
         }
 
-
         private static void CreatePaletteHolder(PletSceneSettings[] paletteHolders)
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             if (paletteHolders.Length == 0)
             {
                 Debug.Log($"No PaletteSceneSettings found in any of the Resources folders, will create a new one at {FolderPath}.");
 
-                var sceneName = SceneManager.GetActiveScene().name;
+                string sceneName = SceneManager.GetActiveScene().name;
 
                 EditorApplication.delayCall += () =>
                 {
                     var pletSceneSettings = ScriptableObject.CreateInstance<PletSceneSettings>();
-                    var assetPath = Path.Combine(FolderPath, sceneName + ".asset");
+                    string assetPath = Path.Combine(FolderPath, sceneName + ".asset");
                     AssetDatabase.CreateAsset(pletSceneSettings, assetPath);
                     AssetDatabase.SaveAssets();
                     AssetDatabase.Refresh();
                 };
             }
-            #endif
+#endif
         }
     }
-
 
     /// <summary>Identifies which of the three palette colors to use for a color slot.</summary>
     public enum HueType
@@ -119,7 +115,6 @@ namespace SOSXR.plet
         Tone,
         Accent
     }
-
 
     /// <summary>
     ///     Serializable per-slot color configuration used by <see cref="ColorProvider"/>.
@@ -141,7 +136,6 @@ namespace SOSXR.plet
         public Color FinalColor;
     }
 
-
     /// <summary>
     ///     Constants defining the editor display range and HSV clamp range for saturation sliders.
     ///     Display range 1–19 maps linearly to HSV values 0.0075–1.0.
@@ -152,7 +146,6 @@ namespace SOSXR.plet
         public static readonly Vector2 Clamp = new(0.0075f, 1.0f);
     }
 
-
     /// <summary>
     ///     Constants defining the editor display range and HSV clamp range for value (brightness) sliders.
     ///     Display range 1–19 maps linearly to HSV values 0.0075–1.0.
@@ -162,7 +155,6 @@ namespace SOSXR.plet
         public static readonly Vector2Int DisplayRange = new(1, 19);
         public static readonly Vector2 Clamp = new(0.0075f, 1.0f);
     }
-
 
     /// <summary>
     ///     Serializable configuration for one material slot in a <see cref="TextureProvider"/>.

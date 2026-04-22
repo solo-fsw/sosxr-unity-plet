@@ -1,0 +1,155 @@
+// This file is generated. Do not modify by hand.
+// XML documentation file not found. To check if public methods have XML comments,
+// make sure the XML doc file is present and located next to the scraped dll
+namespace SOSXR.plet
+{
+    [System.AttributeUsage(System.AttributeTargets.Method)] public class ButtonAttribute : System.Attribute
+    {
+        public bool HorizontalLine { get; set; }
+        public string ItemName { get; set; }
+        public int Space { get; set; }
+        public string Tooltip { get; set; }
+        public ButtonAttribute(string itemName = default(string), string tooltip = default(string), int space = 0, bool horizontalLine = false) {}
+    }
+
+    [UnityEngine.ExecuteInEditMode] public class ColorProvider : UnityEngine.MonoBehaviour
+    {
+        public System.Collections.Generic.List<ColorSettings> ColorSettings;
+        public ColorProvider() {}
+        [Button(null, null, 0, false)] public void ApplyColorAction();
+        [Button(null, null, 0, false)] public void GetPaletteSaturationAndValue();
+        [Button(null, null, 0, false)] public void Init();
+    }
+
+    public class ColorSettings
+    {
+        public float Alpha = 1f;
+        public UnityEngine.Color FinalColor;
+        public HueType HueType;
+        public string Name;
+        public int Saturation;
+        public bool ShowAlpha = true;
+        public int Value;
+        public ColorSettings() {}
+    }
+
+    public enum HueType
+    {
+        Base = 0,
+        Tone = 1,
+        Accent = 2,
+    }
+
+    [UnityEngine.CreateAssetMenu(fileName = @"Palette", menuName = @"SOSXR/plet/Palette")] public class Palette : UnityEngine.ScriptableObject
+    {
+        [UnityEngine.Header(@"Use this around 10% of the time. This is the 'pop' color.")] public UnityEngine.Color Accent;
+        [UnityEngine.Header(@"Use this around 60% of the time. It is a base. Use a rather neutral color.")] public UnityEngine.Color Base;
+        [UnityEngine.Header(@"Use this around 30% of the time. This is the 'tone' color.")] public UnityEngine.Color Tone;
+        public Palette() {}
+    }
+
+    public static class PletHelpers
+    {
+        public static string FolderPath { get; }
+        public static string Suffix { get; }
+        public static PletSceneSettings GetPletSceneSettings();
+        public static void InvalidateCache();
+    }
+
+    [UnityEngine.CreateAssetMenu(fileName = @"PletSceneSettings", menuName = @"SOSXR/plet/PletSceneSettings", order = 1)] public class PletSceneSettings : UnityEngine.ScriptableObject
+    {
+        public UnityEngine.Color AmbientEquatorLightColor;
+        public HueType AmbientEquatorLightHueType;
+        public int AmbientEquatorLightSaturation = 10;
+        public int AmbientEquatorLightValue = 10;
+        public UnityEngine.Color AmbientGroundLightColor;
+        public HueType AmbientGroundLightHueType;
+        public int AmbientGroundLightSaturation = 10;
+        public int AmbientGroundLightValue = 10;
+        public UnityEngine.Color AmbientLightColor;
+        public HueType AmbientLightHueType;
+        public int AmbientLightSaturation = 10;
+        public int AmbientLightValue = 10;
+        public UnityEngine.Color AmbientSkyLightColor;
+        public HueType AmbientSkyLightHueType;
+        public int AmbientSkyLightSaturation = 10;
+        public int AmbientSkyLightValue = 10;
+        [UnityEngine.Header(@"Ambient Light Settings")] public bool ApplyAmbientLight;
+        [UnityEngine.Header(@"Fog Settings")] public bool ApplyFog;
+        [UnityEngine.Header(@"Shadow Settings")] public bool ApplyRealtimeShadows;
+        [UnityEngine.Header(@"Skybox Settings")] public bool ApplySkybox;
+        public UnityEngine.Color FogColor;
+        public HueType FogHueType;
+        public int FogSaturation = 10;
+        public int FogValue = 10;
+        public Palette Palette;
+        public UnityEngine.Color RealtimeShadowColor;
+        public HueType RealtimeShadowHueType;
+        public int RealtimeShadowSaturation = 10;
+        public int RealtimeShadowValue = 10;
+        public UnityEngine.Color SkyboxGroundColor;
+        public HueType SkyboxGroundHueType;
+        public int SkyboxGroundSaturation = 10;
+        public int SkyboxGroundValue = 10;
+        public UnityEngine.Color SkyboxHorizonColor;
+        public HueType SkyboxHorizonHueType;
+        public int SkyboxHorizonSaturation = 10;
+        public int SkyboxHorizonValue = 10;
+        public UnityEngine.Material SkyboxMaterial;
+        public UnityEngine.Color SkyboxSkyColor;
+        public HueType SkyboxSkyHueType;
+        public int SkyboxSkySaturation = 10;
+        public int SkyboxSkyValue = 10;
+        public PletSceneSettings() {}
+        public UnityEngine.Color ApplyColor(HueType type, int saturation, int value, float alpha = 1f);
+        [Button(null, null, 0, false)] public void GetAmbientLightSVFromPalette();
+        [Button(null, null, 0, false)] public void GetColorProvidersSVFromPalette();
+        public UnityEngine.Vector2Int GetColorSV(HueType type);
+        [Button(null, null, 0, false)] public void GetFogSVFromPalette();
+        [Button(null, null, 0, false)] public void GetRealtimeShadowSVFromPalette();
+        [Button(null, null, 0, false)] public void GetSkyboxSVFromPalette();
+        public bool IsActiveSceneSettings();
+        public void SetAllSkyboxAndLights();
+        public void SetFogColor();
+        public void SetRealtimeShadowColor();
+        public void SetSkyboxMaterial();
+    }
+
+    public static class Saturation
+    {
+        public static readonly UnityEngine.Vector2 Clamp;
+        public static readonly UnityEngine.Vector2Int DisplayRange;
+    }
+
+    public class TexturePreviewAttribute : UnityEngine.PropertyAttribute
+    {
+        public readonly int MaxSize;
+        public TexturePreviewAttribute(int maxSize) {}
+    }
+
+    [UnityEngine.RequireComponent(typeof(UnityEngine.Renderer))] public class TextureProvider : UnityEngine.MonoBehaviour
+    {
+        public static System.Func<UnityEngine.Texture2D, int, string> DesaturateTexture;
+        public const int TextureSaturationSteps = 11;
+        public System.Collections.Generic.List<TextureSettings> TextureSettings;
+        public TextureProvider() {}
+        public void GetNextTexture();
+        [UnityEngine.ContextMenu(@"Initialize")] public void Initialize();
+    }
+
+    public class TextureSettings
+    {
+        [TexturePreview(100)] public UnityEngine.Texture2D CurrentTexture;
+        public int Index = 10;
+        public string MaterialName;
+        public int PreviousIndex;
+        public string[] TextureNames;
+        public TextureSettings() {}
+    }
+
+    public static class Value
+    {
+        public static readonly UnityEngine.Vector2 Clamp;
+        public static readonly UnityEngine.Vector2Int DisplayRange;
+    }
+}

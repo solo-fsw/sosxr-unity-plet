@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -6,7 +6,6 @@ using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-
 
 namespace SOSXR.plet
 {
@@ -22,7 +21,7 @@ namespace SOSXR.plet
         /// <summary>Per-material-slot configuration including the saturation index and resolved current texture reference.</summary>
         public List<TextureSettings> TextureSettings = new(1);
 
-        [HideInInspector] [SerializeField] private bool m_init;
+        [HideInInspector][SerializeField] private bool m_init;
         private Renderer _rend;
         private static bool _isDesaturating;
 
@@ -36,16 +35,15 @@ namespace SOSXR.plet
         /// </summary>
         public static Func<Texture2D, int, string> DesaturateTexture;
 
-
         private void OnValidate()
         {
             _rend ??= GetComponent<Renderer>();
 
             TextureSettings ??= new List<TextureSettings>();
 
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             EditorApplication.delayCall += Initialize;
-            #endif
+#endif
 
             if (!m_init)
             {
@@ -55,14 +53,13 @@ namespace SOSXR.plet
             GetNextTexture();
         }
 
-
         /// <summary>
         ///     Checks each slot for an index change and loads the corresponding pre-generated texture variant
         ///     into the material's <c>mainTexture</c>. Call after modifying any <see cref="TextureSettings.Index"/>.
         /// </summary>
         public void GetNextTexture()
         {
-            for (var index = 0; index < TextureSettings.Count; index++)
+            for (int index = 0; index < TextureSettings.Count; index++)
             {
                 if (TextureSettings[index].Index == TextureSettings[index].PreviousIndex)
                 {
@@ -74,7 +71,6 @@ namespace SOSXR.plet
                 TextureSettings[index].PreviousIndex = TextureSettings[index].Index;
             }
         }
-
 
         /// <summary>
         ///     Scans the Renderer's shared materials, registers each slot that has a main texture, and
@@ -97,7 +93,7 @@ namespace SOSXR.plet
 
                 TextureSettings.Add(new TextureSettings
                 {
-                    CurrentTexture = (Texture2D) sharedMat.mainTexture
+                    CurrentTexture = (Texture2D)sharedMat.mainTexture
                 });
 
                 TextureSettings[^1].MaterialName = sharedMat.name;
@@ -106,7 +102,6 @@ namespace SOSXR.plet
 
             m_init = true;
         }
-
 
         private string[] GetDesaturatedTextures(Texture2D currentTexture)
         {
@@ -126,9 +121,9 @@ namespace SOSXR.plet
 
             try
             {
-                var textureNames = new string[TextureSaturationSteps];
+                string[] textureNames = new string[TextureSaturationSteps];
 
-                for (var i = 0; i < TextureSaturationSteps; i++)
+                for (int i = 0; i < TextureSaturationSteps; i++)
                 {
                     textureNames[i] = DesaturateTexture?.Invoke(currentTexture, i * (TextureSaturationSteps - 1));
                 }
@@ -141,22 +136,17 @@ namespace SOSXR.plet
             }
         }
 
-
-        private static bool DesaturationHasBeenDone(string textureName)
-        {
-            return FindTextures(textureName).Length != 0;
-        }
-
+        private static bool DesaturationHasBeenDone(string textureName) => FindTextures(textureName).Length != 0;
 
         private static Texture2D[] FindTextures(string textureName)
         {
             if (textureName.Contains(PletHelpers.Suffix))
             {
-                var suffixIndex = textureName.IndexOf(PletHelpers.Suffix, StringComparison.Ordinal);
+                int suffixIndex = textureName.IndexOf(PletHelpers.Suffix, StringComparison.Ordinal);
 
                 if (suffixIndex >= 0)
                 {
-                    textureName = textureName.Remove(suffixIndex);
+                    textureName = textureName[..suffixIndex];
                 }
             }
 
@@ -167,7 +157,6 @@ namespace SOSXR.plet
 
             return allContaining;
         }
-
 
         private static int ExtractNumber(string name)
         {

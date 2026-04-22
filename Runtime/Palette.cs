@@ -1,5 +1,4 @@
-using UnityEngine;
-
+﻿using UnityEngine;
 
 namespace SOSXR.plet
 {
@@ -24,7 +23,10 @@ namespace SOSXR.plet
         public Color Accent = new(1, 1, 1, 1);
 
         /// <summary>Optional reference texture (e.g., a moodboard or screenshot) used when authoring the palette.</summary>
-        [Space(10)] [Tooltip("Optional")] [TexturePreview(500)] [SerializeField]
+        [Space(10)]
+        [Tooltip("Optional")]
+        [TexturePreview(500)]
+        [SerializeField]
         private Texture m_optionalColorTexture;
     }
 }

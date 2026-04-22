@@ -1,10 +1,9 @@
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
-
 
 namespace SOSXR.plet
 {
@@ -120,9 +119,8 @@ namespace SOSXR.plet
         private static readonly int _skyColorShaderId = Shader.PropertyToID("_SkyColor");
         private static readonly int _horizonColorShaderId = Shader.PropertyToID("_HorizonColor");
         private static readonly int _groundColorShaderId = Shader.PropertyToID("_GroundColor");
-        [HideInInspector] [SerializeField] private Palette _previousPalette;
+        [HideInInspector][SerializeField] private Palette _previousPalette;
         private ColorProvider[] _allColorProviders = null;
-
 
         private void OnValidate()
         {
@@ -148,13 +146,8 @@ namespace SOSXR.plet
             _previousPalette = Palette;
         }
 
-
         /// <summary>Returns <c>true</c> if this instance is the one currently governing the active scene.</summary>
-        public bool IsActiveSceneSettings()
-        {
-            return PletHelpers.GetPletSceneSettings() == this;
-        }
-
+        public bool IsActiveSceneSettings() => PletHelpers.GetPletSceneSettings() == this;
 
         /// <summary>
         ///     Applies all enabled environment overrides (skybox, ambient light, realtime shadows, fog)
@@ -173,11 +166,10 @@ namespace SOSXR.plet
             SetRealtimeShadowColor();
             SetFogColor();
 
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             SceneView.RepaintAll();
-            #endif
+#endif
         }
-
 
         /// <summary>
         ///     Iterates every <see cref="ColorProvider"/> in the scene and resets each one's saturation
@@ -199,7 +191,6 @@ namespace SOSXR.plet
             }
         }
 
-
         /// <summary>Re-reads skybox saturation/value from the palette and re-applies all skybox colors.</summary>
         [Button]
         public void GetSkyboxSVFromPalette()
@@ -214,7 +205,6 @@ namespace SOSXR.plet
             SetSVFromPalette(SkyboxGroundHueType, out SkyboxGroundSaturation, out SkyboxGroundValue);
             SetAllSkyboxAndLights();
         }
-
 
         /// <summary>Re-reads ambient light saturation/value from the palette and re-applies ambient light colors.</summary>
         [Button]
@@ -232,7 +222,6 @@ namespace SOSXR.plet
             SetAllSkyboxAndLights();
         }
 
-
         /// <summary>Re-reads realtime shadow saturation/value from the palette and re-applies the shadow color.</summary>
         [Button]
         public void GetRealtimeShadowSVFromPalette()
@@ -245,7 +234,6 @@ namespace SOSXR.plet
             SetSVFromPalette(RealtimeShadowHueType, out RealtimeShadowSaturation, out RealtimeShadowValue);
             SetAllSkyboxAndLights();
         }
-
 
         /// <summary>Re-reads fog saturation/value from the palette and re-applies the fog color.</summary>
         [Button]
@@ -260,14 +248,12 @@ namespace SOSXR.plet
             SetAllSkyboxAndLights();
         }
 
-
         private void SetSVFromPalette(HueType hueType, out int saturation, out int value)
         {
             var sv = GetColorSV(hueType);
             saturation = sv.x;
             value = sv.y;
         }
-
 
         private void SetSkyboxColors()
         {
@@ -276,7 +262,6 @@ namespace SOSXR.plet
             SetSkyboxGroundColor();
         }
 
-
         private void SetAmbientLightColors()
         {
             SetAmbientLightColor();
@@ -284,7 +269,6 @@ namespace SOSXR.plet
             SetAmbientEquatorTriLightColor();
             SetAmbientGroundTriLightColor();
         }
-
 
         private void SetAmbientLightColor()
         {
@@ -297,7 +281,6 @@ namespace SOSXR.plet
             RenderSettings.ambientLight = AmbientLightColor;
         }
 
-
         private void SetAmbientSkyTriLightColor()
         {
             if (!IsActiveSceneSettings() || !ApplyAmbientLight || RenderSettings.ambientMode != AmbientMode.Trilight)
@@ -308,7 +291,6 @@ namespace SOSXR.plet
             AmbientSkyLightColor = ApplyColor(AmbientSkyLightHueType, AmbientSkyLightSaturation, AmbientSkyLightValue);
             RenderSettings.ambientSkyColor = AmbientSkyLightColor;
         }
-
 
         private void SetAmbientEquatorTriLightColor()
         {
@@ -321,7 +303,6 @@ namespace SOSXR.plet
             RenderSettings.ambientEquatorColor = AmbientEquatorLightColor;
         }
 
-
         private void SetAmbientGroundTriLightColor()
         {
             if (!IsActiveSceneSettings() || !ApplyAmbientLight || RenderSettings.ambientMode != AmbientMode.Trilight)
@@ -333,9 +314,8 @@ namespace SOSXR.plet
             RenderSettings.ambientGroundColor = AmbientGroundLightColor;
         }
 
-
         /// <summary>
-        ///     Writes the palette-derived shadow color to <see cref="UnityEngine.Rendering.RenderSettings.subtractiveShadowColor"/>
+        ///     Writes the palette-derived shadow color to <see cref="Rendering.RenderSettings.subtractiveShadowColor"/>
         ///     when <see cref="ApplyRealtimeShadows"/> is enabled and this instance is active.
         /// </summary>
         public void SetRealtimeShadowColor()
@@ -349,9 +329,8 @@ namespace SOSXR.plet
             RenderSettings.subtractiveShadowColor = RealtimeShadowColor;
         }
 
-
         /// <summary>
-        ///     Writes the palette-derived fog color to <see cref="UnityEngine.Rendering.RenderSettings.fogColor"/>
+        ///     Writes the palette-derived fog color to <see cref="Rendering.RenderSettings.fogColor"/>
         ///     when fog is enabled in Lighting settings and this instance is active.
         /// </summary>
         public void SetFogColor()
@@ -365,7 +344,6 @@ namespace SOSXR.plet
             RenderSettings.fogColor = FogColor;
         }
 
-
         private void SetSkyboxSkyColor()
         {
             if (!CanApplySkybox())
@@ -376,7 +354,6 @@ namespace SOSXR.plet
             SkyboxSkyColor = ApplyColor(SkyboxSkyHueType, SkyboxSkySaturation, SkyboxSkyValue);
             SkyboxMaterial.SetColor(_skyColorShaderId, SkyboxSkyColor);
         }
-
 
         private void SetSkyboxHorizonColor()
         {
@@ -389,7 +366,6 @@ namespace SOSXR.plet
             SkyboxMaterial.SetColor(_horizonColorShaderId, SkyboxHorizonColor);
         }
 
-
         private void SetSkyboxGroundColor()
         {
             if (!CanApplySkybox())
@@ -400,7 +376,6 @@ namespace SOSXR.plet
             SkyboxGroundColor = ApplyColor(SkyboxGroundHueType, SkyboxGroundSaturation, SkyboxGroundValue);
             SkyboxMaterial.SetColor(_groundColorShaderId, SkyboxGroundColor);
         }
-
 
         private bool CanApplySkybox()
         {
@@ -421,7 +396,6 @@ namespace SOSXR.plet
             return true;
         }
 
-
         /// <summary>
         ///     Resolves and assigns the per-scene skybox material, loading it from Resources by convention
         ///     (<c>&lt;sceneName&gt;_plet_skybox</c>) or creating it from the base TriColorSkybox template
@@ -434,8 +408,8 @@ namespace SOSXR.plet
                 return;
             }
 
-            var sceneName = SceneManager.GetActiveScene().name;
-            var sceneMatName = $"{sceneName}_plet_skybox";
+            string sceneName = SceneManager.GetActiveScene().name;
+            string sceneMatName = $"{sceneName}_plet_skybox";
 
             if (RenderSettings.skybox != null && RenderSettings.skybox.name == sceneMatName)
             {
@@ -455,11 +429,10 @@ namespace SOSXR.plet
                 return;
             }
 
-            #if UNITY_EDITOR
-            EditorApplication.delayCall += () => { CreateSceneSkyboxMaterial(sceneMatName); };
-            #endif
+#if UNITY_EDITOR
+            EditorApplication.delayCall += () => CreateSceneSkyboxMaterial(sceneMatName);
+#endif
         }
-
 
         private void CreateSceneSkyboxMaterial(string sceneMatName)
         {
@@ -470,23 +443,22 @@ namespace SOSXR.plet
                 return;
             }
 
-            var targetPath = $"{PletHelpers.FolderPath}/{sceneMatName}.mat";
+            string targetPath = $"{PletHelpers.FolderPath}/{sceneMatName}.mat";
             var newMat = Instantiate(baseMat);
             newMat.name = sceneMatName;
 
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             AssetDatabase.CreateAsset(newMat, targetPath);
             AssetDatabase.SaveAssets();
-            #endif
+#endif
 
             SkyboxMaterial = newMat;
             RenderSettings.skybox = newMat;
             // Debug.Log($"Created new skybox material: {sceneMatName}");
         }
 
-
         /// <summary>
-        ///     Derives a Unity <see cref="UnityEngine.Color"/> from the palette hue of <paramref name="type"/>
+        ///     Derives a Unity <see cref="Color"/> from the palette hue of <paramref name="type"/>
         ///     adjusted by display-range <paramref name="saturation"/> (1–19) and <paramref name="value"/> (1–19),
         ///     then overrides the alpha channel. Saturation and value are linearly interpolated from the
         ///     display range into the configured HSV clamp range.
@@ -494,21 +466,20 @@ namespace SOSXR.plet
         public Color ApplyColor(HueType type, int saturation, int value, float alpha = 1f)
         {
             var baseColor = GetColorFromPalette(type);
-            Color.RGBToHSV(baseColor, out var h, out _, out _);
+            Color.RGBToHSV(baseColor, out float h, out _, out _);
 
             // Map display range to clamped HSV values
-            var s = Mathf.Lerp(Saturation.Clamp.x, Saturation.Clamp.y,
-                (saturation - 1) / (float) (Saturation.DisplayRange.y - 1));
+            float s = Mathf.Lerp(Saturation.Clamp.x, Saturation.Clamp.y,
+                (saturation - 1) / (float)(Saturation.DisplayRange.y - 1));
 
-            var v = Mathf.Lerp(Value.Clamp.x, Value.Clamp.y,
-                (value - 1) / (float) (Value.DisplayRange.y - 1));
+            float v = Mathf.Lerp(Value.Clamp.x, Value.Clamp.y,
+                (value - 1) / (float)(Value.DisplayRange.y - 1));
 
-            var newColor = Color.HSVToRGB(h, s, v);
+            Color newColor = Color.HSVToRGB(h, s, v);
             newColor.a = alpha;
 
             return newColor;
         }
-
 
         /// <summary>
         ///     Converts the raw HSV saturation and value of the palette color for <paramref name="type"/>
@@ -517,20 +488,19 @@ namespace SOSXR.plet
         public Vector2Int GetColorSV(HueType type)
         {
             var baseColor = GetColorFromPalette(type);
-            Color.RGBToHSV(baseColor, out _, out var s, out var v);
+            Color.RGBToHSV(baseColor, out _, out float s, out float v);
 
             // Map HSV values back to display range
-            var saturation = Mathf.RoundToInt(
+            int saturation = Mathf.RoundToInt(
                 (s - Saturation.Clamp.x) / (Saturation.Clamp.y - Saturation.Clamp.x) *
                 (Saturation.DisplayRange.y - 1)) + 1;
 
-            var value = Mathf.RoundToInt(
+            int value = Mathf.RoundToInt(
                 (v - Value.Clamp.x) / (Value.Clamp.y - Value.Clamp.x) *
                 (Value.DisplayRange.y - 1)) + 1;
 
             return new Vector2Int(saturation, value);
         }
-
 
         private Color GetColorFromPalette(HueType type)
         {
@@ -540,12 +510,12 @@ namespace SOSXR.plet
             }
 
             return type switch
-                   {
-                       HueType.Base => Palette.Base,
-                       HueType.Tone => Palette.Tone,
-                       HueType.Accent => Palette.Accent,
-                       _ => Color.white
-                   };
+            {
+                HueType.Base => Palette.Base,
+                HueType.Tone => Palette.Tone,
+                HueType.Accent => Palette.Accent,
+                _ => Color.white
+            };
         }
     }
 }

@@ -1,0 +1,58 @@
+// This file is generated. Do not modify by hand.
+// XML documentation file not found. To check if public methods have XML comments,
+// make sure the XML doc file is present and located next to the scraped dll
+namespace SOSXR.plet
+{
+    public static class Desaturate
+    {
+        public static UnityEngine.Texture2D LoadTexture(string name);
+        public static string Texture(UnityEngine.Texture2D source, int saturationPercentage);
+    }
+}
+
+namespace SOSXR.plet.EditorScripts
+{
+    [UnityEditor.CanEditMultipleObjects] [UnityEditor.CustomEditor(typeof(ColorProvider))] public class ColorProviderEditor : PaletteEditorBase
+    {
+        public ColorProviderEditor() {}
+        public override void OnInspectorGUI();
+    }
+
+    [UnityEngine.ExecuteAlways] public static class DisableReset
+    {
+    }
+
+    [UnityEditor.CustomEditor(typeof(Palette))] public class PaletteEditor : UnityEditor.Editor
+    {
+        public PaletteEditor() {}
+        public override void OnInspectorGUI();
+    }
+
+    public class PaletteEditorBase : UnityEditor.Editor
+    {
+        protected const string ButtonText = @"Get Palette Saturation and Value";
+        public PaletteEditorBase() {}
+        protected static void DrawColorBox(UnityEngine.Color color, bool alpha = false, bool hdr = false, string label = @"Preview", int height = 35);
+        protected void DrawProperty<T>(UnityEditor.SerializedProperty property, string undoName, System.Func<T> drawField, System.Action<UnityEditor.SerializedProperty, T> applyChange);
+        protected void DrawSection(string label, UnityEditor.SerializedProperty typeProp, UnityEditor.SerializedProperty valueProp, UnityEditor.SerializedProperty saturationProp, UnityEditor.SerializedProperty colorProp, UnityEditor.SerializedProperty alphaProp = default(UnityEditor.SerializedProperty), bool useAlpha = false, bool useHDR = false);
+    }
+
+    [UnityEditor.CustomEditor(typeof(PletSceneSettings))] public class PletSceneSettingsEditor : PaletteEditorBase
+    {
+        public PletSceneSettingsEditor() {}
+        public override void OnInspectorGUI();
+    }
+
+    [UnityEditor.CustomPropertyDrawer(typeof(TexturePreviewAttribute))] public class TexturePreviewDrawer : UnityEditor.PropertyDrawer
+    {
+        public TexturePreviewDrawer() {}
+        public override float GetPropertyHeight(UnityEditor.SerializedProperty property, UnityEngine.GUIContent label);
+        public override void OnGUI(UnityEngine.Rect position, UnityEditor.SerializedProperty property, UnityEngine.GUIContent label);
+    }
+
+    [UnityEditor.CanEditMultipleObjects] [UnityEditor.CustomEditor(typeof(TextureProvider))] public class TextureProviderEditor : UnityEditor.Editor
+    {
+        public TextureProviderEditor() {}
+        public override void OnInspectorGUI();
+    }
+}

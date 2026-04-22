@@ -1,60 +1,59 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
 
 namespace SOSXR.plet
 {
     /// <summary>
     ///     MonoBehaviour that applies palette-driven colors to a supported component on the same GameObject.
     ///     Supports <see cref="Renderer"/> (via MaterialPropertyBlock), <see cref="Light"/>,
-    ///     <see cref="Camera"/>, <see cref="SpriteRenderer"/>, <see cref="UnityEngine.UI.Image"/>,
-    ///     <see cref="TMPro.TMP_Text"/>, <see cref="UnityEngine.UI.Text"/>,
-    ///     <see cref="UnityEngine.UI.Selectable"/>, and <see cref="ParticleSystem"/>.
+    ///     <see cref="Camera"/>, <see cref="SpriteRenderer"/>, <see cref="Image"/>,
+    ///     <see cref="TMP_Text"/>, <see cref="Text"/>,
+    ///     <see cref="Selectable"/>, and <see cref="ParticleSystem"/>.
     ///     Each material slot gets its own <see cref="ColorSettings"/> entry with an independently
     ///     adjustable hue type, saturation (1–19 scale), value/brightness (1–19 scale), and alpha.
     /// </summary>
     [ExecuteInEditMode]
     public class ColorProvider : MonoBehaviour
     {
-        /// <summary>One entry per material slot (or per color channel for UI <see cref="UnityEngine.UI.Selectable"/>s).</summary>
+        /// <summary>One entry per material slot (or per color channel for UI <see cref="Selectable"/>s).</summary>
         public List<ColorSettings> ColorSettings = new(1);
 
         /// <summary>Tracks whether this provider has performed its one-time palette-derived initialisation.</summary>
         [SerializeField] private bool init;
         /// <summary>Cached active scene settings used to resolve palette colors and SV mapping.</summary>
-        [HideInInspector] [SerializeField] private PletSceneSettings m_pletSceneSettings;
+        [HideInInspector][SerializeField] private PletSceneSettings m_pletSceneSettings;
 
         private static readonly Dictionary<Type, Action<Component, ColorProvider>> ColorAppliers = new()
         {
-            {typeof(SpriteRenderer), (c, cp) => ((SpriteRenderer) c).color = cp.ColorSettings[0].FinalColor},
+            {typeof(SpriteRenderer), static (c, cp) => ((SpriteRenderer) c).color = cp.ColorSettings[0].FinalColor},
             {typeof(Renderer), ApplyColorToRenderer},
             {typeof(Selectable), ApplyColorToSelectable},
-            {typeof(Image), (c, cp) => ((Image) c).color = cp.ColorSettings[0].FinalColor},
-            {typeof(TMP_Text), (c, cp) => ((TMP_Text) c).color = cp.ColorSettings[0].FinalColor},
-            {typeof(Text), (c, cp) => ((Text) c).color = cp.ColorSettings[0].FinalColor},
+            {typeof(Image), static (c, cp) => ((Image) c).color = cp.ColorSettings[0].FinalColor},
+            {typeof(TMP_Text), static (c, cp) => ((TMP_Text) c).color = cp.ColorSettings[0].FinalColor},
+            {typeof(Text), static (c, cp) => ((Text) c).color = cp.ColorSettings[0].FinalColor},
             {
-                typeof(Light), (c, cp) =>
+                typeof(Light), static (c, cp) =>
                 {
                     ((Light) c).color = cp.ColorSettings[0].FinalColor;
                     cp.ColorSettings[0].ShowAlpha = false;
                 }
             },
             {
-                typeof(Camera), (c, cp) =>
+                typeof(Camera), static (c, cp) =>
                 {
-                    var cam = (Camera) c;
+                    Camera cam = (Camera) c;
                     cam.clearFlags = CameraClearFlags.Color;
                     cam.backgroundColor = cp.ColorSettings[0].FinalColor;
                     cp.ColorSettings[0].ShowAlpha = false;
                 }
             },
             {
-                typeof(ParticleSystem), (c, cp) =>
+                typeof(ParticleSystem), static (c, cp) =>
                 {
-                    var ps = (ParticleSystem) c;
+                    ParticleSystem ps = (ParticleSystem) c;
                     var main = ps.main;
                     main.startColor = cp.ColorSettings[0].FinalColor;
                 }
@@ -66,10 +65,9 @@ namespace SOSXR.plet
         private Component _component;
         private Action _applyColorAction;
 
-
         private static void ApplyColorToSelectable(Component c, ColorProvider colorProvider)
         {
-            var selectable = (Selectable) c;
+            Selectable selectable = (Selectable)c;
             var colors = selectable.colors;
 
             EnsureCorrectLength(colorProvider, 5);
@@ -92,10 +90,9 @@ namespace SOSXR.plet
             selectable.colors = colors;
         }
 
-
         private static void ApplyColorToRenderer(Component c, ColorProvider colorProvider)
         {
-            var renderer = (Renderer) c;
+            Renderer renderer = (Renderer)c;
 
             if (renderer.sharedMaterials.Length == 0)
             {
@@ -108,7 +105,7 @@ namespace SOSXR.plet
 
             EnsureCorrectLength(colorProvider, renderer.sharedMaterials.Length);
 
-            for (var i = 0; i < renderer.sharedMaterials.Length; i++)
+            for (int i = 0; i < renderer.sharedMaterials.Length; i++)
             {
                 var material = renderer.sharedMaterials[i];
 
@@ -125,7 +122,6 @@ namespace SOSXR.plet
             }
         }
 
-
         private static void EnsureCorrectLength(ColorProvider colorProvider, int lengthNeeded)
         {
             while (colorProvider.ColorSettings.Count < lengthNeeded)
@@ -139,19 +135,10 @@ namespace SOSXR.plet
             }
         }
 
-
-        private static bool UsesAlpha(Material material)
-        {
-            return material.IsKeywordEnabled("_ALPHAPREMULTIPLY_ON") ||
+        private static bool UsesAlpha(Material material) => material.IsKeywordEnabled("_ALPHAPREMULTIPLY_ON") ||
                    material.IsKeywordEnabled("_ALPHATEST_ON");
-        }
 
-
-        private void OnValidate()
-        {
-            Init();
-        }
-
+        private void OnValidate() => Init();
 
         /// <summary>
         ///     Initialises this provider: fetches the active <see cref="PletSceneSettings"/>, ensures at least
@@ -166,7 +153,7 @@ namespace SOSXR.plet
                 return;
             }
 
-            GetSceneSettings();
+            _ = GetSceneSettings();
 
             if (ColorSettings.Count == 0)
             {
@@ -183,7 +170,6 @@ namespace SOSXR.plet
 
             ApplyColorAction();
         }
-
 
         /// <summary>
         ///     Reads saturation and value from the active palette for each <see cref="ColorSettings"/> entry
@@ -203,7 +189,7 @@ namespace SOSXR.plet
             {
                 EnsureCorrectLength(this, rend.sharedMaterials.Length);
 
-                for (var i = 0; i < rend.sharedMaterials.Length; i++)
+                for (int i = 0; i < rend.sharedMaterials.Length; i++)
                 {
                     if (rend.sharedMaterials[i] != null && i < ColorSettings.Count)
                     {
@@ -213,13 +199,13 @@ namespace SOSXR.plet
             }
 
             // Initialize all color settings
-            for (var i = 0; i < ColorSettings.Count; i++)
+            for (int i = 0; i < ColorSettings.Count; i++)
             {
                 // Distribute different hue types across materials on first init
                 if (!init && i > 0)
                 {
-                    var hueTypeCount = Enum.GetValues(typeof(HueType)).Length;
-                    ColorSettings[i].HueType = (HueType) (((int) ColorSettings[0].HueType + i) % hueTypeCount);
+                    int hueTypeCount = Enum.GetValues(typeof(HueType)).Length;
+                    ColorSettings[i].HueType = (HueType)(((int)ColorSettings[0].HueType + i) % hueTypeCount);
                 }
 
                 var satVal = m_pletSceneSettings.GetColorSV(ColorSettings[i].HueType);
@@ -238,7 +224,6 @@ namespace SOSXR.plet
             ApplyColorAction();
         }
 
-
         private bool GetSceneSettings()
         {
             if (m_pletSceneSettings != null)
@@ -250,7 +235,6 @@ namespace SOSXR.plet
 
             return m_pletSceneSettings != null;
         }
-
 
         private void CacheComponent()
         {
@@ -271,7 +255,6 @@ namespace SOSXR.plet
                 break;
             }
         }
-
 
         /// <summary>
         ///     Resolves the appropriate color-application delegate for the component type and invokes it,

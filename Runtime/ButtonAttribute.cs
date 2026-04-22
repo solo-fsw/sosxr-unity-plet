@@ -1,5 +1,4 @@
-using System;
-
+﻿using System;
 
 namespace SOSXR.plet
 {
@@ -13,7 +12,6 @@ namespace SOSXR.plet
             Space = space;
             HorizontalLine = horizontalLine;
         }
-
 
         public string Tooltip { get; set; }
         public string ItemName { get; set; }
