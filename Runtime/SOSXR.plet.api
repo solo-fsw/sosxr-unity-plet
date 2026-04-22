@@ -3,7 +3,7 @@
 // make sure the XML doc file is present and located next to the scraped dll
 namespace SOSXR.plet
 {
-    [System.AttributeUsage(System.AttributeTargets.Method)] public class ButtonAttribute : System.Attribute
+    [System.AttributeUsage(System.AttributeTargets.Method)] public sealed class ButtonAttribute : System.Attribute
     {
         public bool HorizontalLine { get; set; }
         public string ItemName { get; set; }
@@ -12,7 +12,7 @@ namespace SOSXR.plet
         public ButtonAttribute(string itemName = default(string), string tooltip = default(string), int space = 0, bool horizontalLine = false) {}
     }
 
-    [UnityEngine.ExecuteInEditMode] public class ColorProvider : UnityEngine.MonoBehaviour
+    [UnityEngine.ExecuteInEditMode] public sealed class ColorProvider : UnityEngine.MonoBehaviour
     {
         public System.Collections.Generic.List<ColorSettings> ColorSettings;
         public ColorProvider() {}
@@ -21,7 +21,7 @@ namespace SOSXR.plet
         [Button(null, null, 0, false)] public void Init();
     }
 
-    public class ColorSettings
+    public sealed class ColorSettings
     {
         public float Alpha = 1f;
         public UnityEngine.Color FinalColor;
@@ -40,7 +40,7 @@ namespace SOSXR.plet
         Accent = 2,
     }
 
-    [UnityEngine.CreateAssetMenu(fileName = @"Palette", menuName = @"SOSXR/plet/Palette")] public class Palette : UnityEngine.ScriptableObject
+    [UnityEngine.CreateAssetMenu(fileName = @"Palette", menuName = @"SOSXR/plet/Palette")] public sealed class Palette : UnityEngine.ScriptableObject
     {
         [UnityEngine.Header(@"Use this around 10% of the time. This is the 'pop' color.")] public UnityEngine.Color Accent;
         [UnityEngine.Header(@"Use this around 60% of the time. It is a base. Use a rather neutral color.")] public UnityEngine.Color Base;
@@ -56,7 +56,7 @@ namespace SOSXR.plet
         public static void InvalidateCache();
     }
 
-    [UnityEngine.CreateAssetMenu(fileName = @"PletSceneSettings", menuName = @"SOSXR/plet/PletSceneSettings", order = 1)] public class PletSceneSettings : UnityEngine.ScriptableObject
+    [UnityEngine.CreateAssetMenu(fileName = @"PletSceneSettings", menuName = @"SOSXR/plet/PletSceneSettings", order = 1)] public sealed class PletSceneSettings : UnityEngine.ScriptableObject
     {
         public UnityEngine.Color AmbientEquatorLightColor;
         public HueType AmbientEquatorLightHueType;
@@ -121,23 +121,23 @@ namespace SOSXR.plet
         public static readonly UnityEngine.Vector2Int DisplayRange;
     }
 
-    public class TexturePreviewAttribute : UnityEngine.PropertyAttribute
+    public sealed class TexturePreviewAttribute : UnityEngine.PropertyAttribute
     {
         public readonly int MaxSize;
         public TexturePreviewAttribute(int maxSize) {}
     }
 
-    [UnityEngine.RequireComponent(typeof(UnityEngine.Renderer))] public class TextureProvider : UnityEngine.MonoBehaviour
+    [UnityEngine.RequireComponent(typeof(UnityEngine.Renderer))] public sealed class TextureProvider : UnityEngine.MonoBehaviour
     {
-        public static System.Func<UnityEngine.Texture2D, int, string> DesaturateTexture;
         public const int TextureSaturationSteps = 11;
         public System.Collections.Generic.List<TextureSettings> TextureSettings;
+        public static System.Func<UnityEngine.Texture2D, int, string> DesaturateTexture { get; set; }
         public TextureProvider() {}
         public void GetNextTexture();
         [UnityEngine.ContextMenu(@"Initialize")] public void Initialize();
     }
 
-    public class TextureSettings
+    public sealed class TextureSettings
     {
         [TexturePreview(100)] public UnityEngine.Texture2D CurrentTexture;
         public int Index = 10;

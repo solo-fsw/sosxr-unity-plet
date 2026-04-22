@@ -33,7 +33,13 @@ namespace SOSXR.plet.EditorScripts
                 var useAlphaProp = colorSettingsProp.FindPropertyRelative(nameof(ColorSettings.ShowAlpha));
                 var valuedColorProp = colorSettingsProp.FindPropertyRelative(nameof(ColorSettings.FinalColor));
 
-                DrawSection(nameProp.stringValue, colorTypeProp, valueProp, saturationProp, valuedColorProp, alphaProp, useAlphaProp.boolValue);
+                if (nameProp == null || colorTypeProp == null || valueProp == null || saturationProp == null || valuedColorProp == null)
+                {
+                    EditorGUILayout.HelpBox("Required color settings properties not found.", MessageType.Error);
+                    continue;
+                }
+
+                DrawSection(nameProp.stringValue, colorTypeProp, valueProp, saturationProp, valuedColorProp, alphaProp, useAlphaProp?.boolValue ?? true);
 
                 EditorGUILayout.Space(10);
             }

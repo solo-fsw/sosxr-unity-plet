@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,8 +14,11 @@ namespace SOSXR.plet
         /// <summary>Filename suffix appended to desaturated texture variants (e.g. <c>texture_saturated_50</c>).</summary>
         public static string Suffix => "_saturated_";
 
-        private static PletSceneSettings _cachedSettings;
-        private static int _cachedSceneHandle;
+        private static PletSceneSettings s_cachedSettings;
+        private static string s_cachedSceneName;
+
+        private static string s_folderPath;
+        private static bool s_folderPathInitialized;
 
         /// <summary>
         ///     Path to the SOSXR Resources folder used for generated assets (palette holders, skybox materials,
@@ -25,14 +28,15 @@ namespace SOSXR.plet
         {
             get
             {
-                string path = "Assets/_SOSXR/Resources";
-
-                if (!Directory.Exists(path))
+                if (!s_folderPathInitialized)
                 {
-                    _ = Directory.CreateDirectory(path);
+                    const string path = "Assets/_SOSXR/Resources";
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+                    s_folderPath = path;
+                    s_folderPathInitialized = true;
                 }
-
-                return path;
+                return s_folderPath;
             }
         }
 
@@ -42,39 +46,48 @@ namespace SOSXR.plet
         ///     matches the active scene. Creates a new asset in the editor if none are found.
         ///     Results are cached per scene to avoid repeated <see cref="Resources.LoadAll{T}"/> calls.
         /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown when multiple settings exist but none match the scene name.</exception>
         public static PletSceneSettings GetPletSceneSettings()
         {
             var activeScene = SceneManager.GetActiveScene();
 
-            if (_cachedSettings != null && _cachedSceneHandle == activeScene.handle)
+            // Validate cache - check if scene is still valid and loaded
+            if (s_cachedSettings != null &&
+                s_cachedSceneName == activeScene.name &&
+                activeScene.IsValid() &&
+                activeScene.isLoaded)
             {
-                return _cachedSettings;
+                return s_cachedSettings;
             }
 
             var paletteHolders = Resources.LoadAll<PletSceneSettings>("");
 
             if (paletteHolders.Length == 1)
             {
-                _cachedSettings = paletteHolders[0];
-                _cachedSceneHandle = activeScene.handle;
+                s_cachedSettings = paletteHolders[0];
+                s_cachedSceneName = activeScene.name;
 
-                return _cachedSettings;
+                return s_cachedSettings;
             }
 
             CreatePaletteHolder(paletteHolders);
 
             foreach (var paletteHolder in paletteHolders)
             {
-                if (paletteHolder.name == activeScene.name)
+                if (paletteHolder != null && paletteHolder.name == activeScene.name)
                 {
-                    _cachedSettings = paletteHolder;
-                    _cachedSceneHandle = activeScene.handle;
+                    s_cachedSettings = paletteHolder;
+                    s_cachedSceneName = activeScene.name;
 
-                    return _cachedSettings;
+                    return s_cachedSettings;
                 }
             }
 
-            Debug.Log(string.Format("Multiple PaletteSettings found in Resources folders, but none with the same name as the scene: {0}", activeScene.name));
+            if (paletteHolders.Length > 1)
+            {
+                throw new InvalidOperationException(
+                    $"Multiple PaletteSettings found in Resources folders, but none with the same name as the scene: {activeScene.name}");
+            }
 
             return null;
         }
@@ -82,28 +95,28 @@ namespace SOSXR.plet
         /// <summary>Clears the cached <see cref="PletSceneSettings"/> so the next call to <see cref="GetPletSceneSettings"/> will re-scan.</summary>
         public static void InvalidateCache()
         {
-            _cachedSettings = null;
-            _cachedSceneHandle = 0;
+            s_cachedSettings = null;
+            s_cachedSceneName = null;
         }
 
         private static void CreatePaletteHolder(PletSceneSettings[] paletteHolders)
         {
 #if UNITY_EDITOR
-            if (paletteHolders.Length == 0)
+            if (paletteHolders.Length != 0)
+                return;
+
+            Debug.Log($"No PaletteSceneSettings found in any of the Resources folders, will create a new one at {FolderPath}.");
+
+            string sceneName = SceneManager.GetActiveScene().name;
+
+            EditorApplication.delayCall += () =>
             {
-                Debug.Log($"No PaletteSceneSettings found in any of the Resources folders, will create a new one at {FolderPath}.");
-
-                string sceneName = SceneManager.GetActiveScene().name;
-
-                EditorApplication.delayCall += () =>
-                {
-                    var pletSceneSettings = ScriptableObject.CreateInstance<PletSceneSettings>();
-                    string assetPath = Path.Combine(FolderPath, sceneName + ".asset");
-                    AssetDatabase.CreateAsset(pletSceneSettings, assetPath);
-                    AssetDatabase.SaveAssets();
-                    AssetDatabase.Refresh();
-                };
-            }
+                var pletSceneSettings = ScriptableObject.CreateInstance<PletSceneSettings>();
+                string assetPath = Path.Combine(FolderPath, $"{sceneName}.asset");
+                AssetDatabase.CreateAsset(pletSceneSettings, assetPath);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+            };
 #endif
         }
     }
@@ -122,7 +135,7 @@ namespace SOSXR.plet
     ///     alpha, and the resolved final color.
     /// </summary>
     [Serializable]
-    public class ColorSettings
+    public sealed class ColorSettings
     {
         public string Name;
         public HueType HueType;
@@ -161,7 +174,7 @@ namespace SOSXR.plet
     ///     Tracks the set of available desaturation-step texture names and the currently selected index.
     /// </summary>
     [Serializable]
-    public class TextureSettings
+    public sealed class TextureSettings
     {
         public string MaterialName;
         /// <summary>Current saturation step index into <see cref="TextureNames"/> (0 = fully desaturated, max = fully saturated).</summary>

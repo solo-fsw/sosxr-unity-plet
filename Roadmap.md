@@ -10,17 +10,17 @@
 
 ### Add support for
 
-- [ ] SpriteRenderers
+- [x] SpriteRenderers (implemented via Renderer base class)
 - [x] Image components
 - [ ] RawImage components
-- [ ] Text components
+- [ ] Text components (legacy UI)
 - [x] TextMeshPro components
-    - [x] TextMeshPro Dropdown components
+    - [ ] TextMeshPro Dropdown components (partial - needs child setup)
     - [ ] TextMeshPro InputField components
     - [ ] TextMeshPro Button components
     - [ ] Scrollbar
-- [x] LineRenderers
-- [x] TrailRenderers
+- [x] LineRenderers (via Renderer base class)
+- [x] TrailRenderers (via Renderer base class)
 - [ ] SpriteMask components
 - [ ] CanvasRenderer components
 - [ ] LensFlare components

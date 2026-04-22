@@ -22,12 +22,27 @@ namespace SOSXR.plet.EditorScripts
         private void OnEnable()
         {
             _textureProvider = target as TextureProvider;
+
+            if (_textureProvider == null)
+            {
+                Debug.LogError("TextureProviderEditor target is not a TextureProvider.");
+
+                return;
+            }
+
             _textureSettingsProp = serializedObject.FindProperty(nameof(TextureProvider.TextureSettings));
         }
 
 
-        public override void OnInspectorGUI()
+            public override void OnInspectorGUI()
         {
+            if (_textureProvider == null || _textureSettingsProp == null)
+            {
+                EditorGUILayout.HelpBox("TextureProvider is not properly initialized.", MessageType.Error);
+
+                return;
+            }
+
             serializedObject.Update();
 
             for (var i = 0; i < _textureSettingsProp.arraySize; i++)
@@ -52,12 +67,17 @@ namespace SOSXR.plet.EditorScripts
                     currentTextureProp = textureSettingsProp.FindPropertyRelative(nameof(TextureSettings.CurrentTexture));
                 }
 
-                EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.PropertyField(currentTextureProp);
-                EditorGUI.EndDisabledGroup();
+                if (currentTextureProp != null)
+                {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.PropertyField(currentTextureProp);
+                    EditorGUI.EndDisabledGroup();
+                }
 
                 GUILayout.EndVertical();
             }
+
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }

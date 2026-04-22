@@ -76,10 +76,17 @@ namespace SOSXR.plet.EditorScripts
                         continue;
                     }
 
-                    var so = new SerializedObject(targetObject);
-                    var prop = so.FindProperty(property.propertyPath); // Get the correct property path
-                    applyChange(prop, newValue);
-                    so.ApplyModifiedProperties();
+                    using (var so = new SerializedObject(targetObject))
+                    {
+                        var prop = so.FindProperty(property.propertyPath);
+                        if (prop == null)
+                        {
+                            Debug.LogWarning($"Property '{property.propertyPath}' not found on target object.");
+                            continue;
+                        }
+                        applyChange(prop, newValue);
+                        so.ApplyModifiedProperties();
+                    }
                 }
             }
         }

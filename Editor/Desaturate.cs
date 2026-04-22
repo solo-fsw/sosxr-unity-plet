@@ -67,9 +67,16 @@ namespace SOSXR.plet
 
         private static bool IsReadable(string assetPath, bool force = false)
         {
-            var textureImporter = (TextureImporter) AssetImporter.GetAtPath(assetPath);
+            var textureImporter = AssetImporter.GetAtPath(assetPath) as TextureImporter;
 
-            if (force && textureImporter != null && !textureImporter.isReadable)
+            if (textureImporter == null)
+            {
+                Debug.LogError($"Failed to get TextureImporter for asset at path: {assetPath}");
+
+                return false;
+            }
+
+            if (force && !textureImporter.isReadable)
             {
                 textureImporter.isReadable = true;
                 textureImporter.SaveAndReimport();

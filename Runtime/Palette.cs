@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace SOSXR.plet
 {
@@ -8,7 +8,7 @@ namespace SOSXR.plet
     ///     and <see cref="Accent"/> (~10%) color, plus an optional reference texture for design reference.
     /// </summary>
     [CreateAssetMenu(fileName = "Palette", menuName = "SOSXR/plet/Palette")]
-    public class Palette : ScriptableObject
+    public sealed class Palette : ScriptableObject
     {
         /// <summary>Dominant (~60%) palette color; generally a neutral base.</summary>
         [Header("Use this around 60% of the time. It is a base. Use a rather neutral color.")]
@@ -27,6 +27,6 @@ namespace SOSXR.plet
         [Tooltip("Optional")]
         [TexturePreview(500)]
         [SerializeField]
-        private Texture m_optionalColorTexture;
+        private Texture _optionalColorTexture;
     }
 }

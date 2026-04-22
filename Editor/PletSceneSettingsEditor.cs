@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -140,9 +140,23 @@ namespace SOSXR.plet.EditorScripts
 
         public override void OnInspectorGUI()
         {
+            if (target == null)
+            {
+                EditorGUILayout.HelpBox("Target is null.", MessageType.Error);
+
+                return;
+            }
+
             serializedObject.Update();
 
-            var pletSceneSettings = (PletSceneSettings) target;
+            var pletSceneSettings = target as PletSceneSettings;
+
+            if (pletSceneSettings == null)
+            {
+                EditorGUILayout.HelpBox("Target is not a PletSceneSettings.", MessageType.Error);
+
+                return;
+            }
 
             if (!IsActiveSceneSettings(pletSceneSettings))
             {
@@ -166,7 +180,7 @@ namespace SOSXR.plet.EditorScripts
                 pletSceneSettings.GetColorProvidersSVFromPalette();
             }
 
-            var palette = (Palette) _paletteProp.objectReferenceValue;
+            var palette = (Palette)_paletteProp.objectReferenceValue;
 
             EditorGUILayout.Space();
             DrawSectionHeader("Palette Colors");
@@ -198,7 +212,7 @@ namespace SOSXR.plet.EditorScripts
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
 
-                var pletSceneSettings = (PletSceneSettings) target;
+                var pletSceneSettings = (PletSceneSettings)target;
                 pletSceneSettings.Palette = AssetDatabase.LoadAssetAtPath<Palette>(assetPath);
             }
         }
@@ -348,7 +362,7 @@ namespace SOSXR.plet.EditorScripts
             GUILayout.BeginVertical(EditorStyles.helpBox);
 
             DrawProperty(_skyboxMaterialProp, "Skybox Material",
-                () => (Material) EditorGUILayout.ObjectField("Skybox Material",
+                () => (Material)EditorGUILayout.ObjectField("Skybox Material",
                     _skyboxMaterialProp.objectReferenceValue, typeof(Material), false),
                 (prop, newValue) => prop.objectReferenceValue = newValue);
 
