@@ -1,8 +1,9 @@
-#if UNITY_EDITOR
-using System;
-using System.Collections.Generic;
+﻿#if UNITY_EDITOR
 using UnityEditor;
 #endif
+
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
@@ -159,7 +160,7 @@ namespace SOSXR.plet
             if (this == null)
                 return;
 
-                _allColorProviders = FindObjectsByType<ColorProvider>(FindObjectsInactive.Include);
+            _allColorProviders = FindObjectsByType<ColorProvider>(FindObjectsInactive.Include);
 
             foreach (var colorProvider in _allColorProviders)
             {
@@ -292,7 +293,7 @@ namespace SOSXR.plet
 
             if (_allColorProviders == null || _allColorProviders.Length == 0)
             {
-            _allColorProviders = FindObjectsByType<ColorProvider>(FindObjectsInactive.Include);
+                _allColorProviders = FindObjectsByType<ColorProvider>(FindObjectsInactive.Include);
             }
 
             for (int i = 0; i < _allColorProviders.Length; i++)
