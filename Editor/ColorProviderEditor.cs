@@ -45,17 +45,22 @@ namespace SOSXR.plet.EditorScripts
             }
 
 
+            serializedObject.ApplyModifiedProperties();
+
             if (GUILayout.Button(ButtonText))
             {
+                Undo.RecordObjects(targets, ButtonText);
+
                 foreach (var colorProviderObj in targets)
                 {
-                    ((ColorProvider) colorProviderObj).GetPaletteSaturationAndValue();
+                    var colorProvider = (ColorProvider) colorProviderObj;
+                    colorProvider.GetPaletteSaturationAndValue();
+                    EditorUtility.SetDirty(colorProvider);
                 }
 
+                serializedObject.Update();
                 SceneView.RepaintAll();
             }
-
-            serializedObject.ApplyModifiedProperties();
         }
     }
 }

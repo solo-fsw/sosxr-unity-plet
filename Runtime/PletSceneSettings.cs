@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.SceneManagement;
 #endif
 
 using System;
@@ -134,6 +135,7 @@ namespace SOSXR.plet
         private static readonly int s_horizonColorShaderId = Shader.PropertyToID("_HorizonColor");
         private static readonly int s_groundColorShaderId = Shader.PropertyToID("_GroundColor");
         private static readonly Dictionary<string, Material> s_materialCache = new();
+        private static readonly HashSet<string> s_pendingSkyboxMaterials = new();
 
         [HideInInspector][SerializeField] private Palette _previousPalette;
         private ColorProvider[] _allColorProviders;
@@ -162,9 +164,16 @@ namespace SOSXR.plet
 
             _allColorProviders = FindObjectsByType<ColorProvider>(FindObjectsInactive.Include);
 
+            if (_allColorProviders.Length > 0)
+            {
+                Undo.RecordObjects(_allColorProviders, "Apply plet palette");
+            }
+
             foreach (var colorProvider in _allColorProviders)
             {
-                colorProvider?.Init();
+                if (colorProvider == null) continue;
+                colorProvider.Init();
+                EditorUtility.SetDirty(colorProvider);
             }
 
             SetAllSkyboxAndLights();
@@ -174,7 +183,18 @@ namespace SOSXR.plet
 
         #region Public Methods
         /// <summary>Returns <c>true</c> if this instance is the one currently governing the active scene.</summary>
-        public bool IsActiveSceneSettings() => PletHelpers.GetPletSceneSettings() == this;
+        /// <remarks>Returns <c>false</c> (instead of throwing) when several settings exist and none matches the scene.</remarks>
+        public bool IsActiveSceneSettings()
+        {
+            try
+            {
+                return PletHelpers.GetPletSceneSettings() == this;
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         ///     Applies all enabled environment overrides (skybox, ambient light, realtime shadows, fog)
@@ -192,6 +212,9 @@ namespace SOSXR.plet
             SetFogColor();
 
 #if UNITY_EDITOR
+            if (!Application.isPlaying)
+                EditorUtility.SetDirty(this);
+
             SceneView.RepaintAll();
 #endif
         }
@@ -201,13 +224,14 @@ namespace SOSXR.plet
         ///     adjusted by display-range <paramref name="saturation"/> (1–19) and <paramref name="value"/> (1–19),
         ///     then overrides the alpha channel.
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when saturation or value is outside the valid range.</exception>
+        /// <remarks>
+        ///     Out-of-range <paramref name="saturation"/> and <paramref name="value"/> are clamped to 1–19
+        ///     (for example the 0 of a freshly added slot), so this never throws.
+        /// </remarks>
         public Color ApplyColor(HueType type, int saturation, int value, float alpha = 1f)
         {
-            if (saturation is < 1 or > 19)
-                throw new ArgumentOutOfRangeException(nameof(saturation), "Must be between 1 and 19.");
-            if (value is < 1 or > 19)
-                throw new ArgumentOutOfRangeException(nameof(value), "Must be between 1 and 19.");
+            saturation = Mathf.Clamp(saturation, Saturation.DisplayRange.x, Saturation.DisplayRange.y);
+            value = Mathf.Clamp(value, Value.DisplayRange.x, Value.DisplayRange.y);
 
             var baseColor = GetColorFromPalette(type);
             Color.RGBToHSV(baseColor, out float h, out _, out _);
@@ -243,9 +267,11 @@ namespace SOSXR.plet
 
         private static int HsvToDisplay(float hsvValue, Vector2 clampRange)
         {
-            return Mathf.RoundToInt(
+            int display = Mathf.RoundToInt(
                 (hsvValue - clampRange.x) / (clampRange.y - clampRange.x) *
                 (19 - 1)) + 1;
+
+            return Mathf.Clamp(display, 1, 19);
         }
 
         /// <summary>
@@ -257,10 +283,9 @@ namespace SOSXR.plet
             if (!IsActiveSceneSettings() || !ApplySkybox)
                 return;
 
-            string sceneName = SceneManager.GetActiveScene().name;
-            string sceneMatName = $"{sceneName}_plet_skybox";
+            string sceneMatName = GetSkyboxMaterialName(SceneManager.GetActiveScene().name);
 
-            if (RenderSettings.skybox == SkyboxMaterial)
+            if (SkyboxMaterial != null && RenderSettings.skybox == SkyboxMaterial)
                 return;
 
             Material sceneMat;
@@ -273,15 +298,28 @@ namespace SOSXR.plet
 
             if (sceneMat != null)
             {
-                SkyboxMaterial = sceneMat;
-                RenderSettings.skybox = sceneMat;
+                AssignSkyboxMaterial(sceneMat);
                 return;
             }
 
 #if UNITY_EDITOR
-            EditorApplication.delayCall += () => CreateSceneSkyboxMaterial(sceneMatName);
+            // Called from OnValidate and inspector changes: schedule at most one creation per material.
+            if (Application.isPlaying || !s_pendingSkyboxMaterials.Add(sceneMatName))
+                return;
+
+            EditorApplication.delayCall += () =>
+            {
+                s_pendingSkyboxMaterials.Remove(sceneMatName);
+
+                if (this != null)
+                    CreateSceneSkyboxMaterial(sceneMatName);
+            };
 #endif
         }
+
+        /// <summary>Returns the name of the generated per-scene skybox material for <paramref name="sceneName"/>.</summary>
+        public static string GetSkyboxMaterialName(string sceneName) =>
+            $"{PletHelpers.GetSafeSceneName(sceneName)}_plet_skybox";
         #endregion
 
         #region Button Methods
@@ -291,14 +329,23 @@ namespace SOSXR.plet
             if (!IsActiveSceneSettings())
                 return;
 
-            if (_allColorProviders == null || _allColorProviders.Length == 0)
-            {
-                _allColorProviders = FindObjectsByType<ColorProvider>(FindObjectsInactive.Include);
-            }
+            // Always re-scan: providers may have been added or destroyed since the last call.
+            _allColorProviders = FindObjectsByType<ColorProvider>(FindObjectsInactive.Include);
+
+#if UNITY_EDITOR
+            if (!Application.isPlaying && _allColorProviders.Length > 0)
+                Undo.RecordObjects(_allColorProviders, "Get palette saturation and value");
+#endif
 
             for (int i = 0; i < _allColorProviders.Length; i++)
             {
-                _allColorProviders[i]?.GetPaletteSaturationAndValue();
+                if (_allColorProviders[i] == null) continue;
+
+                _allColorProviders[i].GetPaletteSaturationAndValue();
+#if UNITY_EDITOR
+                if (!Application.isPlaying)
+                    EditorUtility.SetDirty(_allColorProviders[i]);
+#endif
             }
         }
 
@@ -307,6 +354,8 @@ namespace SOSXR.plet
         {
             if (!IsActiveSceneSettings())
                 return;
+
+            RecordSelf("GetSkyboxSVFromPalette");
 
             SetSVFromPalette(SkyboxSkyHueType, out SkyboxSkySaturation, out SkyboxSkyValue);
             SetSVFromPalette(SkyboxHorizonHueType, out SkyboxHorizonSaturation, out SkyboxHorizonValue);
@@ -319,6 +368,8 @@ namespace SOSXR.plet
         {
             if (!IsActiveSceneSettings())
                 return;
+
+            RecordSelf("GetAmbientLightSVFromPalette");
 
             SetSVFromPalette(AmbientLightHueType, out AmbientLightSaturation, out AmbientLightValue);
             SetSVFromPalette(AmbientSkyLightHueType, out AmbientSkyLightSaturation, out AmbientSkyLightValue);
@@ -333,6 +384,8 @@ namespace SOSXR.plet
             if (!IsActiveSceneSettings())
                 return;
 
+            RecordSelf("GetRealtimeShadowSVFromPalette");
+
             SetSVFromPalette(RealtimeShadowHueType, out RealtimeShadowSaturation, out RealtimeShadowValue);
             SetAllSkyboxAndLights();
         }
@@ -343,12 +396,22 @@ namespace SOSXR.plet
             if (!IsActiveSceneSettings())
                 return;
 
+            RecordSelf("GetFogSVFromPalette");
+
             SetSVFromPalette(FogHueType, out FogSaturation, out FogValue);
             SetAllSkyboxAndLights();
         }
         #endregion
 
         #region Private Methods
+        private void RecordSelf(string undoName)
+        {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                Undo.RecordObject(this, undoName);
+#endif
+        }
+
         private void SetSVFromPalette(HueType hueType, out int saturation, out int value)
         {
             var sv = GetColorSV(hueType);
@@ -374,35 +437,35 @@ namespace SOSXR.plet
         private void SetAmbientLightColor()
         {
             SetAmbientColor(AmbientMode.Flat, AmbientLightHueType, AmbientLightSaturation, AmbientLightValue,
-                ref AmbientLightColor, color => RenderSettings.ambientLight = color);
+                ref AmbientLightColor, RenderSettings.ambientLight, color => RenderSettings.ambientLight = color);
         }
 
         private void SetAmbientSkyTriLightColor()
         {
             SetAmbientColor(AmbientMode.Trilight, AmbientSkyLightHueType, AmbientSkyLightSaturation, AmbientSkyLightValue,
-                ref AmbientSkyLightColor, color => RenderSettings.ambientSkyColor = color);
+                ref AmbientSkyLightColor, RenderSettings.ambientSkyColor, color => RenderSettings.ambientSkyColor = color);
         }
 
         private void SetAmbientEquatorTriLightColor()
         {
             SetAmbientColor(AmbientMode.Trilight, AmbientEquatorLightHueType, AmbientEquatorLightSaturation, AmbientEquatorLightValue,
-                ref AmbientEquatorLightColor, color => RenderSettings.ambientEquatorColor = color);
+                ref AmbientEquatorLightColor, RenderSettings.ambientEquatorColor, color => RenderSettings.ambientEquatorColor = color);
         }
 
         private void SetAmbientGroundTriLightColor()
         {
             SetAmbientColor(AmbientMode.Trilight, AmbientGroundLightHueType, AmbientGroundLightSaturation, AmbientGroundLightValue,
-                ref AmbientGroundLightColor, color => RenderSettings.ambientGroundColor = color);
+                ref AmbientGroundLightColor, RenderSettings.ambientGroundColor, color => RenderSettings.ambientGroundColor = color);
         }
 
         private void SetAmbientColor(AmbientMode requiredMode, HueType hueType, int saturation, int value,
-            ref Color colorRef, System.Action<Color> setter)
+            ref Color colorRef, Color current, Action<Color> setter)
         {
             if (!IsActiveSceneSettings() || !ApplyAmbientLight || RenderSettings.ambientMode != requiredMode)
                 return;
 
             colorRef = ApplyColor(hueType, saturation, value);
-            setter(colorRef);
+            SetRenderSetting(current, colorRef, setter);
         }
 
         public void SetRealtimeShadowColor()
@@ -411,7 +474,7 @@ namespace SOSXR.plet
                 return;
 
             RealtimeShadowColor = ApplyColor(RealtimeShadowHueType, RealtimeShadowSaturation, RealtimeShadowValue);
-            RenderSettings.subtractiveShadowColor = RealtimeShadowColor;
+            SetRenderSetting(RenderSettings.subtractiveShadowColor, RealtimeShadowColor, color => RenderSettings.subtractiveShadowColor = color);
         }
 
         public void SetFogColor()
@@ -420,7 +483,7 @@ namespace SOSXR.plet
                 return;
 
             FogColor = ApplyColor(FogHueType, FogSaturation, FogValue);
-            RenderSettings.fogColor = FogColor;
+            SetRenderSetting(RenderSettings.fogColor, FogColor, color => RenderSettings.fogColor = color);
         }
 
         private void SetSkyboxSkyColor() =>
@@ -438,7 +501,55 @@ namespace SOSXR.plet
                 return;
 
             colorRef = ApplyColor(hueType, saturation, value);
+
+            if (SkyboxMaterial.GetColor(shaderPropertyId) == colorRef)
+                return;
+
             SkyboxMaterial.SetColor(shaderPropertyId, colorRef);
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                EditorUtility.SetDirty(SkyboxMaterial);
+#endif
+        }
+
+        /// <summary>
+        ///     Applies <paramref name="color"/> to a <see cref="RenderSettings"/> value through <paramref name="setter"/>.
+        ///     RenderSettings are saved with the scene, so in edit mode the scene is marked dirty when the value changes.
+        /// </summary>
+        private static void SetRenderSetting(Color current, Color color, Action<Color> setter)
+        {
+            if (current == color)
+                return;
+
+            setter(color);
+            MarkActiveSceneDirty();
+        }
+
+        private void AssignSkyboxMaterial(Material material)
+        {
+            SkyboxMaterial = material;
+
+            if (RenderSettings.skybox == material)
+                return;
+
+            RenderSettings.skybox = material;
+            MarkActiveSceneDirty();
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                EditorUtility.SetDirty(this);
+#endif
+        }
+
+        private static void MarkActiveSceneDirty()
+        {
+#if UNITY_EDITOR
+            if (Application.isPlaying)
+                return;
+
+            var scene = SceneManager.GetActiveScene();
+            if (scene.IsValid())
+                EditorSceneManager.MarkSceneDirty(scene);
+#endif
         }
 
         private bool CanApplySkybox()
@@ -471,16 +582,24 @@ namespace SOSXR.plet
             }
 
             string targetPath = $"{PletHelpers.FolderPath}/{sceneMatName}.mat";
-            var newMat = Instantiate(baseMat);
-            newMat.name = sceneMatName;
 
+            Material newMat = null;
 #if UNITY_EDITOR
-            AssetDatabase.CreateAsset(newMat, targetPath);
-            AssetDatabase.SaveAssets();
-#endif
+            // Never overwrite an existing material (CreateAsset would replace it).
+            newMat = AssetDatabase.LoadAssetAtPath<Material>(targetPath);
 
-            SkyboxMaterial = newMat;
-            RenderSettings.skybox = newMat;
+            if (newMat == null)
+            {
+                newMat = Instantiate(baseMat);
+                newMat.name = sceneMatName;
+                AssetDatabase.CreateAsset(newMat, targetPath);
+                AssetDatabase.SaveAssets();
+            }
+#endif
+            if (newMat == null)
+                return;
+
+            AssignSkyboxMaterial(newMat);
             s_materialCache[sceneMatName] = newMat;
         }
 

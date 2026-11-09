@@ -1,5 +1,4 @@
-﻿using System.IO;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -205,22 +204,29 @@ namespace SOSXR.plet.EditorScripts
             if (GUILayout.Button("Create Palette"))
             {
                 var palette = CreateInstance<Palette>();
-                palette.name = "Palette";
 
-                var assetPath = Path.Combine(PletHelpers.FolderPath, palette.name + ".asset");
+                // Never overwrite an existing palette: pick a free name (Palette.asset, Palette 1.asset, ...).
+                var assetPath = GetNewPaletteAssetPath();
                 AssetDatabase.CreateAsset(palette, assetPath);
                 AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
 
-                var pletSceneSettings = (PletSceneSettings)target;
-                pletSceneSettings.Palette = AssetDatabase.LoadAssetAtPath<Palette>(assetPath);
+                // Assign through the serialized property so it is undoable and marks the asset dirty.
+                _paletteProp.objectReferenceValue = AssetDatabase.LoadAssetAtPath<Palette>(assetPath);
+                serializedObject.ApplyModifiedProperties();
             }
+        }
+
+
+        /// <summary>Returns a free asset path for a new palette in <see cref="PletHelpers.FolderPath"/>.</summary>
+        public static string GetNewPaletteAssetPath()
+        {
+            return AssetDatabase.GenerateUniqueAssetPath($"{PletHelpers.FolderPath}/Palette.asset");
         }
 
 
         private bool IsActiveSceneSettings(PletSceneSettings settings)
         {
-            return PletHelpers.GetPletSceneSettings() == settings;
+            return settings.IsActiveSceneSettings();
         }
 
 

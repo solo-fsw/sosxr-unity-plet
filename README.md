@@ -4,7 +4,7 @@ MOC:
 related:
 tags: []
 date_created: 2025-02-25
-date_modified: 2026-02-26
+date_modified: 2026-11-09
 ---
 
 # Plet: A _Highly_ Opinionated Color Palette Manager for Unity
@@ -42,7 +42,7 @@ For the latest (and possibly unstable) version, you can do any of the above on t
 
 #### Requirements
 
-- TextMeshPro
+- uGUI (`com.unity.ugui` 2.0.0). TextMeshPro ships inside uGUI in Unity 6, so the package installs it as a dependency. The older `com.unity.textmeshpro` package is no longer needed.
 
 ## Architecture
 
@@ -52,8 +52,8 @@ plet's core types form a simple pipeline from design asset to rendered pixel:
 |---|---|---|
 | **`Palette`** | ScriptableObject | Defines exactly three colors: `Base` (~60%), `Tone` (~30%), and `Accent` (~10%). Optionally holds a reference texture for design reference. |
 | **`PletSceneSettings`** | ScriptableObject | The **PaletteHolder** (see Usage below). Lives in a `Resources` folder; links an active `Palette` to a scene and controls optional overrides for skybox, ambient light, realtime shadow, and fog. Either one global instance or one per scene (named exactly after the scene). |
-| **`ColorProvider`** | MonoBehaviour | Added to any GameObject with a supported component (Renderer, Light, Camera, SpriteRenderer, Image, TMP_Text, Text, Selectable, ParticleSystem). Reads the hue from the active `PletSceneSettings` → `Palette`, then applies per-instance saturation and value multipliers. Uses `MaterialPropertyBlock` for Renderers; direct assignment for lights, cameras, and UI. |
-| **`TextureProvider`** | MonoBehaviour | Optional add-on for Renderers. Pre-bakes a set of desaturated texture variants per material slot (via `Desaturate`) and lets you pick a saturation step at runtime. |
+| **`ColorProvider`** | MonoBehaviour | Added to any GameObject with a supported component. The first match wins, in this order: ParticleSystem, TMP_Text, Text, SpriteRenderer, Selectable, Image, Light, Camera, then any other Renderer. Reads the hue from the active `PletSceneSettings` → `Palette`, then applies per-instance saturation and value. Colours are applied in `OnEnable`, so they also show in builds and after runtime `AddComponent`. Uses `MaterialPropertyBlock` for Renderers; direct assignment for lights, cameras, and UI. For cameras, `SetCameraClearFlagsToSolidColor` (on by default) also switches Clear Flags to Solid Color. Turn it off to change only the background colour. |
+| **`TextureProvider`** | MonoBehaviour | Optional add-on for Renderers. Pre-bakes desaturated texture variants (via `Desaturate`) and lets you pick a saturation step at runtime. Each variant is applied through a `MaterialPropertyBlock`, so the material asset on disk is not changed. `MaterialIndex` sets which material slot an entry targets. Generated textures are saved to `Assets/_SOSXR/Resources/Plet/Textures/`. |
 | **`Desaturate`** | Static utility (Editor) | Produces the pre-baked texture variants consumed by `TextureProvider`. |
 
 **Data flow:**
@@ -85,7 +85,7 @@ public class PletExample : MonoBehaviour
         Color baseColor = settings.Palette.Base;
 
         // Option B — derive an adjusted color with saturation/value overrides.
-        // Both saturation and value use a 1–19 display scale (10 = palette default).
+        // Both saturation and value use a 1–19 display scale (10 = palette default). Values outside that range are clamped.
         Color accentAdjusted = settings.ApplyColor(HueType.Accent, saturation: 14, value: 12);
 
         Debug.Log($"Base: {baseColor}  AccentAdjusted: {accentAdjusted}");
@@ -107,7 +107,7 @@ This rule states that you should use 60% of one color, 30% of another, and 10% o
 
 ## Usage
 
-Check out the Samples folder for examples on how to use the different features of this package. plet consists of three main parts: Palettes, PaletteHolders, and ColorProviders.
+Check out the `Samples/Palettes` folder for examples on how to use the different features of this package. plet consists of three main parts: Palettes, PaletteHolders, and ColorProviders.
 
 ### Palette(s)
 
@@ -138,8 +138,11 @@ Further below you have a few checkboxes. Their use is discussed later in more de
 Add the ColorProvider component to all GameObjects that you want to be able to change color on. It currently works on:
 
 - SkinnedMeshRenderers
-- MeshRenderers
+- MeshRenderers (and any other Renderer)
 - ParticleSystems
+- TextMeshPro (3D and UI) and legacy UI Text components
+- SpriteRenderers
+- Image and Selectable components (Button, Toggle, and so on)
 - Light components
 - Camera components
 
@@ -170,12 +173,23 @@ The second option is preferable. This way, you can always go back to the origina
 
 ### Further things to note
 
-When working with Materials: it will not update the material directly, but create an instance of it, and modify that. This is usually useful (and kind of required), it can be a bit of a bummer when the same Material is used in multiple places, and you want to set them all to the same color. In short: you can't, and will have to manually set the ColorProvider to each Renderer. When working with either a Renderer or SkinnedMeshRenderer which has multiple materials, it will grab all materials and allow you to change them. On the left of each 'block' / material (in the ColorChanger) the name of each material will be printed.
+When working with Materials: the colour is written through a `MaterialPropertyBlock`, so the shared Material asset is not changed. Each Renderer gets its own colour, even when several Renderers use the same Material. Each one still needs its own ColorProvider. When working with either a Renderer or SkinnedMeshRenderer which has multiple materials, it will grab all materials and allow you to change them. On the left of each 'block' / material (in the ColorChanger) the name of each material will be printed.
 
 ## Samples and Further Information
 
-The Samples folder holds a couple dozen palette examples, screenshotted from two YouTube videos: [Movie LUTs YouTube](https://www.youtube.com/watch?v=RdAEf6A7WwQ) and [Florent Farges](https://www.youtube.com/watch?v=p0rVUhXnmpY). These are great examples of how you can use palettes to create a consistent look and feel throughout your scene. The videos also give some more information on the how and
+The samples live in `Samples/Palettes` (visible in the project since 0.5.0). To import them, open the Package Manager, select Plet, and use the Samples tab. The samples hold a couple dozen palette examples, screenshotted from two YouTube videos: [Movie LUTs YouTube](https://www.youtube.com/watch?v=RdAEf6A7WwQ) and [Florent Farges](https://www.youtube.com/watch?v=p0rVUhXnmpY). These are great examples of how you can use palettes to create a consistent look and feel throughout your scene. The videos also give some more information on the how and
 why of the 60/30/10 rule.
+
+## Tests
+
+The package has EditMode tests in `Tests/Editor/`, in the assembly `SOSXR.Plet.Tests`. The assembly compiles only when Unity defines `UNITY_INCLUDE_TESTS`, which happens when the Unity Test Framework is installed. To run them, open **Window > General > Test Runner**, select the **EditMode** tab, and press **Run All**.
+
+## Upgrading to 0.5.0
+
+- Plet now depends on `com.unity.ugui` instead of `com.unity.textmeshpro`.
+- Textures generated before 0.5.0 are still found, so they are not regenerated. New textures go to `Assets/_SOSXR/Resources/Plet/Textures/`.
+- `TextureProvider` components saved by an older version have no `MaterialIndex`. Choose **Reinitialize** from the component's context menu to rebuild its settings, especially on renderers with several materials.
+- `ApplyColor` clamps saturation and value to 1–19. It no longer throws for out-of-range values.
 
 ## Specifics
 

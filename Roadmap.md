@@ -13,7 +13,7 @@
 - [x] SpriteRenderers (implemented via Renderer base class)
 - [x] Image components
 - [ ] RawImage components
-- [ ] Text components (legacy UI)
+- [x] Text components (legacy UI)
 - [x] TextMeshPro components
     - [ ] TextMeshPro Dropdown components (partial - needs child setup)
     - [ ] TextMeshPro InputField components

@@ -34,7 +34,7 @@ namespace SOSXR.plet.EditorScripts
         }
 
 
-            public override void OnInspectorGUI()
+        public override void OnInspectorGUI()
         {
             if (_textureProvider == null || _textureSettingsProp == null)
             {
@@ -62,7 +62,9 @@ namespace SOSXR.plet.EditorScripts
                     serializedObject.ApplyModifiedProperties();
 
                     previousIndexProp.intValue = indexProp.intValue;
+                    Undo.RecordObject(_textureProvider, "Change texture saturation");
                     _textureProvider.GetNextTexture();
+                    EditorUtility.SetDirty(_textureProvider);
 
                     currentTextureProp = textureSettingsProp.FindPropertyRelative(nameof(TextureSettings.CurrentTexture));
                 }

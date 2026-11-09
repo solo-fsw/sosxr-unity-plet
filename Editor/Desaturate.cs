@@ -2,21 +2,24 @@ using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 
 namespace SOSXR.plet
 {
     /// <summary>
     ///     Is used to desaturate a texture by a given percentage.
-    ///     It will save the desaturated texture as a new PNG file in the SOSXR Resources folder.
+    ///     It will save the desaturated texture as a new PNG file in <see cref="PletHelpers.TextureFolderPath"/>,
+    ///     which is the same folder <see cref="TextureProvider"/> loads from.
     /// </summary>
     public static class Desaturate
     {
         #if UNITY_EDITOR
         /// <summary>
         ///     Desaturates <paramref name="source"/> to <paramref name="saturationPercentage"/> percent of its original
-        ///     saturation (0 = greyscale, 100 = fully saturated) and saves the result as a PNG in the SOSXR
-        ///     Resources folder. Returns the new asset name (without extension), or <c>null</c> on failure.
+        ///     saturation (0 = greyscale, 100 = fully saturated) and saves the result as a PNG in
+        ///     <see cref="PletHelpers.TextureFolderPath"/>. Returns the Resources path of the new texture
+        ///     (for <c>Resources.Load</c>), or <c>null</c> on failure.
         /// </summary>
         public static string Texture(Texture2D source, int saturationPercentage)
         {
@@ -43,25 +46,32 @@ namespace SOSXR.plet
                 return null;
             }
 
-            if (!Directory.Exists(PletHelpers.FolderPath))
+            var folder = PletHelpers.TextureFolderPath;
+
+            if (!Directory.Exists(folder))
             {
-                Directory.CreateDirectory(PletHelpers.FolderPath);
+                Directory.CreateDirectory(folder);
             }
 
             var filename = Path.GetFileNameWithoutExtension(assetPath);
-            var newFileName = $"{filename}{PletHelpers.Suffix}{saturationPercentage}";
+            var newFileName = PletHelpers.DesaturatedTextureName(filename, saturationPercentage);
 
-            var savePath = $"{PletHelpers.FolderPath}/{newFileName}.png";
+            var savePath = $"{folder}/{newFileName}.png";
 
             var saturation = (float) Math.Round(saturationPercentage / 100f, 1);
             var desaturatedTexture = CalculateDesaturation(source, saturation);
 
-            SaveAsPNG(desaturatedTexture, savePath);
+            var saved = SaveAsPNG(desaturatedTexture, savePath);
+            Object.DestroyImmediate(desaturatedTexture);
+
+            if (!saved)
+            {
+                return null;
+            }
 
             Debug.Log($"Desaturated texture saved to: {savePath}");
-            AssetDatabase.Refresh();
 
-            return newFileName;
+            return PletHelpers.TextureResourcePath(newFileName);
         }
 
 
@@ -86,7 +96,12 @@ namespace SOSXR.plet
         }
 
 
-        private static Texture2D CalculateDesaturation(Texture2D source, float saturation)
+        /// <summary>
+        ///     Returns a new texture where each pixel is blended towards its luminance grey.
+        ///     <paramref name="saturation"/> 1 keeps the source colors, 0 gives greyscale. Alpha is preserved.
+        ///     <paramref name="source"/> must be readable.
+        /// </summary>
+        public static Texture2D CalculateDesaturation(Texture2D source, float saturation)
         {
             if (saturation is < 0 or > 1)
             {
@@ -114,7 +129,7 @@ namespace SOSXR.plet
         }
 
 
-        private static void SaveAsPNG(Texture2D texture, string filePath)
+        private static bool SaveAsPNG(Texture2D texture, string filePath)
         {
             var pngData = texture.EncodeToPNG();
 
@@ -122,11 +137,13 @@ namespace SOSXR.plet
             {
                 Debug.LogError("Failed to encode texture to PNG.");
 
-                return;
+                return false;
             }
 
             File.WriteAllBytes(filePath, pngData);
             AssetDatabase.ImportAsset(filePath);
+
+            return true;
         }
 
 

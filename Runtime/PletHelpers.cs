@@ -14,6 +14,14 @@ namespace SOSXR.plet
         /// <summary>Filename suffix appended to desaturated texture variants (e.g. <c>texture_saturated_50</c>).</summary>
         public static string Suffix => "_saturated_";
 
+        /// <summary>Resources-relative folder for generated desaturated textures (load with <c>Resources.Load</c>).</summary>
+        public const string TextureResourcesFolder = "Plet/Textures";
+
+        /// <summary>Name used for generated assets when the active scene has no name (untitled scene).</summary>
+        public const string UntitledSceneName = "Untitled";
+
+        private static bool s_settingsCreationPending;
+
         private static PletSceneSettings s_cachedSettings;
         private static string s_cachedSceneName;
 
@@ -31,14 +39,36 @@ namespace SOSXR.plet
                 if (!s_folderPathInitialized)
                 {
                     const string path = "Assets/_SOSXR/Resources";
+#if UNITY_EDITOR
                     if (!Directory.Exists(path))
                         Directory.CreateDirectory(path);
+#endif
                     s_folderPath = path;
                     s_folderPathInitialized = true;
                 }
                 return s_folderPath;
             }
         }
+
+        /// <summary>Project path of the folder where desaturated textures are saved (inside <see cref="FolderPath"/>).</summary>
+        public static string TextureFolderPath => $"{FolderPath}/{TextureResourcesFolder}";
+
+        /// <summary>Returns the Resources path (for <c>Resources.Load</c>) of a generated texture called <paramref name="textureName"/>.</summary>
+        public static string TextureResourcePath(string textureName) => $"{TextureResourcesFolder}/{textureName}";
+
+        /// <summary>Returns the asset name of the desaturated variant of <paramref name="baseName"/> at <paramref name="saturationPercentage"/>.</summary>
+        public static string DesaturatedTextureName(string baseName, int saturationPercentage) => $"{baseName}{Suffix}{saturationPercentage}";
+
+        /// <summary>
+        ///     Returns the saturation percentage (0–100) for desaturation step <paramref name="step"/>
+        ///     out of <paramref name="stepCount"/> steps.
+        /// </summary>
+        public static int SaturationPercentageForStep(int step, int stepCount) =>
+            stepCount <= 1 ? 100 : Mathf.RoundToInt((float)step / (stepCount - 1) * 100);
+
+        /// <summary>Returns <paramref name="sceneName"/>, or <see cref="UntitledSceneName"/> when it is null or empty.</summary>
+        public static string GetSafeSceneName(string sceneName) =>
+            string.IsNullOrEmpty(sceneName) ? UntitledSceneName : sceneName;
 
         /// <summary>
         ///     Loads all <see cref="PletSceneSettings"/> assets from every Resources folder.
@@ -102,20 +132,30 @@ namespace SOSXR.plet
         private static void CreatePaletteHolder(PletSceneSettings[] paletteHolders)
         {
 #if UNITY_EDITOR
-            if (paletteHolders.Length != 0)
+            // OnValidate can call this many times in a row. Schedule at most one creation.
+            if (paletteHolders.Length != 0 || s_settingsCreationPending || Application.isPlaying)
                 return;
 
-            Debug.Log($"No PaletteSceneSettings found in any of the Resources folders, will create a new one at {FolderPath}.");
+            s_settingsCreationPending = true;
 
-            string sceneName = SceneManager.GetActiveScene().name;
+            string sceneName = GetSafeSceneName(SceneManager.GetActiveScene().name);
+            string assetPath = $"{FolderPath}/{sceneName}.asset";
+
+            Debug.Log($"No PletSceneSettings found in any of the Resources folders, will create a new one at {assetPath}.");
 
             EditorApplication.delayCall += () =>
             {
+                s_settingsCreationPending = false;
+
+                // Something may have created one in the meantime. Never overwrite an existing asset.
+                if (Resources.LoadAll<PletSceneSettings>("").Length != 0 ||
+                    AssetDatabase.LoadAssetAtPath<PletSceneSettings>(assetPath) != null)
+                    return;
+
                 var pletSceneSettings = ScriptableObject.CreateInstance<PletSceneSettings>();
-                string assetPath = Path.Combine(FolderPath, $"{sceneName}.asset");
-                AssetDatabase.CreateAsset(pletSceneSettings, assetPath);
+                AssetDatabase.CreateAsset(pletSceneSettings, AssetDatabase.GenerateUniqueAssetPath(assetPath));
                 AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
+                InvalidateCache();
             };
 #endif
         }
@@ -141,12 +181,12 @@ namespace SOSXR.plet
         public HueType HueType;
 
         /// <summary>Saturation multiplier on a 1–19 display scale (10 = palette default; maps linearly to HSV 0.0075–1.0).</summary>
-        public int Saturation;
+        public int Saturation = 10;
         /// <summary>Brightness (HSV value) multiplier on a 1–19 display scale (10 = palette default; maps linearly to HSV 0.0075–1.0).</summary>
-        public int Value;
+        public int Value = 10;
         public bool ShowAlpha = true;
         public float Alpha = 1f;
-        public Color FinalColor;
+        public Color FinalColor = Color.white;
     }
 
     /// <summary>
@@ -177,10 +217,12 @@ namespace SOSXR.plet
     public sealed class TextureSettings
     {
         public string MaterialName;
+        /// <summary>Index of the material slot on the renderer this entry belongs to.</summary>
+        public int MaterialIndex;
         /// <summary>Current saturation step index into <see cref="TextureNames"/> (0 = fully desaturated, max = fully saturated).</summary>
         public int Index = TextureProvider.TextureSaturationSteps - 1;
         public int PreviousIndex;
-        /// <summary>Resource names of all pre-generated desaturation-step textures, produced by <see cref="Desaturate"/>.</summary>
+        /// <summary>Resources paths of all pre-generated desaturation-step textures (index 0 = greyscale).</summary>
         public string[] TextureNames = new string[TextureProvider.TextureSaturationSteps];
 
         [TexturePreview(100)] public Texture2D CurrentTexture;
