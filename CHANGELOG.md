@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 The changelog format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## [Unreleased]
+
+### Fixed
+
+- `PletSceneSettings` uses a user-assigned `SkyboxMaterial`. A per-scene `{scene}_plet_skybox` material is generated only when the field is empty, or holds a generated material of another scene; before, the user's material was tinted and then replaced.
+- In Play mode the skybox colours are applied to a runtime copy of `SkyboxMaterial`, so the material asset is not changed.
+- Desaturated texture variants include the first 8 characters of the source texture's asset GUID (e.g. `wood_1a2b3c4d_saturated_50`). Same-named textures in different folders no longer overwrite each other in `Resources/Plet/Textures/`. Providers that are already initialized keep their stored paths; new or reinitialized providers generate variants under the new names, and old-named variants are not reused.
+
+### Documentation
+
+- Saturation and Value sliders (1–19) map to absolute HSV 0.0075–1.0 (10 ≈ 0.5). The docs said "10 = palette default", which was wrong. Use "Get Palette Saturation and Value" to match the palette colour.
+
+### Added
+
+- `PletHelpers.DesaturatedTextureBaseName(Texture2D)` and `PletHelpers.DesaturatedTextureBaseName(string, string)`.
+- `PletSceneSettings.IsGeneratedSkyboxMaterialName(string)`.
+
 ## [0.5.0] - 2026-11-09
 
 ### Changed

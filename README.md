@@ -53,7 +53,7 @@ plet's core types form a simple pipeline from design asset to rendered pixel:
 | **`Palette`** | ScriptableObject | Defines exactly three colors: `Base` (~60%), `Tone` (~30%), and `Accent` (~10%). Optionally holds a reference texture for design reference. |
 | **`PletSceneSettings`** | ScriptableObject | The **PaletteHolder** (see Usage below). Lives in a `Resources` folder; links an active `Palette` to a scene and controls optional overrides for skybox, ambient light, realtime shadow, and fog. Either one global instance or one per scene (named exactly after the scene). |
 | **`ColorProvider`** | MonoBehaviour | Added to any GameObject with a supported component. The first match wins, in this order: ParticleSystem, TMP_Text, Text, SpriteRenderer, Selectable, Image, Light, Camera, then any other Renderer. Reads the hue from the active `PletSceneSettings` → `Palette`, then applies per-instance saturation and value. Colours are applied in `OnEnable`, so they also show in builds and after runtime `AddComponent`. Uses `MaterialPropertyBlock` for Renderers; direct assignment for lights, cameras, and UI. For cameras, `SetCameraClearFlagsToSolidColor` (on by default) also switches Clear Flags to Solid Color. Turn it off to change only the background colour. |
-| **`TextureProvider`** | MonoBehaviour | Optional add-on for Renderers. Pre-bakes desaturated texture variants (via `Desaturate`) and lets you pick a saturation step at runtime. Each variant is applied through a `MaterialPropertyBlock`, so the material asset on disk is not changed. `MaterialIndex` sets which material slot an entry targets. Generated textures are saved to `Assets/_SOSXR/Resources/Plet/Textures/`. |
+| **`TextureProvider`** | MonoBehaviour | Optional add-on for Renderers. Pre-bakes desaturated texture variants (via `Desaturate`) and lets you pick a saturation step at runtime. Each variant is applied through a `MaterialPropertyBlock`, so the material asset on disk is not changed. `MaterialIndex` sets which material slot an entry targets. Generated textures are saved to `Assets/_SOSXR/Resources/Plet/Textures/` as `{name}_{guid8}_saturated_{percent}`; the source GUID prefix keeps same-named textures apart. |
 | **`Desaturate`** | Static utility (Editor) | Produces the pre-baked texture variants consumed by `TextureProvider`. |
 
 **Data flow:**
@@ -85,7 +85,7 @@ public class PletExample : MonoBehaviour
         Color baseColor = settings.Palette.Base;
 
         // Option B — derive an adjusted color with saturation/value overrides.
-        // Both saturation and value use a 1–19 display scale (10 = palette default). Values outside that range are clamped.
+        // Both saturation and value use a 1–19 display scale that maps to absolute HSV 0.0075–1.0 (10 ≈ 0.5). Values outside that range are clamped.
         Color accentAdjusted = settings.ApplyColor(HueType.Accent, saturation: 14, value: 12);
 
         Debug.Log($"Base: {baseColor}  AccentAdjusted: {accentAdjusted}");
@@ -187,7 +187,8 @@ The package has EditMode tests in `Tests/Editor/`, in the assembly `SOSXR.Plet.T
 ## Upgrading to 0.5.0
 
 - Plet now depends on `com.unity.ugui` instead of `com.unity.textmeshpro`.
-- Textures generated before 0.5.0 are still found, so they are not regenerated. New textures go to `Assets/_SOSXR/Resources/Plet/Textures/`.
+- New textures go to `Assets/_SOSXR/Resources/Plet/Textures/`.
+- Generated texture names now include a short source GUID prefix. `TextureProvider` components that are already initialized keep their stored paths and keep working. A new or reinitialized provider generates its variants again under the new names; old-named variants are not reused and can be deleted.
 - `TextureProvider` components saved by an older version have no `MaterialIndex`. Choose **Reinitialize** from the component's context menu to rebuild its settings, especially on renderers with several materials.
 - `ApplyColor` clamps saturation and value to 1–19. It no longer throws for out-of-range values.
 

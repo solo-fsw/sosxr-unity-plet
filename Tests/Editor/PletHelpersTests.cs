@@ -30,6 +30,24 @@ namespace SOSXR.plet.Tests
         }
 
         [Test]
+        public void DesaturatedTextureBaseName_AddsGuidPrefix_SoSameNamedTexturesDoNotCollide()
+        {
+            // Regression: variants were keyed by texture name only, in one flat folder.
+            string a = PletHelpers.DesaturatedTextureBaseName("wood", "1a2b3c4d5e6f77889900aabbccddeeff");
+            string b = PletHelpers.DesaturatedTextureBaseName("wood", "ffeeddccbbaa00998877f6e5d4c3b2a1");
+
+            Assert.That(a, Is.EqualTo("wood_1a2b3c4d"));
+            Assert.That(a, Is.Not.EqualTo(b));
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        public void DesaturatedTextureBaseName_WithoutGuid_ReturnsTextureName(string guid)
+        {
+            Assert.That(PletHelpers.DesaturatedTextureBaseName("wood", guid), Is.EqualTo("wood"));
+        }
+
+        [Test]
         public void SaturationPercentageForStep_CoversZeroToHundred()
         {
             int steps = TextureProvider.TextureSaturationSteps;

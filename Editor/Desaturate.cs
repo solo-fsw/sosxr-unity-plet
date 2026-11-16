@@ -53,8 +53,9 @@ namespace SOSXR.plet
                 Directory.CreateDirectory(folder);
             }
 
-            var filename = Path.GetFileNameWithoutExtension(assetPath);
-            var newFileName = PletHelpers.DesaturatedTextureName(filename, saturationPercentage);
+            // Include the source GUID: all variants share one flat folder, so same-named textures must not collide.
+            var baseName = PletHelpers.DesaturatedTextureBaseName(source);
+            var newFileName = PletHelpers.DesaturatedTextureName(baseName, saturationPercentage);
 
             var savePath = $"{folder}/{newFileName}.png";
 

@@ -27,6 +27,24 @@ namespace SOSXR.plet.Tests
             PletTestUtility.AssertColorsEqual(PletTestUtility.BaseColor, color);
         }
 
+        [Test]
+        public void ApplyColor_ForUnsaturatedPaletteColor_IsAbsoluteAndMatchesPaletteAtItsOwnSV()
+        {
+            // Saturation/Value are absolute HSV on the 1–19 scale, not relative to the palette colour.
+            var paletteColor = Color.HSVToRGB(0.6f, 0.3f, 0.8f);
+            _settings.Palette.Tone = paletteColor;
+
+            var sv = _settings.GetColorSV(HueType.Tone);
+            Assert.That(sv, Is.Not.EqualTo(new Vector2Int(10, 10)));
+
+            // One display step is ~0.055 HSV, so allow for rounding to the nearest step.
+            PletTestUtility.AssertColorsEqual(paletteColor, _settings.ApplyColor(HueType.Tone, sv.x, sv.y), 0.06f);
+
+            Color.RGBToHSV(_settings.ApplyColor(HueType.Tone, 10, 10), out _, out float s, out float v);
+            Assert.That(s, Is.EqualTo(0.50375f).Within(0.001f));
+            Assert.That(v, Is.EqualTo(0.50375f).Within(0.001f));
+        }
+
         [TestCase(HueType.Base)]
         [TestCase(HueType.Tone)]
         [TestCase(HueType.Accent)]
@@ -92,5 +110,14 @@ namespace SOSXR.plet.Tests
             Assert.That(PletSceneSettings.GetSkyboxMaterialName(""), Is.EqualTo("Untitled_plet_skybox"));
             Assert.That(PletSceneSettings.GetSkyboxMaterialName("MyScene"), Is.EqualTo("MyScene_plet_skybox"));
         }
+
+        [TestCase("MyScene_plet_skybox", ExpectedResult = true)]
+        [TestCase("Untitled_plet_skybox", ExpectedResult = true)]
+        [TestCase("MyOwnSkybox", ExpectedResult = false)]
+        [TestCase("", ExpectedResult = false)]
+        [TestCase(null, ExpectedResult = false)]
+        public bool IsGeneratedSkyboxMaterialName_OnlyMatchesGeneratedNames(string materialName) =>
+            // A user-assigned skybox material (any other name) is used as is and never replaced.
+            PletSceneSettings.IsGeneratedSkyboxMaterialName(materialName);
     }
 }

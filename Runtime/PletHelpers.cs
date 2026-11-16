@@ -59,6 +59,37 @@ namespace SOSXR.plet
         /// <summary>Returns the asset name of the desaturated variant of <paramref name="baseName"/> at <paramref name="saturationPercentage"/>.</summary>
         public static string DesaturatedTextureName(string baseName, int saturationPercentage) => $"{baseName}{Suffix}{saturationPercentage}";
 
+        /// <summary>Number of asset GUID characters added to generated texture names (see <see cref="DesaturatedTextureBaseName(string, string)"/>).</summary>
+        public const int TextureGuidPrefixLength = 8;
+
+        /// <summary>
+        ///     Returns the base name for the desaturated variants of <paramref name="textureName"/>: the name plus the first
+        ///     <see cref="TextureGuidPrefixLength"/> characters of <paramref name="assetGuid"/> (e.g. <c>wood_1a2b3c4d</c>).
+        ///     All variants share one flat folder, so the GUID keeps same-named textures from different folders apart.
+        ///     Returns <paramref name="textureName"/> unchanged when <paramref name="assetGuid"/> is null or empty.
+        /// </summary>
+        public static string DesaturatedTextureBaseName(string textureName, string assetGuid) =>
+            string.IsNullOrEmpty(assetGuid)
+                ? textureName
+                : $"{textureName}_{assetGuid.Substring(0, Math.Min(TextureGuidPrefixLength, assetGuid.Length))}";
+
+        /// <summary>
+        ///     Returns the base name for the desaturated variants of <paramref name="texture"/>. In the editor this includes
+        ///     a short prefix of the texture's asset GUID; for textures that are not assets (and in builds) it is the texture name.
+        /// </summary>
+        public static string DesaturatedTextureBaseName(Texture2D texture)
+        {
+            if (texture == null) return null;
+
+            string guid = null;
+#if UNITY_EDITOR
+            string assetPath = AssetDatabase.GetAssetPath(texture);
+            if (!string.IsNullOrEmpty(assetPath))
+                guid = AssetDatabase.AssetPathToGUID(assetPath);
+#endif
+            return DesaturatedTextureBaseName(texture.name, guid);
+        }
+
         /// <summary>
         ///     Returns the saturation percentage (0–100) for desaturation step <paramref name="step"/>
         ///     out of <paramref name="stepCount"/> steps.
@@ -164,28 +195,42 @@ namespace SOSXR.plet
     /// <summary>Identifies which of the three palette colors to use for a color slot.</summary>
     public enum HueType
     {
+        /// <summary>The base palette color.</summary>
         Base,
+        /// <summary>The tone palette color.</summary>
         Tone,
+        /// <summary>The accent palette color.</summary>
         Accent
     }
 
     /// <summary>
     ///     Serializable per-slot color configuration used by <see cref="ColorProvider"/>.
-    ///     Tracks the chosen hue type, saturation/value on a 1–19 display scale (10 = palette default),
+    ///     Tracks the chosen hue type, saturation/value on a 1–19 display scale (absolute HSV, not relative to the palette colour),
     ///     alpha, and the resolved final color.
     /// </summary>
     [Serializable]
     public sealed class ColorSettings
     {
+        /// <summary>Display name of this color slot.</summary>
         public string Name;
+        /// <summary>The palette color (Base, Tone or Accent) this slot is derived from.</summary>
         public HueType HueType;
 
-        /// <summary>Saturation multiplier on a 1–19 display scale (10 = palette default; maps linearly to HSV 0.0075–1.0).</summary>
+        /// <summary>
+        ///     Saturation on a 1–19 display scale; maps linearly to absolute HSV saturation 0.0075–1.0 (10 ≈ 0.5).
+        ///     Use "Get Palette Saturation and Value" to match the palette colour's own saturation.
+        /// </summary>
         public int Saturation = 10;
-        /// <summary>Brightness (HSV value) multiplier on a 1–19 display scale (10 = palette default; maps linearly to HSV 0.0075–1.0).</summary>
+        /// <summary>
+        ///     Brightness on a 1–19 display scale; maps linearly to absolute HSV value 0.0075–1.0 (10 ≈ 0.5).
+        ///     Use "Get Palette Saturation and Value" to match the palette colour's own value.
+        /// </summary>
         public int Value = 10;
+        /// <summary>Whether the alpha value is shown for this slot.</summary>
         public bool ShowAlpha = true;
+        /// <summary>Alpha (opacity) of the resolved color, from 0 to 1.</summary>
         public float Alpha = 1f;
+        /// <summary>The resolved color for this slot.</summary>
         public Color FinalColor = Color.white;
     }
 
@@ -195,7 +240,9 @@ namespace SOSXR.plet
     /// </summary>
     public static class Saturation
     {
+        /// <summary>The editor display range (1 to 19) of saturation sliders.</summary>
         public static readonly Vector2Int DisplayRange = new(1, 19);
+        /// <summary>The HSV saturation range that the display range maps to (0.0075 to 1).</summary>
         public static readonly Vector2 Clamp = new(0.0075f, 1.0f);
     }
 
@@ -205,7 +252,9 @@ namespace SOSXR.plet
     /// </summary>
     public static class Value
     {
+        /// <summary>The editor display range (1 to 19) of value (brightness) sliders.</summary>
         public static readonly Vector2Int DisplayRange = new(1, 19);
+        /// <summary>The HSV value range that the display range maps to (0.0075 to 1).</summary>
         public static readonly Vector2 Clamp = new(0.0075f, 1.0f);
     }
 
@@ -216,15 +265,18 @@ namespace SOSXR.plet
     [Serializable]
     public sealed class TextureSettings
     {
+        /// <summary>Name of the material in the slot this entry belongs to.</summary>
         public string MaterialName;
         /// <summary>Index of the material slot on the renderer this entry belongs to.</summary>
         public int MaterialIndex;
         /// <summary>Current saturation step index into <see cref="TextureNames"/> (0 = fully desaturated, max = fully saturated).</summary>
         public int Index = TextureProvider.TextureSaturationSteps - 1;
+        /// <summary>The <see cref="Index"/> value that was last applied, used to detect changes.</summary>
         public int PreviousIndex;
         /// <summary>Resources paths of all pre-generated desaturation-step textures (index 0 = greyscale).</summary>
         public string[] TextureNames = new string[TextureProvider.TextureSaturationSteps];
 
+        /// <summary>The texture currently applied to this slot.</summary>
         [TexturePreview(100)] public Texture2D CurrentTexture;
     }
 }

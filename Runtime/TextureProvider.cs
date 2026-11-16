@@ -17,6 +17,7 @@ namespace SOSXR.plet
     [RequireComponent(typeof(Renderer))]
     public sealed class TextureProvider : MonoBehaviour
     {
+        /// <summary>The per-material-slot texture settings of this renderer. Filled by <see cref="Initialize"/> and serialized with the component.</summary>
         public List<TextureSettings> TextureSettings = new(1);
 
         [HideInInspector][SerializeField] private bool _init;
@@ -27,6 +28,7 @@ namespace SOSXR.plet
         private static readonly int s_baseMapId = Shader.PropertyToID("_BaseMap");
         private static readonly int s_mainTexId = Shader.PropertyToID("_MainTex");
 
+        /// <summary>Number of desaturation steps generated per texture, from greyscale (index 0) to fully saturated (last index).</summary>
         public const int TextureSaturationSteps = 11;
 
         /// <summary>
@@ -221,7 +223,8 @@ namespace SOSXR.plet
                 return Array.Empty<string>();
             }
 
-            var existing = FindExistingDesaturatedTextures(currentTexture.name, TextureLoader);
+            // Variants are keyed by name plus asset GUID prefix, the same name Desaturate.Texture saves them under.
+            var existing = FindExistingDesaturatedTextures(PletHelpers.DesaturatedTextureBaseName(currentTexture), TextureLoader);
             if (existing != null) return existing;
 
             if (DesaturateTexture == null)
@@ -261,6 +264,7 @@ namespace SOSXR.plet
         /// <summary>
         ///     Returns the Resources paths of all <see cref="TextureSaturationSteps"/> desaturated variants of
         ///     <paramref name="textureName"/> if every one of them already exists, otherwise null.
+        ///     Pass <see cref="PletHelpers.DesaturatedTextureBaseName(Texture2D)"/> to match the names <c>Desaturate.Texture</c> generates.
         ///     Looks in <see cref="PletHelpers.TextureResourcesFolder"/> first, then in the Resources root
         ///     (where versions before 0.5.0 saved them).
         /// </summary>

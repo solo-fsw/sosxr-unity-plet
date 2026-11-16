@@ -30,31 +30,35 @@ namespace SOSXR.plet
         /// <summary>Whether to apply skybox material and color overrides for this scene.</summary>
         [Header("Skybox Settings")]
         public bool ApplySkybox = false;
-        /// <summary>Skybox material instance to assign and tint when <see cref="ApplySkybox"/> is enabled.</summary>
+        /// <summary>
+        ///     Skybox material to assign and tint when <see cref="ApplySkybox"/> is enabled.
+        ///     When left empty, a per-scene material is generated from the base plet skybox and assigned here.
+        ///     In Play mode a runtime copy is tinted, so the material asset is not changed.
+        /// </summary>
         public Material SkyboxMaterial;
         /// <summary>Palette hue used for the sky portion of the skybox.</summary>
         public HueType SkyboxSkyHueType;
-        /// <summary>Sky saturation on a 1–19 display scale (10 = palette default).</summary>
+        /// <summary>Sky saturation on a 1–19 display scale (absolute HSV; use the Get…SVFromPalette button to match the palette).</summary>
         public int SkyboxSkySaturation = 10;
-        /// <summary>Sky brightness/value on a 1–19 display scale (10 = palette default).</summary>
+        /// <summary>Sky brightness/value on a 1–19 display scale (absolute HSV; use the Get…SVFromPalette button to match the palette).</summary>
         public int SkyboxSkyValue = 10;
         /// <summary>Resolved skybox sky color currently applied (cached for inspector preview).</summary>
         public Color SkyboxSkyColor;
 
         /// <summary>Palette hue used for the horizon portion of the skybox.</summary>
         public HueType SkyboxHorizonHueType;
-        /// <summary>Horizon saturation on a 1–19 display scale (10 = palette default).</summary>
+        /// <summary>Horizon saturation on a 1–19 display scale (absolute HSV; use the Get…SVFromPalette button to match the palette).</summary>
         public int SkyboxHorizonSaturation = 10;
-        /// <summary>Horizon brightness/value on a 1–19 display scale (10 = palette default).</summary>
+        /// <summary>Horizon brightness/value on a 1–19 display scale (absolute HSV; use the Get…SVFromPalette button to match the palette).</summary>
         public int SkyboxHorizonValue = 10;
         /// <summary>Resolved skybox horizon color currently applied (cached for inspector preview).</summary>
         public Color SkyboxHorizonColor;
 
         /// <summary>Palette hue used for the ground portion of the skybox.</summary>
         public HueType SkyboxGroundHueType;
-        /// <summary>Ground saturation on a 1–19 display scale (10 = palette default).</summary>
+        /// <summary>Ground saturation on a 1–19 display scale (absolute HSV; use the Get…SVFromPalette button to match the palette).</summary>
         public int SkyboxGroundSaturation = 10;
-        /// <summary>Ground brightness/value on a 1–19 display scale (10 = palette default).</summary>
+        /// <summary>Ground brightness/value on a 1–19 display scale (absolute HSV; use the Get…SVFromPalette button to match the palette).</summary>
         public int SkyboxGroundValue = 10;
         /// <summary>Resolved skybox ground color currently applied (cached for inspector preview).</summary>
         public Color SkyboxGroundColor;
@@ -67,36 +71,36 @@ namespace SOSXR.plet
 
         /// <summary>Palette hue used for flat ambient light (or the sky contribution in tri-light mode).</summary>
         public HueType AmbientLightHueType;
-        /// <summary>Ambient light saturation on a 1–19 display scale (10 = palette default).</summary>
+        /// <summary>Ambient light saturation on a 1–19 display scale (absolute HSV; use the Get…SVFromPalette button to match the palette).</summary>
         public int AmbientLightSaturation = 10;
-        /// <summary>Ambient light brightness/value on a 1–19 display scale (10 = palette default).</summary>
+        /// <summary>Ambient light brightness/value on a 1–19 display scale (absolute HSV; use the Get…SVFromPalette button to match the palette).</summary>
         public int AmbientLightValue = 10;
         /// <summary>Resolved ambient light color currently applied to <see cref="RenderSettings.ambientLight"/>.</summary>
         public Color AmbientLightColor;
 
         /// <summary>Palette hue used for the sky ambient contribution in tri-light mode.</summary>
         public HueType AmbientSkyLightHueType;
-        /// <summary>Ambient sky saturation on a 1–19 display scale (10 = palette default).</summary>
+        /// <summary>Ambient sky saturation on a 1–19 display scale (absolute HSV; use the Get…SVFromPalette button to match the palette).</summary>
         public int AmbientSkyLightSaturation = 10;
-        /// <summary>Ambient sky brightness/value on a 1–19 display scale (10 = palette default).</summary>
+        /// <summary>Ambient sky brightness/value on a 1–19 display scale (absolute HSV; use the Get…SVFromPalette button to match the palette).</summary>
         public int AmbientSkyLightValue = 10;
         /// <summary>Resolved ambient sky color currently applied to <see cref="RenderSettings.ambientSkyColor"/>.</summary>
         public Color AmbientSkyLightColor;
 
         /// <summary>Palette hue used for the equator ambient contribution in tri-light mode.</summary>
         public HueType AmbientEquatorLightHueType;
-        /// <summary>Ambient equator saturation on a 1–19 display scale (10 = palette default).</summary>
+        /// <summary>Ambient equator saturation on a 1–19 display scale (absolute HSV; use the Get…SVFromPalette button to match the palette).</summary>
         public int AmbientEquatorLightSaturation = 10;
-        /// <summary>Ambient equator brightness/value on a 1–19 display scale (10 = palette default).</summary>
+        /// <summary>Ambient equator brightness/value on a 1–19 display scale (absolute HSV; use the Get…SVFromPalette button to match the palette).</summary>
         public int AmbientEquatorLightValue = 10;
         /// <summary>Resolved ambient equator color currently applied to <see cref="RenderSettings.ambientEquatorColor"/>.</summary>
         public Color AmbientEquatorLightColor;
 
         /// <summary>Palette hue used for the ground ambient contribution in tri-light mode.</summary>
         public HueType AmbientGroundLightHueType;
-        /// <summary>Ambient ground saturation on a 1–19 display scale (10 = palette default).</summary>
+        /// <summary>Ambient ground saturation on a 1–19 display scale (absolute HSV; use the Get…SVFromPalette button to match the palette).</summary>
         public int AmbientGroundLightSaturation = 10;
-        /// <summary>Ambient ground brightness/value on a 1–19 display scale (10 = palette default).</summary>
+        /// <summary>Ambient ground brightness/value on a 1–19 display scale (absolute HSV; use the Get…SVFromPalette button to match the palette).</summary>
         public int AmbientGroundLightValue = 10;
         /// <summary>Resolved ambient ground color currently applied to <see cref="RenderSettings.ambientGroundColor"/>.</summary>
         public Color AmbientGroundLightColor;
@@ -108,9 +112,9 @@ namespace SOSXR.plet
         public bool ApplyRealtimeShadows = false;
         /// <summary>Palette hue used for the realtime/subtractive shadow color override.</summary>
         public HueType RealtimeShadowHueType;
-        /// <summary>Shadow saturation on a 1–19 display scale (10 = palette default).</summary>
+        /// <summary>Shadow saturation on a 1–19 display scale (absolute HSV; use the Get…SVFromPalette button to match the palette).</summary>
         public int RealtimeShadowSaturation = 10;
-        /// <summary>Shadow brightness/value on a 1–19 display scale (10 = palette default).</summary>
+        /// <summary>Shadow brightness/value on a 1–19 display scale (absolute HSV; use the Get…SVFromPalette button to match the palette).</summary>
         public int RealtimeShadowValue = 10;
         /// <summary>Resolved shadow color currently applied to <see cref="RenderSettings.subtractiveShadowColor"/>.</summary>
         public Color RealtimeShadowColor;
@@ -122,9 +126,9 @@ namespace SOSXR.plet
         public bool ApplyFog = false;
         /// <summary>Palette hue used for the fog color override.</summary>
         public HueType FogHueType;
-        /// <summary>Fog saturation on a 1–19 display scale (10 = palette default).</summary>
+        /// <summary>Fog saturation on a 1–19 display scale (absolute HSV; use the Get…SVFromPalette button to match the palette).</summary>
         public int FogSaturation = 10;
-        /// <summary>Fog brightness/value on a 1–19 display scale (10 = palette default).</summary>
+        /// <summary>Fog brightness/value on a 1–19 display scale (absolute HSV; use the Get…SVFromPalette button to match the palette).</summary>
         public int FogValue = 10;
         /// <summary>Resolved fog color currently applied to <see cref="RenderSettings.fogColor"/>.</summary>
         public Color FogColor;
@@ -139,6 +143,8 @@ namespace SOSXR.plet
 
         [HideInInspector][SerializeField] private Palette _previousPalette;
         private ColorProvider[] _allColorProviders;
+        [NonSerialized] private Material _runtimeSkyboxMaterial;
+        [NonSerialized] private Material _runtimeSkyboxSource;
         #endregion
 
         #region Unity Lifecycle
@@ -285,8 +291,14 @@ namespace SOSXR.plet
 
             string sceneMatName = GetSkyboxMaterialName(SceneManager.GetActiveScene().name);
 
-            if (SkyboxMaterial != null && RenderSettings.skybox == SkyboxMaterial)
+            // A material assigned by the user always wins; only use a generated per-scene material when none is set.
+            // A material generated for another scene (one settings asset shared by several scenes) is replaced.
+            if (SkyboxMaterial != null &&
+                (SkyboxMaterial.name == sceneMatName || !IsGeneratedSkyboxMaterialName(SkyboxMaterial.name)))
+            {
+                ApplySkyboxToRenderSettings();
                 return;
+            }
 
             Material sceneMat;
             if (!s_materialCache.TryGetValue(sceneMatName, out sceneMat))
@@ -319,10 +331,20 @@ namespace SOSXR.plet
 
         /// <summary>Returns the name of the generated per-scene skybox material for <paramref name="sceneName"/>.</summary>
         public static string GetSkyboxMaterialName(string sceneName) =>
-            $"{PletHelpers.GetSafeSceneName(sceneName)}_plet_skybox";
+            $"{PletHelpers.GetSafeSceneName(sceneName)}{GeneratedSkyboxSuffix}";
+
+        /// <summary>Returns <c>true</c> if <paramref name="materialName"/> is a name made by <see cref="GetSkyboxMaterialName"/>.</summary>
+        public static bool IsGeneratedSkyboxMaterialName(string materialName) =>
+            !string.IsNullOrEmpty(materialName) && materialName.EndsWith(GeneratedSkyboxSuffix, StringComparison.Ordinal);
+
+        private const string GeneratedSkyboxSuffix = "_plet_skybox";
         #endregion
 
         #region Button Methods
+        /// <summary>
+        ///     Sets the saturation and value of every <see cref="ColorProvider"/> in the scene to match its palette color.
+        ///     Inspector button; does nothing unless this is the active scene settings.
+        /// </summary>
         [Button]
         public void GetColorProvidersSVFromPalette()
         {
@@ -349,6 +371,10 @@ namespace SOSXR.plet
             }
         }
 
+        /// <summary>
+        ///     Sets the sky, horizon and ground saturation and value from the palette, then reapplies the skybox and lights.
+        ///     Inspector button.
+        /// </summary>
         [Button]
         public void GetSkyboxSVFromPalette()
         {
@@ -363,6 +389,10 @@ namespace SOSXR.plet
             SetAllSkyboxAndLights();
         }
 
+        /// <summary>
+        ///     Sets the flat and tri-light ambient saturation and value from the palette, then reapplies the skybox and lights.
+        ///     Inspector button.
+        /// </summary>
         [Button]
         public void GetAmbientLightSVFromPalette()
         {
@@ -378,6 +408,10 @@ namespace SOSXR.plet
             SetAllSkyboxAndLights();
         }
 
+        /// <summary>
+        ///     Sets the realtime shadow saturation and value from the palette, then reapplies the skybox and lights.
+        ///     Inspector button.
+        /// </summary>
         [Button]
         public void GetRealtimeShadowSVFromPalette()
         {
@@ -390,6 +424,10 @@ namespace SOSXR.plet
             SetAllSkyboxAndLights();
         }
 
+        /// <summary>
+        ///     Sets the fog saturation and value from the palette, then reapplies the skybox and lights.
+        ///     Inspector button.
+        /// </summary>
         [Button]
         public void GetFogSVFromPalette()
         {
@@ -468,6 +506,10 @@ namespace SOSXR.plet
             SetRenderSetting(current, colorRef, setter);
         }
 
+        /// <summary>
+        ///     Resolves the realtime shadow color from the palette and applies it to <see cref="RenderSettings.subtractiveShadowColor"/>.
+        ///     Does nothing unless this is the active scene settings and <see cref="ApplyRealtimeShadows"/> is enabled.
+        /// </summary>
         public void SetRealtimeShadowColor()
         {
             if (!IsActiveSceneSettings() || !ApplyRealtimeShadows)
@@ -477,6 +519,10 @@ namespace SOSXR.plet
             SetRenderSetting(RenderSettings.subtractiveShadowColor, RealtimeShadowColor, color => RenderSettings.subtractiveShadowColor = color);
         }
 
+        /// <summary>
+        ///     Resolves the fog color from the palette and applies it to <see cref="RenderSettings.fogColor"/>.
+        ///     Does nothing unless this is the active scene settings and <see cref="ApplyFog"/> is enabled.
+        /// </summary>
         public void SetFogColor()
         {
             if (!IsActiveSceneSettings() || !ApplyFog)
@@ -502,13 +548,16 @@ namespace SOSXR.plet
 
             colorRef = ApplyColor(hueType, saturation, value);
 
-            if (SkyboxMaterial.GetColor(shaderPropertyId) == colorRef)
+            // In Play mode this is a runtime copy, so the material asset is not changed.
+            var material = GetSkyboxMaterialToTint();
+
+            if (material.GetColor(shaderPropertyId) == colorRef)
                 return;
 
-            SkyboxMaterial.SetColor(shaderPropertyId, colorRef);
+            material.SetColor(shaderPropertyId, colorRef);
 #if UNITY_EDITOR
             if (!Application.isPlaying)
-                EditorUtility.SetDirty(SkyboxMaterial);
+                EditorUtility.SetDirty(material);
 #endif
         }
 
@@ -527,17 +576,52 @@ namespace SOSXR.plet
 
         private void AssignSkyboxMaterial(Material material)
         {
-            SkyboxMaterial = material;
+            if (SkyboxMaterial != material)
+            {
+                SkyboxMaterial = material;
+#if UNITY_EDITOR
+                if (!Application.isPlaying)
+                    EditorUtility.SetDirty(this);
+#endif
+            }
 
-            if (RenderSettings.skybox == material)
+            ApplySkyboxToRenderSettings();
+        }
+
+        private void ApplySkyboxToRenderSettings()
+        {
+            var skybox = GetSkyboxMaterialToTint();
+
+            if (skybox == null || RenderSettings.skybox == skybox)
                 return;
 
-            RenderSettings.skybox = material;
+            RenderSettings.skybox = skybox;
             MarkActiveSceneDirty();
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-                EditorUtility.SetDirty(this);
-#endif
+        }
+
+        /// <summary>
+        ///     Returns <see cref="SkyboxMaterial"/> in edit mode. In Play mode returns a runtime copy of it,
+        ///     so tinting never changes the material asset on disk.
+        /// </summary>
+        private Material GetSkyboxMaterialToTint()
+        {
+            if (SkyboxMaterial == null || !Application.isPlaying)
+                return SkyboxMaterial;
+
+            if (_runtimeSkyboxMaterial == null || _runtimeSkyboxSource != SkyboxMaterial)
+            {
+                if (_runtimeSkyboxMaterial != null)
+                    Destroy(_runtimeSkyboxMaterial);
+
+                _runtimeSkyboxMaterial = new Material(SkyboxMaterial)
+                {
+                    name = $"{SkyboxMaterial.name} (plet runtime)",
+                    hideFlags = HideFlags.DontSave
+                };
+                _runtimeSkyboxSource = SkyboxMaterial;
+            }
+
+            return _runtimeSkyboxMaterial;
         }
 
         private static void MarkActiveSceneDirty()
